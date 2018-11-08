@@ -1,2 +1,4 @@
-# MyAuction
-MyAuction Project for CS1555 Fall 2018 at Pitt
+# MyAuction - TEAM 1
+Jordan Grogan - jog89  
+John Wartonick - jww36  
+Wyatt Bobis - wjb39
