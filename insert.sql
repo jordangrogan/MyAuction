@@ -9,7 +9,7 @@ INSERT INTO ourSysDATE (C_DATE) VALUES (TO_DATE('2018-11-15 17:38:39', 'YYYY-MM-
 -- 3 Customer
 
 -- 1 Administrator
-INSERT INTO Administrator (LOGIN, PASSWORD, NAME) VALUES ('admin', 'root', 'Administrator')
+INSERT INTO Administrator (LOGIN, PASSWORD, NAME) VALUES ('admin', 'root', 'Administrator');
 
 -- 5 Product
 
