@@ -24,4 +24,4 @@
 -- func_buyingAmount(x, u)
 
 
--- trig_cloudAuctions
+-- trig_closeAuctions
