@@ -4,9 +4,6 @@
 -- Jordan Grogan, John Wartonick, Wyatt Bobis
 
 -- proc_putProduct
--- The procedure takes as inputs all the
---valid information that the user provides, infers other information (i.e., auction id and
---starting date), and records all information to the database.
 CREATE OR REPLACE PROCEDURE proc_putProduct (product_name in varchar2, product_description in varchar2, seller_id in number, category in varchar2, min_price in number, num_days in number) AS
 auction_id number;
 current_date date;
