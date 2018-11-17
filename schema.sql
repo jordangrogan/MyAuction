@@ -50,7 +50,8 @@ CREATE TABLE Product
     amount int,
     CONSTRAINT Product_PK PRIMARY KEY (auction_id),
     CONSTRAINT Product_FK_seller FOREIGN KEY (seller) REFERENCES Customer(login),
-    CONSTRAINT Product_FK_buyer FOREIGN KEY (buyer) REFERENCES Customer(login)
+    CONSTRAINT Product_FK_buyer FOREIGN KEY (buyer) REFERENCES Customer(login),
+    CONSTRAINT Product_status_options CHECK (status IN ('under auction', 'sold', 'withdrawn', 'closed'))
 );
 
 CREATE TABLE Bidlog
@@ -68,7 +69,8 @@ CREATE TABLE Category
 (   name varchar2(20),
     parent_category varchar2(20),
     CONSTRAINT Category_PK PRIMARY KEY (name),
-    CONSTRAINT Category_FK_parent_category FOREIGN KEY (parent_category) REFERENCES Category(name)
+    CONSTRAINT Category_FK_parent_category FOREIGN KEY (parent_category) REFERENCES Category(name),
+    CONSTRAINT Category_cat_options CHECK (name IN ('books-and-records', 'software', 'automobiles', 'appliances'))
 );
 
 CREATE TABLE BelongsTo
