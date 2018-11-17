@@ -3,7 +3,9 @@
 -- Triggers, Functions, Procedures
 -- Jordan Grogan, John Wartonick, Wyatt Bobis
 
+
 -- proc_putProduct
+-- NOT YET TESTED
 CREATE OR REPLACE PROCEDURE proc_putProduct (product_name in varchar2, product_description in varchar2, seller_id in number, category in varchar2, min_price in number, num_days in number) AS
 auction_id number;
 current_date date;
@@ -18,13 +20,22 @@ END;
 /
 
 
--- constraint: the amount of the new bid on a product > the currently highest bid (i.e. "amount" attribute) on that product
-
-
 -- trig_bidTimeUpdate
+CREATE OR REPLACE TRIGGER trig_bidTimeUpdate
+AFTER INSERT ON bidlog
+DECLARE
+    old_date DATE;
+    new_date DATE;
+BEGIN
+    SELECT c_date INTO old_date from oursysdate;
+    new_date := old_date + INTERVAL '5' SECOND;
+    UPDATE OURSYSDATE SET c_date = new_date WHERE c_date = old_date;
+end;
+/
 
 
 -- trig_updateHighBid
+-- constraint: the amount of the new bid on a product > the currently highest bid (i.e. "amount" attribute) on that product
 
 
 -- func_productCount(x, c)
