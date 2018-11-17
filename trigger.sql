@@ -4,8 +4,7 @@
 -- Jordan Grogan, John Wartonick, Wyatt Bobis
 
 
--- proc_putProduct
--- NOT YET TESTED
+-- proc_putProduct (NOT YET TESTED)
 CREATE OR REPLACE PROCEDURE proc_putProduct (product_name in varchar2, product_description in varchar2, seller_id in number, category in varchar2, min_price in number, num_days in number) AS
 auction_id number;
 current_date date;
@@ -20,7 +19,7 @@ END;
 /
 
 
--- trig_bidTimeUpdate
+-- trig_bidTimeUpdate (TESTED)
 CREATE OR REPLACE TRIGGER trig_bidTimeUpdate
 AFTER INSERT ON bidlog
 DECLARE
@@ -34,8 +33,14 @@ end;
 /
 
 
--- trig_updateHighBid
--- constraint: the amount of the new bid on a product > the currently highest bid (i.e. "amount" attribute) on that product
+-- trig_updateHighBid (NOT YET TESTED)
+CREATE OR REPLACE TRIGGER trig_updateHighBid
+AFTER INSERT OR UPDATE ON bidlog
+FOR EACH ROW
+BEGIN
+    UPDATE product SET amount=:NEW.amount WHERE auction_id=:NEW.auction_id;
+END;
+/
 
 
 -- func_productCount(x, c)
