@@ -69,8 +69,7 @@ CREATE TABLE Category
 (   name varchar2(20),
     parent_category varchar2(20),
     CONSTRAINT Category_PK PRIMARY KEY (name),
-    CONSTRAINT Category_FK_parent_category FOREIGN KEY (parent_category) REFERENCES Category(name),
-    CONSTRAINT Category_cat_options CHECK (name IN ('books-and-records', 'software', 'automobiles', 'appliances'))
+    CONSTRAINT Category_FK_parent_category FOREIGN KEY (parent_category) REFERENCES Category(name)
 );
 
 CREATE TABLE BelongsTo
