@@ -26,9 +26,9 @@ DECLARE
     old_date DATE;
     new_date DATE;
 BEGIN
-    SELECT c_date INTO old_date from oursysdate;
+    SELECT c_date INTO old_date FROM oursysdate;
     new_date := old_date + INTERVAL '5' SECOND;
-    UPDATE OURSYSDATE SET c_date = new_date WHERE c_date = old_date;
+    UPDATE oursysdate SET c_date = new_date WHERE c_date = old_date;
 end;
 /
 
@@ -67,7 +67,20 @@ END;
 /
 
 
--- func_buyingAmount(x, u)
+-- func_buyingAmount(x, u) (NOT YET TESTED)
+-- calculates the total dollar amount a specific user u has spent in the past x months, where x and u are the function’s inputs.
+CREATE OR REPLACE FUNCTION func_buyingAmount (x in number, u in varchar2) return number
+IS
+    total_amt number;
+    current_sys_date date;
+    x_months_ago date;
+BEGIN
+    SELECT c_date INTO current_sys_date from oursysdate;
+    x_months_ago := current_sys_date - NUMTODSINTERVAL(x, 'MONTH');
+    SELECT SUM(amount) INTO total_amt FROM product WHERE buyer=u AND sell_date>x_months_ago;
+    RETURN (total_amt);
+END;
+/
 
 
 -- trig_closeAuctions
