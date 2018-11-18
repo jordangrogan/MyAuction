@@ -55,7 +55,16 @@ END;
 /
 
 
--- func_bidCount(x, u)
+-- func_bidCount(x, u) (NOT YET TESTED)
+-- counts the number of bids a specific user u has placed in the past x months, where x and u are the function’s inputs.
+CREATE OR REPLACE FUNCTION func_bidCount (x in number, u in varchar2) return number
+IS
+    num_bids number;
+BEGIN
+    SELECT COUNT(auction_id) INTO num_bids FROM BIDLOG WHERE bidder=u;
+    RETURN (num_bids);
+END;
+/
 
 
 -- func_buyingAmount(x, u)
