@@ -5,18 +5,29 @@
 
 
 -- proc_putProduct (NOT YET TESTED)
-CREATE OR REPLACE PROCEDURE proc_putProduct (product_name in varchar2, product_description in varchar2, seller_id in number, category in varchar2, min_price in number, num_days in number) AS
+CREATE OR REPLACE PROCEDURE proc_putProduct (product_name in varchar2, product_description in varchar2, seller in varchar2, categories_csv in varchar2, min_price in number, num_days in number) AS
 auction_id number;
 current_date date;
 BEGIN
+    dbms_output.put_line('test');
     SELECT MAX(auction_id)+1 INTO auction_id FROM product;
     SELECT c_date INTO current_date FROM oursysdate;
     
     INSERT INTO product (AUCTION_ID, NAME, DESCRIPTION, SELLER, START_DATE, MIN_PRICE, NUMBER_OF_DAYS, STATUS) VALUES 
-        (auction_id, product_name, product_description, seller_id, current_date, min_price, num_days, 'under auction');
-    INSERT INTO belongsto (AUCTION_ID, CATEGORY) VALUES (auction_id, category);
+        (auction_id, product_name, product_description, seller, current_date, min_price, num_days, 'under auction');
+        
+    
+    --FOR i IN (SELECT trim(regexp_substr(categories_csv, '[^,]+', 1, LEVEL)) l FROM dual CONNECT BY LEVEL <= regexp_count(categories_csv, ',')+1)
+    --    LOOP
+    --        dbms_output.put_line(i.l);
+    --        INSERT INTO belongsto (AUCTION_ID, CATEGORY) VALUES (auction_id, i.l);
+    --    END LOOP;
+
 END;
 /
+set transaction read write;
+call proc_putProduct('testprod', 'testdescript', 'jog89', 'Equipment,Kitchen', 5, 7);
+commit;
 
 
 -- trig_bidTimeUpdate (TESTED)
