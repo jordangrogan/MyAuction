@@ -83,7 +83,7 @@ END;
 /
 
 
--- trig_closeAuctions (NOT TESTED)
+-- trig_closeAuctions (NOT YET TESTED)
 -- executes when the system time is updated. This trigger should check all the products in the system and close the auctions
 -- (i.e., change the status to ‘close’ if it is ‘under auction’) of all products whose sell-date falls before the new system time.
 CREATE OR REPLACE TRIGGER trig_closeAuctions
