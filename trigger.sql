@@ -43,7 +43,16 @@ END;
 /
 
 
--- func_productCount(x, c)
+-- func_productCount(x, c) (NOT YET TESTED)
+-- counts the number of products sold in the past x months for a specific categories c, where x and c are the function’s inputs.
+CREATE OR REPLACE FUNCTION func_productCount (x in number, c in varchar2) return number
+IS
+    num_products number;
+BEGIN
+    SELECT COUNT(auction_id) INTO num_products FROM BELONGSTO WHERE category=c;
+    RETURN (num_products);
+END;
+/
 
 
 -- func_bidCount(x, u)
