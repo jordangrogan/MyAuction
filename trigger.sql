@@ -77,10 +77,21 @@ IS
 BEGIN
     SELECT c_date INTO current_sys_date from oursysdate;
     x_months_ago := current_sys_date - NUMTODSINTERVAL(x, 'MONTH');
-    SELECT SUM(amount) INTO total_amt FROM product WHERE buyer=u AND sell_date>x_months_ago;
+    SELECT SUM(amount) INTO total_amt FROM product WHERE buyer=u AND sell_date>x_months_ago AND status='closed';
     RETURN (total_amt);
 END;
 /
 
 
--- trig_closeAuctions
+-- trig_closeAuctions (NOT TESTED)
+-- executes when the system time is updated. This trigger should check all the products in the system and close the auctions
+-- (i.e., change the status to ‘close’ if it is ‘under auction’) of all products whose sell-date falls before the new system time.
+CREATE OR REPLACE TRIGGER trig_closeAuctions
+AFTER UPDATE ON oursysdate
+DECLARE
+    current_sys_date DATE;
+BEGIN
+    SELECT c_date INTO current_sys_date FROM oursysdate;
+    UPDATE product SET status='closed' WHERE status='under auction' AND sell_date >= current_sys_date;
+end;
+/
