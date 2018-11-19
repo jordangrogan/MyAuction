@@ -9,7 +9,6 @@ CREATE OR REPLACE PROCEDURE proc_putProduct (product_name in varchar2, product_d
 auction_id number;
 current_date date;
 BEGIN
-    dbms_output.put_line('test');
     SELECT MAX(auction_id)+1 INTO auction_id FROM product;
     SELECT c_date INTO current_date FROM oursysdate;
     
@@ -67,21 +66,31 @@ END;
 -- counts the number of products sold in the past x months for a specific categories c, where x and c are the function’s inputs.
 CREATE OR REPLACE FUNCTION func_productCount (x in number, c in varchar2) return number
 IS
+    current_sys_date date;
+    x_months_ago date;
     num_products number;
 BEGIN
-    SELECT COUNT(auction_id) INTO num_products FROM BELONGSTO WHERE category=c;
+    SELECT c_date INTO current_sys_date from oursysdate;
+    x_months_ago := current_sys_date - NUMTODSINTERVAL(x, 'MONTH');
+    SELECT COUNT(BELONGSTO.auction_id) INTO num_products FROM BELONGSTO JOIN PRODUCT ON BELONGSTO.auction_id=PRODUCT.auction_id WHERE BELONGSTO.category=c AND PRODUCT.sell_date>x_months_ago;
     RETURN (num_products);
 END;
 /
+-- Test:
+dbms_output.put_line('func_productCount(x, c)' || func_productCount(5, 'Equipment'));
 
 
 -- func_bidCount(x, u) (NOT YET TESTED)
 -- counts the number of bids a specific user u has placed in the past x months, where x and u are the function’s inputs.
 CREATE OR REPLACE FUNCTION func_bidCount (x in number, u in varchar2) return number
 IS
+    current_sys_date date;
+    x_months_ago date;
     num_bids number;
 BEGIN
-    SELECT COUNT(auction_id) INTO num_bids FROM BIDLOG WHERE bidder=u;
+    SELECT c_date INTO current_sys_date from oursysdate;
+    x_months_ago := current_sys_date - NUMTODSINTERVAL(x, 'MONTH');
+    SELECT COUNT(auction_id) INTO num_bids FROM BIDLOG WHERE bidder=u AND bid_time>x_months_ago;
     RETURN (num_bids);
 END;
 /
