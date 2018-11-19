@@ -4,7 +4,7 @@
 -- Jordan Grogan, John Wartonick, Wyatt Bobis
 
 
--- proc_putProduct (NOT YET TESTED)
+-- proc_putProduct (DONE)
 CREATE OR REPLACE PROCEDURE proc_putProduct (product_name in varchar2, product_description in varchar2, seller in varchar2, categories_csv in varchar2, min_price in number, num_days in number) AS
 auction_id number;
 current_date date;
@@ -17,20 +17,21 @@ BEGIN
         (auction_id, product_name, product_description, seller, current_date, min_price, num_days, 'under auction');
         
     
-    --FOR i IN (SELECT trim(regexp_substr(categories_csv, '[^,]+', 1, LEVEL)) l FROM dual CONNECT BY LEVEL <= regexp_count(categories_csv, ',')+1)
-    --    LOOP
-    --        dbms_output.put_line(i.l);
-    --        INSERT INTO belongsto (AUCTION_ID, CATEGORY) VALUES (auction_id, i.l);
-    --    END LOOP;
+    FOR i IN (SELECT trim(regexp_substr(categories_csv, '[^,]+', 1, LEVEL)) l FROM dual CONNECT BY LEVEL <= regexp_count(categories_csv, ',')+1)
+        LOOP
+            dbms_output.put_line(i.l);
+            INSERT INTO belongsto (AUCTION_ID, CATEGORY) VALUES (auction_id, i.l);
+        END LOOP;
 
 END;
 /
-set transaction read write;
-call proc_putProduct('testprod', 'testdescript', 'jog89', 'Equipment,Kitchen', 5, 7);
-commit;
+-- Test:
+-- set transaction read write;
+-- call proc_putProduct('testprod', 'testdescript', 'jog89', 'Equipment,Kitchen', 5, 7);
+-- commit;
 
 
--- trig_bidTimeUpdate (TESTED)
+-- trig_bidTimeUpdate (DONE)
 CREATE OR REPLACE TRIGGER trig_bidTimeUpdate
 AFTER INSERT ON bidlog
 DECLARE
@@ -42,6 +43,10 @@ BEGIN
     UPDATE oursysdate SET c_date = new_date WHERE c_date = old_date;
 end;
 /
+-- Test:
+-- SELECT to_char(c_date,'HH24:MI:SS AM') FROM OURSYSDATE;
+-- INSERT INTO BIDLOG (BIDSN) VALUES ('11');
+-- SELECT to_char(c_date,'HH24:MI:SS AM') FROM OURSYSDATE;
 
 
 -- trig_updateHighBid (NOT YET TESTED)
