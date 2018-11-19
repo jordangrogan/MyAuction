@@ -62,22 +62,21 @@ END;
 -- INSERT INTO bidlog (BIDSN, AUCTION_ID, BIDDER, BID_TIME, AMOUNT) VALUES ('11', '5', 'jog89', TO_DATE('2018-11-18 22:05:42', 'YYYY-MM-DD HH24:MI:SS'), '100');
 
 
--- func_productCount(x, c) (NOT YET TESTED)
+-- func_productCount(x, c) (DONE)
 -- counts the number of products sold in the past x months for a specific categories c, where x and c are the function’s inputs.
-CREATE OR REPLACE FUNCTION func_productCount (x in number, c in varchar2) return number
-IS
+CREATE OR REPLACE FUNCTION func_productCount(x in number, c in varchar2) return number IS
     current_sys_date date;
     x_months_ago date;
     num_products number;
 BEGIN
     SELECT c_date INTO current_sys_date from oursysdate;
-    x_months_ago := current_sys_date - NUMTODSINTERVAL(x, 'MONTH');
+    x_months_ago := add_months(current_sys_date, x*-1);
     SELECT COUNT(BELONGSTO.auction_id) INTO num_products FROM BELONGSTO JOIN PRODUCT ON BELONGSTO.auction_id=PRODUCT.auction_id WHERE BELONGSTO.category=c AND PRODUCT.sell_date>x_months_ago;
     RETURN (num_products);
 END;
 /
 -- Test:
-dbms_output.put_line('func_productCount(x, c)' || func_productCount(5, 'Equipment'));
+-- SELECT func_productCount(5, 'Equipment') FROM dual;
 
 
 -- func_bidCount(x, u) (NOT YET TESTED)
