@@ -115,7 +115,7 @@ END;
 -- SELECT func_buyingAmount(12, 'jog89') FROM dual;
 
 
--- trig_closeAuctions (NOT YET TESTED)
+-- trig_closeAuctions (DONE)
 -- executes when the system time is updated. This trigger should check all the products in the system and close the auctions
 -- (i.e., change the status to ‘close’ if it is ‘under auction’) of all products whose sell-date falls before the new system time.
 CREATE OR REPLACE TRIGGER trig_closeAuctions
@@ -124,6 +124,10 @@ DECLARE
     current_sys_date DATE;
 BEGIN
     SELECT c_date INTO current_sys_date FROM oursysdate;
-    UPDATE product SET status='closed' WHERE status='under auction' AND sell_date >= current_sys_date;
+    UPDATE product SET status='closed' WHERE status='under auction' AND sell_date <= current_sys_date;
 end;
 /
+-- Test:
+-- SELECT auction_id,status FROM product;
+-- UPDATE oursysdate SET c_date=TO_DATE('2018-11-17 17:38:39', 'YYYY-MM-DD HH24:MI:SS') WHERE c_date=TO_DATE('2018-11-15 17:38:39', 'YYYY-MM-DD HH24:MI:SS');
+-- SELECT auction_id,status FROM product;
