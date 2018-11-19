@@ -97,7 +97,7 @@ END;
 -- SELECT func_bidCount(5, 'jog89') FROM dual;
 
 
--- func_buyingAmount(x, u) (NOT YET TESTED)
+-- func_buyingAmount(x, u) (DONE)
 -- calculates the total dollar amount a specific user u has spent in the past x months, where x and u are the function’s inputs.
 CREATE OR REPLACE FUNCTION func_buyingAmount (x in number, u in varchar2) return number
 IS
@@ -107,10 +107,12 @@ IS
 BEGIN
     SELECT c_date INTO current_sys_date from oursysdate;
     x_months_ago := add_months(current_sys_date, x*-1);
-    SELECT SUM(amount) INTO total_amt FROM product WHERE buyer=u AND sell_date>x_months_ago AND status='closed';
+    SELECT SUM(amount) INTO total_amt FROM product WHERE buyer=u AND sell_date>x_months_ago AND status='sold';
     RETURN (total_amt);
 END;
 /
+-- Test:
+-- SELECT func_buyingAmount(12, 'jog89') FROM dual;
 
 
 -- trig_closeAuctions (NOT YET TESTED)
