@@ -1,4 +1,4 @@
--- My Auction
+-- My Auction, Phase 1
 -- Team 1
 -- Triggers, Functions, Procedures
 -- Jordan Grogan, John Wartonick, Wyatt Bobis

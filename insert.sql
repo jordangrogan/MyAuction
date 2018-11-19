@@ -1,4 +1,4 @@
--- My Auction
+-- My Auction, Phase 1
 -- Team 1
 -- Sample Data
 -- Jordan Grogan, John Wartonick, Wyatt Bobis

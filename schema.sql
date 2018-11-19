@@ -1,4 +1,4 @@
--- My Auction
+-- My Auction, Phase 1
 -- Team 1
 -- Schema
 -- Jordan Grogan, John Wartonick, Wyatt Bobis
