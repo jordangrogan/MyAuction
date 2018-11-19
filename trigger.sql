@@ -49,14 +49,19 @@ end;
 -- SELECT to_char(c_date,'HH24:MI:SS AM') FROM OURSYSDATE;
 
 
--- trig_updateHighBid (NOT YET TESTED)
+-- trig_updateHighBid (DONE)
 CREATE OR REPLACE TRIGGER trig_updateHighBid
 AFTER INSERT OR UPDATE ON bidlog
 FOR EACH ROW
+DECLARE
+    current_sys_date DATE;
 BEGIN
-    UPDATE product SET amount=:NEW.amount WHERE auction_id=:NEW.auction_id;
+    SELECT c_date INTO current_sys_date from oursysdate;
+    UPDATE product SET amount=:NEW.amount, buyer=:NEW.bidder, sell_date=current_sys_date WHERE auction_id=:NEW.auction_id;
 END;
 /
+-- Test:
+-- INSERT INTO bidlog (BIDSN, AUCTION_ID, BIDDER, BID_TIME, AMOUNT) VALUES ('11', '5', 'jog89', TO_DATE('2018-11-18 22:05:42', 'YYYY-MM-DD HH24:MI:SS'), '100');
 
 
 -- func_productCount(x, c) (NOT YET TESTED)
