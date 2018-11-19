@@ -88,7 +88,7 @@ IS
     num_bids number;
 BEGIN
     SELECT c_date INTO current_sys_date from oursysdate;
-    x_months_ago := current_sys_date - NUMTODSINTERVAL(x, 'MONTH');
+    x_months_ago := add_months(current_sys_date, x*-1);
     SELECT COUNT(auction_id) INTO num_bids FROM BIDLOG WHERE bidder=u AND bid_time>x_months_ago;
     RETURN (num_bids);
 END;
@@ -104,7 +104,7 @@ IS
     x_months_ago date;
 BEGIN
     SELECT c_date INTO current_sys_date from oursysdate;
-    x_months_ago := current_sys_date - NUMTODSINTERVAL(x, 'MONTH');
+    x_months_ago := add_months(current_sys_date, x*-1);
     SELECT SUM(amount) INTO total_amt FROM product WHERE buyer=u AND sell_date>x_months_ago AND status='closed';
     RETURN (total_amt);
 END;
