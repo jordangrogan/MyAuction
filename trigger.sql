@@ -4,7 +4,7 @@
 -- Jordan Grogan, John Wartonick, Wyatt Bobis
 
 
--- proc_putProduct (DONE)
+-- proc_putProduct
 CREATE OR REPLACE PROCEDURE proc_putProduct (product_name in varchar2, product_description in varchar2, seller in varchar2, categories_csv in varchar2, min_price in number, num_days in number) AS
 auction_id number;
 current_date date;
@@ -29,7 +29,7 @@ END;
 -- commit;
 
 
--- trig_bidTimeUpdate (DONE)
+-- trig_bidTimeUpdate
 CREATE OR REPLACE TRIGGER trig_bidTimeUpdate
 AFTER INSERT ON bidlog
 DECLARE
@@ -47,7 +47,7 @@ end;
 -- SELECT to_char(c_date,'HH24:MI:SS AM') FROM OURSYSDATE;
 
 
--- trig_updateHighBid (DONE)
+-- trig_updateHighBid
 CREATE OR REPLACE TRIGGER trig_updateHighBid
 AFTER INSERT OR UPDATE ON bidlog
 FOR EACH ROW
@@ -62,7 +62,7 @@ END;
 -- INSERT INTO bidlog (BIDSN, AUCTION_ID, BIDDER, BID_TIME, AMOUNT) VALUES ('11', '5', 'jog89', TO_DATE('2018-11-18 22:05:42', 'YYYY-MM-DD HH24:MI:SS'), '100');
 
 
--- func_productCount(x, c) (DONE)
+-- func_productCount(x, c)
 -- counts the number of products sold in the past x months for a specific categories c, where x and c are the function’s inputs.
 CREATE OR REPLACE FUNCTION func_productCount (x in number, c in varchar2) return number IS
     current_sys_date date;
@@ -79,7 +79,7 @@ END;
 -- SELECT func_productCount(5, 'Equipment') FROM dual;
 
 
--- func_bidCount(x, u) (DONE)
+-- func_bidCount(x, u)
 -- counts the number of bids a specific user u has placed in the past x months, where x and u are the function’s inputs.
 CREATE OR REPLACE FUNCTION func_bidCount (x in number, u in varchar2) return number
 IS
@@ -97,7 +97,7 @@ END;
 -- SELECT func_bidCount(5, 'jog89') FROM dual;
 
 
--- func_buyingAmount(x, u) (DONE)
+-- func_buyingAmount(x, u)
 -- calculates the total dollar amount a specific user u has spent in the past x months, where x and u are the function’s inputs.
 CREATE OR REPLACE FUNCTION func_buyingAmount (x in number, u in varchar2) return number
 IS
@@ -115,7 +115,7 @@ END;
 -- SELECT func_buyingAmount(12, 'jog89') FROM dual;
 
 
--- trig_closeAuctions (DONE)
+-- trig_closeAuctions
 -- executes when the system time is updated. This trigger should check all the products in the system and close the auctions
 -- (i.e., change the status to ‘close’ if it is ‘under auction’) of all products whose sell-date falls before the new system time.
 CREATE OR REPLACE TRIGGER trig_closeAuctions

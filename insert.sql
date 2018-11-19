@@ -33,12 +33,14 @@ insert into Bidlog (bidsn, auction_id, bidder, bid_time, amount) Values (7, 1, '
 insert into Bidlog (bidsn, auction_id, bidder, bid_time, amount) Values (8, 3, 'jog89', TO_DATE('2018-04-20 04:50:05', 'YYYY-MM-DD HH24:MI:SS'), 4);
 insert into Bidlog (bidsn, auction_id, bidder, bid_time, amount) Values (9, 3, 'jww36', TO_DATE('2018-04-21 06:45:03', 'YYYY-MM-DD HH24:MI:SS'), 7);
 insert into Bidlog (bidsn, auction_id, bidder, bid_time, amount) Values (10, 5, 'jww36', TO_DATE('2018-11-23 05:35:01', 'YYYY-MM-DD HH24:MI:SS'), 2);
+
 -- 5 Category
 insert into Category (name, parent_category) Values ('Home', Null);
 insert into Category (name, parent_category) Values ('Sports', Null);
 insert into Category (name, parent_category) Values ('Balls', 'Sports');
 insert into Category (name, parent_category) Values ('Kitchen', 'Home');
 insert into Category (name, parent_category) Values ('Equipment', 'Sports');
+
 -- 5 BelongsTo
 insert into BelongsTo (auction_id, category) values (1, 'Equipment');
 insert into BelongsTo (auction_id, category) values (2, 'Equipment');
