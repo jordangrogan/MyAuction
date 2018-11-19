@@ -125,9 +125,27 @@ DECLARE
 BEGIN
     SELECT c_date INTO current_sys_date FROM oursysdate;
     UPDATE product SET status='closed' WHERE status='under auction' AND sell_date <= current_sys_date;
-end;
+END;
 /
 -- Test:
 -- SELECT auction_id,status FROM product;
 -- UPDATE oursysdate SET c_date=TO_DATE('2018-11-17 17:38:39', 'YYYY-MM-DD HH24:MI:SS') WHERE c_date=TO_DATE('2018-11-15 17:38:39', 'YYYY-MM-DD HH24:MI:SS');
 -- SELECT auction_id,status FROM product;
+
+
+-- trig_newbid
+-- According to the project description: "There is a constraint that the amount of the new bid on a product must be higher than 
+-- the currently highest bid on that product (recorded on the Amount attribute of the Product table)."
+CREATE OR REPLACE TRIGGER trig_newBid
+BEFORE INSERT ON bidlog
+FOR EACH ROW
+DECLARE
+    current_amt number;
+BEGIN
+    SELECT amount INTO current_amt FROM product WHERE auction_id=:NEW.auction_id;
+    IF current_amt > :NEW.amount THEN RAISE_APPLICATION_ERROR(-20001, 'Bid lower than current highest bid');
+    END IF;
+END;
+/
+-- Test:
+-- INSERT INTO BIDLOG (BIDSN, AUCTION_ID, BIDDER, BID_TIME, AMOUNT) VALUES ('13', '5', 'wjb39', TO_DATE('2018-11-27 12:23:47', 'YYYY-MM-DD HH24:MI:SS'), '2');
