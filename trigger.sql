@@ -64,7 +64,7 @@ END;
 
 -- func_productCount(x, c) (DONE)
 -- counts the number of products sold in the past x months for a specific categories c, where x and c are the function’s inputs.
-CREATE OR REPLACE FUNCTION func_productCount(x in number, c in varchar2) return number IS
+CREATE OR REPLACE FUNCTION func_productCount (x in number, c in varchar2) return number IS
     current_sys_date date;
     x_months_ago date;
     num_products number;
@@ -79,7 +79,7 @@ END;
 -- SELECT func_productCount(5, 'Equipment') FROM dual;
 
 
--- func_bidCount(x, u) (NOT YET TESTED)
+-- func_bidCount(x, u) (DONE)
 -- counts the number of bids a specific user u has placed in the past x months, where x and u are the function’s inputs.
 CREATE OR REPLACE FUNCTION func_bidCount (x in number, u in varchar2) return number
 IS
@@ -93,6 +93,8 @@ BEGIN
     RETURN (num_bids);
 END;
 /
+-- Test:
+-- SELECT func_bidCount(5, 'jog89') FROM dual;
 
 
 -- func_buyingAmount(x, u) (NOT YET TESTED)
