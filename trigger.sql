@@ -15,11 +15,10 @@ BEGIN
     
     INSERT INTO product (AUCTION_ID, NAME, DESCRIPTION, SELLER, START_DATE, MIN_PRICE, NUMBER_OF_DAYS, STATUS) VALUES 
         (auction_id, product_name, product_description, seller, current_date, min_price, num_days, 'under auction');
-        
     
+    -- Take a comma separated value list of categories and put them in the belongsto table
     FOR i IN (SELECT trim(regexp_substr(categories_csv, '[^,]+', 1, LEVEL)) l FROM dual CONNECT BY LEVEL <= regexp_count(categories_csv, ',')+1)
         LOOP
-            dbms_output.put_line(i.l);
             INSERT INTO belongsto (AUCTION_ID, CATEGORY) VALUES (auction_id, i.l);
         END LOOP;
 
