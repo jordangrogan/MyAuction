@@ -361,6 +361,12 @@ public class MyAuction {
 
     public static void main(String args[]) throws SQLException {
 
+        if(args.length != 2) {
+            System.out.println("Include your Oracle username and password as arguments.\n" +
+                    "For example, `java MyAuction YOUR_ORACLE_USERNAME YOUR_ORACLE_PASSWORD`");
+            System.exit(0);
+        }
+
         reader  = new Scanner(System.in);
 
         String username, password;
@@ -380,12 +386,10 @@ public class MyAuction {
             connection = DriverManager.getConnection(url, username, password);
             MyAuction myauction = new MyAuction();
 
-        }
-        catch(Exception Ex)  {
+
+        } catch(Exception Ex)  {
             System.out.println("Error connecting to database.  Machine Error: " + Ex.toString());
-        }
-        finally
-        {
+        } finally {
             connection.close();
         }
 
