@@ -8,12 +8,15 @@
 CREATE OR REPLACE PROCEDURE proc_putProduct (product_name in varchar2, product_description in varchar2, seller in varchar2, categories_csv in varchar2, min_price in number, num_days in number) AS
 auction_id number;
 current_date date;
+end_of_auction_date date;
 BEGIN
     SELECT MAX(auction_id)+1 INTO auction_id FROM product;
     SELECT c_date INTO current_date FROM oursysdate;
     
-    INSERT INTO product (AUCTION_ID, NAME, DESCRIPTION, SELLER, START_DATE, MIN_PRICE, NUMBER_OF_DAYS, STATUS) VALUES 
-        (auction_id, product_name, product_description, seller, current_date, min_price, num_days, 'under auction');
+    end_of_auction_date := current_date + num_days;
+    
+    INSERT INTO product (AUCTION_ID, NAME, DESCRIPTION, SELLER, START_DATE, MIN_PRICE, NUMBER_OF_DAYS, STATUS, SELL_DATE) VALUES 
+        (auction_id, product_name, product_description, seller, current_date, min_price, num_days, 'under auction', end_of_auction_date);
     
     -- Take a comma separated value list of categories and put them in the belongsto table
     FOR i IN (SELECT trim(regexp_substr(categories_csv, '[^,]+', 1, LEVEL)) l FROM dual CONNECT BY LEVEL <= regexp_count(categories_csv, ',')+1)
@@ -71,7 +74,7 @@ CREATE OR REPLACE FUNCTION func_productCount (x in number, c in varchar2) return
 BEGIN
     SELECT c_date INTO current_sys_date from oursysdate;
     x_months_ago := add_months(current_sys_date, x*-1);
-    SELECT COUNT(BELONGSTO.auction_id) INTO num_products FROM BELONGSTO JOIN PRODUCT ON BELONGSTO.auction_id=PRODUCT.auction_id WHERE BELONGSTO.category=c AND PRODUCT.sell_date>x_months_ago;
+    SELECT COUNT(BELONGSTO.auction_id) INTO num_products FROM BELONGSTO JOIN PRODUCT ON BELONGSTO.auction_id=PRODUCT.auction_id WHERE BELONGSTO.category=c AND PRODUCT.sell_date>x_months_ago AND PRODUCT.status='sold';
     RETURN (num_products);
 END;
 /
