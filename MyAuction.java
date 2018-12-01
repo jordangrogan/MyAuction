@@ -16,6 +16,7 @@ public class MyAuction {
 
         Scanner reader = new Scanner(System.in);
         String response;
+        String login;
         boolean loggedIn = false;
 
         System.out.println("Welcome to My Auction!");
@@ -28,7 +29,7 @@ public class MyAuction {
         if(response.equals("customer")) {
             System.out.println("Welcome Customer! Please enter your login/username:");
             do {
-                String login = reader.nextLine();
+                login = reader.nextLine();
                 System.out.println("Please enter your password:");
                 String password = reader.nextLine();
                 if (checkCredentials(login, password, false)) {
@@ -45,8 +46,10 @@ public class MyAuction {
                     "2 - Search for product by text\n" +
                     "3 - Put product for auction\n" +
                     "4 - Bid on product\n" +
-                    "5 - Suggestions\n" +
-                    "6 - Sell product"); // TODO: this option only available to customers who sell sell products
+                    "5 - Suggestions");
+                    if(checkIfCustomerSellsProducts(login)) { // this option only available to customers who sell sell products
+                        System.out.println("6 - Sell product");
+                    }
                 response = reader.nextLine();
                 switch (response) {
                     case "1":
@@ -73,7 +76,7 @@ public class MyAuction {
         } else if(response.equals("admin")) {
             System.out.println("Welcome Admin! Please enter your login/username:");
             do {
-                String login = reader.nextLine();
+                login = reader.nextLine();
                 System.out.println("Please enter your password:");
                 String password = reader.nextLine();
                 if (checkCredentials(login, password, true)) {
@@ -120,7 +123,7 @@ public class MyAuction {
 
         boolean authorized = false;
 
-        try{
+        try {
             if(isAdmin) {
                 query = "SELECT * FROM administrator WHERE login=? AND password=?";
             } else {
@@ -141,12 +144,10 @@ public class MyAuction {
 
             resultSet.close();
 
-        }
-        catch(SQLException Ex) {
+        } catch(SQLException Ex) {
             System.out.println("Error running the  queries.  Machine Error: " +
                     Ex.toString());
-        }
-        finally{
+        } finally{
             try {
                 if (prepStatement != null) prepStatement.close();
             } catch (SQLException e) {
@@ -155,6 +156,41 @@ public class MyAuction {
         }
 
         return authorized;
+    }
+
+    public boolean checkIfCustomerSellsProducts(String login) {
+
+        boolean sellsProducts = false;
+
+        try {
+            query = "SELECT * FROM product WHERE seller=?";
+
+            prepStatement = connection.prepareStatement(query);
+
+            prepStatement.setString(1, login);
+
+            resultSet = prepStatement.executeQuery(); //run the query on the DB table
+
+            if(resultSet.next()) {
+                // At least one result! This user sells products!
+                sellsProducts = true;
+            }
+
+            resultSet.close();
+
+        } catch(SQLException Ex) {
+            System.out.println("Error running the  queries.  Machine Error: " +
+                    Ex.toString());
+        } finally{
+            try {
+                if (prepStatement != null) prepStatement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
+
+        return sellsProducts;
+
     }
 
     public void browseProducts() {
