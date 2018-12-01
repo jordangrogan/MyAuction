@@ -16,23 +16,23 @@ INSERT INTO Administrator (LOGIN, PASSWORD, NAME, ADDRESS, EMAIL) VALUES ('admin
 
 -- 5 Product
 
-insert into Product (auction_id, name, description, seller, start_date, min_price, number_of_days, status, buyer, sell_date, amount) Values(1, 'bike', 'a blue bike', 'jog89', TO_DATE('2018-11-18 17:40:01', 'YYYY-MM-DD HH24:MI:SS'), 40, 5, 'sold', 'jww36', TO_DATE('2018-11-23 12:30:01', 'YYYY-MM-DD HH24:MI:SS'), 35);
-insert into Product (auction_id, name, description, seller, start_date, min_price, number_of_days, status, buyer, sell_date, amount) Values(2, 'shoes', 'runnin shoes', 'jww36', TO_DATE('2018-03-18 17:36:01', 'YYYY-MM-DD HH24:MI:SS'), 15, 3, 'under auction', 'wjb39', TO_DATE('2018-03-21 02:30:01', 'YYYY-MM-DD HH24:MI:SS'), 15);
-insert into Product (auction_id, name, description, seller, start_date, min_price, number_of_days, status, buyer, sell_date, amount) Values(3, 'sink', 'the kitchen sink', 'wjb39', TO_DATE('2018-04-18 17:40:01', 'YYYY-MM-DD HH24:MI:SS'), 12, 6, 'sold', 'jog89', TO_DATE('2018-04-24 04:30:01', 'YYYY-MM-DD HH24:MI:SS'), 12);
-insert into Product (auction_id, name, description, seller, start_date, min_price, number_of_days, status, buyer, sell_date, amount) Values(4, 'cup', 'very big', 'jww36', TO_DATE('2018-05-18 17:40:01', 'YYYY-MM-DD HH24:MI:SS'), 5, 2, 'closed', 'wjb39', TO_DATE('2018-05-20 11:30:01', 'YYYY-MM-DD HH24:MI:SS'), 2);
-insert into Product (auction_id, name, description, seller, start_date, min_price, number_of_days, status, buyer, sell_date, amount) Values(5, 'ball', 'a very bouncy ball', 'jog89', TO_DATE('2018-11-18 17:40:01', 'YYYY-MM-DD HH24:MI:SS'), 3, 7, 'withdrawn', 'jww36', TO_DATE('2018-11-25 01:30:01', 'YYYY-MM-DD HH24:MI:SS'), 3);
+insert into Product (auction_id, name, description, seller, start_date, min_price, number_of_days, status, buyer, sell_date, amount) Values(1, 'bike', 'a blue bike', 'jog89', TO_DATE('2018-11-18 17:40:01', 'YYYY-MM-DD HH24:MI:SS'), 40, 5, 'sold', 'jww36', TO_DATE('2018-11-23 12:30:01', 'YYYY-MM-DD HH24:MI:SS'), 0);
+insert into Product (auction_id, name, description, seller, start_date, min_price, number_of_days, status, buyer, sell_date, amount) Values(2, 'shoes', 'runnin shoes', 'jww36', TO_DATE('2018-03-18 17:36:01', 'YYYY-MM-DD HH24:MI:SS'), 15, 3, 'under auction', 'wjb39', TO_DATE('2018-03-21 02:30:01', 'YYYY-MM-DD HH24:MI:SS'), 0);
+insert into Product (auction_id, name, description, seller, start_date, min_price, number_of_days, status, buyer, sell_date, amount) Values(3, 'sink', 'the kitchen sink', 'wjb39', TO_DATE('2018-04-18 17:40:01', 'YYYY-MM-DD HH24:MI:SS'), 12, 6, 'sold', 'jog89', TO_DATE('2018-04-24 04:30:01', 'YYYY-MM-DD HH24:MI:SS'), 0);
+insert into Product (auction_id, name, description, seller, start_date, min_price, number_of_days, status, buyer, sell_date, amount) Values(4, 'cup', 'very big', 'jww36', TO_DATE('2018-05-18 17:40:01', 'YYYY-MM-DD HH24:MI:SS'), 5, 2, 'closed', 'wjb39', TO_DATE('2018-05-20 11:30:01', 'YYYY-MM-DD HH24:MI:SS'), 0);
+insert into Product (auction_id, name, description, seller, start_date, min_price, number_of_days, status, buyer, sell_date, amount) Values(5, 'ball', 'a very bouncy ball', 'jog89', TO_DATE('2018-11-18 17:40:01', 'YYYY-MM-DD HH24:MI:SS'), 3, 7, 'withdrawn', 'jww36', TO_DATE('2018-11-25 01:30:01', 'YYYY-MM-DD HH24:MI:SS'), 0);
 
 -- 10 Bidlog
-insert into Bidlog (bidsn, auction_id, bidder, bid_time, amount) Values (1, 1, 'jww36', TO_DATE('2018-11-23 12:29:01', 'YYYY-MM-DD HH24:MI:SS'), 35);
-insert into Bidlog (bidsn, auction_id, bidder, bid_time, amount) Values (2, 2, 'wjb39', TO_DATE('2018-03-21 02:29:01', 'YYYY-MM-DD HH24:MI:SS'), 15 );
-insert into Bidlog (bidsn, auction_id, bidder, bid_time, amount) Values (3, 3, 'jog89', TO_DATE('2018-04-24 04:29:01', 'YYYY-MM-DD HH24:MI:SS'), 12);
-insert into Bidlog (bidsn, auction_id, bidder, bid_time, amount) Values (4, 4, 'wjb39', TO_DATE('2018-05-20 11:29:01', 'YYYY-MM-DD HH24:MI:SS'), 2 );
-insert into Bidlog (bidsn, auction_id, bidder, bid_time, amount) Values (5, 5, 'jww36', TO_DATE('2018-11-25 01:29:01', 'YYYY-MM-DD HH24:MI:SS'), 3 );
-insert into Bidlog (bidsn, auction_id, bidder, bid_time, amount) Values (6, 1, 'jww36', TO_DATE('2018-11-19 16:30:02', 'YYYY-MM-DD HH24:MI:SS'), 20); 
-insert into Bidlog (bidsn, auction_id, bidder, bid_time, amount) Values (7, 1, 'jog89', TO_DATE('2018-11-19 16:35:02', 'YYYY-MM-DD HH24:MI:SS'), 22);
-insert into Bidlog (bidsn, auction_id, bidder, bid_time, amount) Values (8, 3, 'jog89', TO_DATE('2018-04-20 04:50:05', 'YYYY-MM-DD HH24:MI:SS'), 4);
-insert into Bidlog (bidsn, auction_id, bidder, bid_time, amount) Values (9, 3, 'jww36', TO_DATE('2018-04-21 06:45:03', 'YYYY-MM-DD HH24:MI:SS'), 7);
-insert into Bidlog (bidsn, auction_id, bidder, bid_time, amount) Values (10, 5, 'jww36', TO_DATE('2018-11-23 05:35:01', 'YYYY-MM-DD HH24:MI:SS'), 2);
+insert into Bidlog (bidsn, auction_id, bidder, bid_time, amount) Values (1, 1, 'jww36', TO_DATE('2018-11-19 16:30:02', 'YYYY-MM-DD HH24:MI:SS'), 20); 
+insert into Bidlog (bidsn, auction_id, bidder, bid_time, amount) Values (2, 1, 'jog89', TO_DATE('2018-11-19 16:35:02', 'YYYY-MM-DD HH24:MI:SS'), 22);
+insert into Bidlog (bidsn, auction_id, bidder, bid_time, amount) Values (3, 1, 'jww36', TO_DATE('2018-11-23 12:29:01', 'YYYY-MM-DD HH24:MI:SS'), 35);
+insert into Bidlog (bidsn, auction_id, bidder, bid_time, amount) Values (4, 2, 'wjb39', TO_DATE('2018-03-21 02:29:01', 'YYYY-MM-DD HH24:MI:SS'), 15 );
+insert into Bidlog (bidsn, auction_id, bidder, bid_time, amount) Values (5, 3, 'jog89', TO_DATE('2018-04-20 04:50:05', 'YYYY-MM-DD HH24:MI:SS'), 4);
+insert into Bidlog (bidsn, auction_id, bidder, bid_time, amount) Values (6, 3, 'jww36', TO_DATE('2018-04-21 06:45:03', 'YYYY-MM-DD HH24:MI:SS'), 7);
+insert into Bidlog (bidsn, auction_id, bidder, bid_time, amount) Values (7, 3, 'jog89', TO_DATE('2018-04-24 04:29:01', 'YYYY-MM-DD HH24:MI:SS'), 12);
+insert into Bidlog (bidsn, auction_id, bidder, bid_time, amount) Values (8, 4, 'wjb39', TO_DATE('2018-05-20 11:29:01', 'YYYY-MM-DD HH24:MI:SS'), 2 );
+insert into Bidlog (bidsn, auction_id, bidder, bid_time, amount) Values (9, 5, 'jww36', TO_DATE('2018-11-23 05:35:01', 'YYYY-MM-DD HH24:MI:SS'), 2);
+insert into Bidlog (bidsn, auction_id, bidder, bid_time, amount) Values (10, 5, 'jww36', TO_DATE('2018-11-25 01:29:01', 'YYYY-MM-DD HH24:MI:SS'), 3 );
 
 -- 5 Category
 insert into Category (name, parent_category) Values ('Home', Null);
