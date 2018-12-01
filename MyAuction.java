@@ -319,8 +319,54 @@ public class MyAuction {
 
     }
 
+    private void displayProductsByKeywords(String[] keywords) {
+
+        try {
+
+            if(keywords.length == 1) {
+                query = "SELECT * FROM product WHERE description LIKE '%' || ? || '%'";
+                prepStatement = connection.prepareStatement(query);
+                prepStatement.setString(1, keywords[0]);
+
+            } else {
+                query = "SELECT * FROM product WHERE description LIKE '%' || ? || '%' AND description LIKE '%' || ? || '%'";
+                prepStatement = connection.prepareStatement(query);
+                prepStatement.setString(1, keywords[0]);
+                prepStatement.setString(2, keywords[1]);
+            }
+            resultSet = prepStatement.executeQuery(); //run the query on the DB table
+
+            while (resultSet.next()) //this not only keeps track of if another record
+            //exists but moves us forward to the first record
+            {
+                int auctionID = resultSet.getInt("auction_id");
+                String name = resultSet.getString("name");
+                String description = resultSet.getString("description");
+                int highestBidAmt = resultSet.getInt("amount");
+                System.out.println(auctionID + ": " + name + " - " + description + " - Highest Bid Amount: $" + highestBidAmt);
+            }
+
+        } catch(SQLException Ex) {
+            System.out.println("Error running the queries. Machine Error: " +
+                    Ex.toString());
+        } finally {
+            try {
+                if (statement != null) statement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
+
+    }
+
     public void searchForProductsByText() {
-        // TODO
+        String[] keywordsArr;
+        do {
+            System.out.println("Enter up to 2 keywords to search by (separated by a space):");
+            String keywords = reader.nextLine();
+            keywordsArr = keywords.split(" ");
+        } while(keywordsArr.length != 1 && keywordsArr.length != 2);
+        displayProductsByKeywords(keywordsArr);
     }
 
     public void putProductForAuction() {
