@@ -46,6 +46,6 @@ insert into BelongsTo (auction_id, category) values (1, 'Equipment');
 insert into BelongsTo (auction_id, category) values (2, 'Equipment');
 insert into BelongsTo (auction_id, category) values (3, 'Kitchen');
 insert into BelongsTo (auction_id, category) values (4, 'Kitchen');
-insert into BelongsTo (auction_id, category) values (5, 'Equipment');
+insert into BelongsTo (auction_id, category) values (5, 'Balls');
 
 commit;
