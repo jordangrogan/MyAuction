@@ -66,7 +66,7 @@ DECLARE
     current_sys_date DATE;
 BEGIN
     SELECT c_date INTO current_sys_date from oursysdate;
-    UPDATE product SET amount=:NEW.amount, buyer=:NEW.bidder, sell_date=current_sys_date WHERE auction_id=:NEW.auction_id;
+    UPDATE product SET amount=:NEW.amount WHERE auction_id=:NEW.auction_id;
 END;
 /
 -- Test:
