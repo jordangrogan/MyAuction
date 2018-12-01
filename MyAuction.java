@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.sql.*; //import the file containing definitions for the parts
 import java.text.ParseException; //needed by java for database connection and manipulation
@@ -5,16 +6,14 @@ import java.text.ParseException; //needed by java for database connection and ma
 
 public class MyAuction {
 
-    private static Connection connection; //used to hold the jdbc connection to the DB
-    private Statement statement; //used to create an instance of the connection
-    private PreparedStatement prepStatement; //used to create a prepared statement, that will be later reused
-    private ResultSet resultSet; //used to hold the result of your query (if one
-    // exists)
-    private String query;  //this will hold the query we are using
+    private static Scanner reader;
+    private static Connection connection; // used to hold the jdbc connection to the DB
+    private PreparedStatement prepStatement; // used to create a prepared statement, that will be later reused
+    private ResultSet resultSet; // used to hold the result of your query (if one exists)
+    private String query; // this will hold the query we are using
 
     public MyAuction() {
 
-        Scanner reader = new Scanner(System.in);
         String response;
         String login;
         boolean loggedIn = false;
@@ -115,11 +114,9 @@ public class MyAuction {
             } while(!response.equals("0"));
         }
 
-        reader.close();
-
     }
 
-    public boolean checkCredentials(String login, String password, boolean isAdmin) {
+    private boolean checkCredentials(String login, String password, boolean isAdmin) {
 
         boolean authorized = false;
 
@@ -158,7 +155,7 @@ public class MyAuction {
         return authorized;
     }
 
-    public boolean checkIfCustomerSellsProducts(String login) {
+    private boolean checkIfCustomerSellsProducts(String login) {
 
         boolean sellsProducts = false;
 
@@ -194,7 +191,46 @@ public class MyAuction {
     }
 
     public void browseProducts() {
-        // TODO
+        String response;
+        System.out.println("Which category would you like to browse?");
+        // List categories where parent_category = NULL
+        ArrayList<String> parentCategories = getParentCategories();
+        for (int i = 0; i < parentCategories.size(); i++) {
+            System.out.println((i + 1) + " - " + parentCategories.get(i));
+        }
+        response = reader.nextLine();
+        System.out.println("Which subcategory would you like to browse?");
+        // List categories where parent_category = the category selected
+        ArrayList<String> childCategories = getChildCategories(parentCategories.get(Integer.parseInt(response)));
+        for(int i = 0; i < parentCategories.size(); i++) {
+            System.out.println((i+1) + " - " + childCategories.get(i));
+        }
+        String category = reader.nextLine();
+        System.out.println("Would you like the products to be sorted by:\n" +
+                "1 - highest bid amount\n" +
+                "2 - alphabetically by product name, or\n" +
+                "3 - no sorting?");
+        response = reader.nextLine();
+        // List products with key attributes: auction_id, name, description, highest_bid (if sorted)
+        displayProducts(category, Integer.parseInt(response));
+    }
+
+    private ArrayList<String> getParentCategories() {
+        ArrayList<String> parentCategories = new ArrayList<>();
+
+
+
+        return parentCategories;
+    }
+
+    private ArrayList<String> getChildCategories(String parent) {
+        ArrayList<String> childCategories = new ArrayList<>();
+
+        return childCategories;
+    }
+
+    private void displayProducts() {
+
     }
 
     public void searchForProductsByText() {
@@ -238,10 +274,8 @@ public class MyAuction {
     }
 
     public static void main(String args[]) throws SQLException {
-    /* Making a connection to a DB causes certain exceptions.  In order to handle
-	   these, you either put the DB stuff in a try block or have your function
-	   throw the Exceptions and handle them later.  For this demo I will use the
-	   try blocks */
+
+        reader  = new Scanner(System.in);
 
         String username, password;
         username = args[0]; //This is your username in oracle
@@ -268,6 +302,9 @@ public class MyAuction {
         {
             connection.close();
         }
+
+        reader.close();
+
     }
 
 }
