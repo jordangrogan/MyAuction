@@ -7,29 +7,37 @@
 -- proc_putProduct
 CREATE OR REPLACE PROCEDURE proc_putProduct (product_name in varchar2, product_description in varchar2, seller in varchar2, categories_csv in varchar2, min_price in number, num_days in number) AS
 auction_id number;
-current_date date;
+curr_date date;
 end_of_auction_date date;
+par_cat varchar2(20);
 BEGIN
+
     SELECT MAX(auction_id)+1 INTO auction_id FROM product;
-    SELECT c_date INTO current_date FROM oursysdate;
+    SELECT c_date INTO curr_date FROM oursysdate;
     
-    end_of_auction_date := current_date + num_days;
+    end_of_auction_date := curr_date + num_days;
     
     INSERT INTO product (AUCTION_ID, NAME, DESCRIPTION, SELLER, START_DATE, MIN_PRICE, NUMBER_OF_DAYS, STATUS, SELL_DATE) VALUES 
-        (auction_id, product_name, product_description, seller, current_date, min_price, num_days, 'under auction', end_of_auction_date);
-    
+        (auction_id, product_name, product_description, seller, curr_date, min_price, num_days, 'under auction', end_of_auction_date);
+        
     -- Take a comma separated value list of categories and put them in the belongsto table
     FOR i IN (SELECT trim(regexp_substr(categories_csv, '[^,]+', 1, LEVEL)) l FROM dual CONNECT BY LEVEL <= regexp_count(categories_csv, ',')+1)
         LOOP
-            INSERT INTO belongsto (AUCTION_ID, CATEGORY) VALUES (auction_id, i.l);
+            -- Check to make sure category is a leaf category (i.e. has a parent category)
+            SELECT parent_category INTO par_cat FROM category WHERE name=i.l;
+            IF (par_cat IS NOT NULL) THEN
+                INSERT INTO belongsto (AUCTION_ID, CATEGORY) VALUES (auction_id, i.l);
+            ELSE
+                RAISE_APPLICATION_ERROR(-20001, 'Category must be a leaf category');
+            END IF;
         END LOOP;
 
 END;
 /
 -- Test:
--- set transaction read write;
--- call proc_putProduct('testprod', 'testdescript', 'jog89', 'Equipment,Kitchen', 5, 7);
--- commit;
+--set transaction read write;
+--call proc_putProduct('testprod', 'testdescript', 'jog89', 'Equipment', 5, 7);
+--commit;
 
 
 -- trig_bidTimeUpdate
