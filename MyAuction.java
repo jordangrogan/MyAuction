@@ -386,7 +386,56 @@ public class MyAuction {
     }
 
     public void newCustomerRegistration() {
-        // TODO
+        System.out.println("Enter new user's name:");
+        String name = reader.nextLine();
+        System.out.println("Enter new user's address:");
+        String address = reader.nextLine();
+        System.out.println("Enter new user's email address:");
+        String email = reader.nextLine();
+        System.out.println("Enter new user's preferred login name:");
+        String login = reader.nextLine();
+        System.out.println("Enter new user's password:");
+        String password = reader.nextLine();
+        String adminResponse;
+        boolean isAdmin;
+        do {
+            System.out.println("Is this new user an administrator (\"yes\" or \"no\":");
+            adminResponse = reader.nextLine();
+        } while(!(adminResponse.equals("yes") || adminResponse.equals("no")));
+        if(adminResponse.equals("yes")) isAdmin = true; else isAdmin = false;
+        registerUser(name, address, email, login, password, isAdmin);
+    }
+
+    private void registerUser(String name, String address, String email, String login, String password, boolean isAdmin) {
+        try {
+
+            if(isAdmin) {
+                query = "INSERT INTO Administrator (LOGIN, PASSWORD, NAME, ADDRESS, EMAIL) VALUES (?, ?, ?, ?, ?)";
+            } else {
+                query = "INSERT INTO Customer (LOGIN, PASSWORD, NAME, ADDRESS, EMAIL) VALUES (?, ?, ?, ?, ?)";
+            }
+            prepStatement = connection.prepareStatement(query);
+
+            prepStatement.setString(1, login);
+            prepStatement.setString(2, password);
+            prepStatement.setString(3, name);
+            prepStatement.setString(4, address);
+            prepStatement.setString(5, email);
+
+            prepStatement.executeUpdate();
+
+            System.out.println("User added!");
+
+        } catch(SQLException Ex) {
+            System.out.println("Error running the sample queries.  Machine Error: " +
+                    Ex.toString());
+        } finally {
+            try {
+                if (prepStatement != null) prepStatement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
     }
 
     public void updateSystemDate() {
