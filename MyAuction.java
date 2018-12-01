@@ -8,6 +8,7 @@ public class MyAuction {
 
     private static Scanner reader;
     private static Connection connection; // used to hold the jdbc connection to the DB
+    private Statement statement; // used to create an instance of the connection
     private PreparedStatement prepStatement; // used to create a prepared statement, that will be later reused
     private ResultSet resultSet; // used to hold the result of your query (if one exists)
     private String query; // this will hold the query we are using
@@ -20,13 +21,16 @@ public class MyAuction {
 
         System.out.println("Welcome to My Auction!");
 
+        // Ask for admin or customer until a valid response is entered
         do {
             System.out.println("Are you an \"admin\" or a \"customer\"?");
             response = reader.nextLine();
         } while(!(response.equals("admin") || response.equals("customer")));
 
+        // CUSTOMER
         if(response.equals("customer")) {
             System.out.println("Welcome Customer! Please enter your login/username:");
+            // Ask for username/password until valid credentials are given
             do {
                 login = reader.nextLine();
                 System.out.println("Please enter your password:");
@@ -72,8 +76,10 @@ public class MyAuction {
                 }
             } while(!response.equals("0"));
 
+        // ADMIN
         } else if(response.equals("admin")) {
             System.out.println("Welcome Admin! Please enter your login/username:");
+            // Ask for username/password until valid credentials are given
             do {
                 login = reader.nextLine();
                 System.out.println("Please enter your password:");
@@ -196,14 +202,14 @@ public class MyAuction {
         // List categories where parent_category = NULL
         ArrayList<String> parentCategories = getParentCategories();
         for (int i = 0; i < parentCategories.size(); i++) {
-            System.out.println((i + 1) + " - " + parentCategories.get(i));
+            System.out.println(i + " - " + parentCategories.get(i));
         }
         response = reader.nextLine();
         System.out.println("Which subcategory would you like to browse?");
         // List categories where parent_category = the category selected
         ArrayList<String> childCategories = getChildCategories(parentCategories.get(Integer.parseInt(response)));
-        for(int i = 0; i < parentCategories.size(); i++) {
-            System.out.println((i+1) + " - " + childCategories.get(i));
+        for(int i = 0; i < childCategories.size(); i++) {
+            System.out.println(i + " - " + childCategories.get(i));
         }
         String category = reader.nextLine();
         System.out.println("Would you like the products to be sorted by:\n" +
@@ -212,13 +218,35 @@ public class MyAuction {
                 "3 - no sorting?");
         response = reader.nextLine();
         // List products with key attributes: auction_id, name, description, highest_bid (if sorted)
-        displayProducts(category, Integer.parseInt(response));
+        displayProducts(childCategories.get((Integer.parseInt(category))), Integer.parseInt(response));
     }
 
     private ArrayList<String> getParentCategories() {
         ArrayList<String> parentCategories = new ArrayList<>();
 
+        try {
 
+            statement = connection.createStatement(); //create an instance
+            String selectQuery = "SELECT * FROM category WHERE parent_category IS NULL";
+
+            resultSet = statement.executeQuery(selectQuery); //run the query on the DB table
+
+            while (resultSet.next()) //this not only keeps track of if another record
+            //exists but moves us forward to the first record
+            {
+                parentCategories.add(resultSet.getString("name"));
+            }
+
+        } catch(SQLException Ex) {
+            System.out.println("Error running the sample queries.  Machine Error: " +
+                    Ex.toString());
+        } finally {
+            try {
+                if (statement != null) statement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
 
         return parentCategories;
     }
@@ -226,10 +254,68 @@ public class MyAuction {
     private ArrayList<String> getChildCategories(String parent) {
         ArrayList<String> childCategories = new ArrayList<>();
 
+        try {
+
+            statement = connection.createStatement(); //create an instance
+            String selectQuery = "SELECT * FROM category WHERE parent_category='" + parent + "'"; // concatenating because this value does not come from the user, safe to not sanitize
+
+            resultSet = statement.executeQuery(selectQuery); //run the query on the DB table
+
+            while (resultSet.next()) //this not only keeps track of if another record
+            //exists but moves us forward to the first record
+            {
+                childCategories.add(resultSet.getString("name"));
+            }
+
+        } catch(SQLException Ex) {
+            System.out.println("Error running the sample queries.  Machine Error: " +
+                    Ex.toString());
+        } finally {
+            try {
+                if (statement != null) statement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
+
         return childCategories;
     }
 
-    private void displayProducts() {
+    private void displayProducts(String category, int sort) {
+
+        try {
+
+            statement = connection.createStatement(); //create an instance
+            String selectQuery = "SELECT * FROM product JOIN belongsto ON product.auction_id=belongsto.auction_id WHERE product.status='under auction' AND belongsto.category='" + category + "'";
+
+            if(sort == 1) {
+                selectQuery += " ORDER BY amount";
+            } else if(sort == 2) {
+                selectQuery += " ORDER BY name";
+            }
+
+            resultSet = statement.executeQuery(selectQuery); //run the query on the DB table
+
+            while (resultSet.next()) //this not only keeps track of if another record
+            //exists but moves us forward to the first record
+            {
+                int auctionID = resultSet.getInt("auction_id");
+                String name = resultSet.getString("name");
+                String description = resultSet.getString("description");
+                int highestBidAmt = resultSet.getInt("amount");
+                System.out.println(auctionID + ": " + name + " - " + description + " - Highest Bid Amount: $" + highestBidAmt);
+            }
+
+        } catch(SQLException Ex) {
+            System.out.println("Error running the sample queries.  Machine Error: " +
+                    Ex.toString());
+        } finally {
+            try {
+                if (statement != null) statement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
 
     }
 
