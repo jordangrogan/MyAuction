@@ -16,6 +16,7 @@ public class MyAuction {
 
         Scanner reader = new Scanner(System.in);
         String response;
+        boolean loggedIn = false;
 
         System.out.println("Welcome to My Auction!");
 
@@ -26,24 +27,43 @@ public class MyAuction {
 
         if(response.equals("customer")) {
             System.out.println("Welcome Customer! Please enter your login/username:");
-            String login = reader.nextLine();
-            System.out.println("Please enter your password:");
-            String password = reader.nextLine();
-            if(checkCredentials(login, password, false)) {
-                System.out.println("Logged in!");
-            } else {
-                System.out.println("Try again!");
-            }
+            do {
+                String login = reader.nextLine();
+                System.out.println("Please enter your password:");
+                String password = reader.nextLine();
+                if (checkCredentials(login, password, false)) {
+                    loggedIn = true;
+                } else {
+                    System.out.println("Sorry, those credentials are invalid. Enter your username:");
+                }
+            } while(!loggedIn);
+            System.out.println("Customer Main Menu\n" +
+                    "Select an option below:\n" +
+                    "1 - Browse products\n" +
+                    "2 - Search for product by text\n" +
+                    "3 - Put product for auction\n" +
+                    "4 - Bid on product\n" +
+                    "5 - Suggestions\n" +
+                    "6 - Sell product"); // TODO: this option only available to customers who sell sell products
         } else if(response.equals("admin")) {
             System.out.println("Welcome Admin! Please enter your login/username:");
-            String login = reader.nextLine();
-            System.out.println("Please enter your password:");
-            String password = reader.nextLine();
-            if(checkCredentials(login, password, true) == true) {
-                System.out.println("Logged in!");
-            } else {
-                System.out.println("Try again!");
-            }
+            do {
+                String login = reader.nextLine();
+                System.out.println("Please enter your password:");
+                String password = reader.nextLine();
+                if (checkCredentials(login, password, true)) {
+                    loggedIn = true;
+                } else {
+                    System.out.println("Sorry, those credentials are invalid. Enter your username:");
+                }
+            } while(!loggedIn);
+            System.out.println("Administrator Main Menu\n" +
+                    "Select an option below:\n" +
+                    "1 - New customer registration\n" +
+                    "2 - Update system date\n" +
+                    "3 - Product statistics (all products)\n" +
+                    "4 - Product statistics (by customer)\n" +
+                    "5 - Statistics");
         }
 
     }
@@ -54,9 +74,9 @@ public class MyAuction {
 
         try{
             if(isAdmin) {
-                query = "SELECT * FROM administrator WHERE login='?' AND password='?';";
+                query = "SELECT * FROM administrator WHERE login=? AND password=?";
             } else {
-                query = "SELECT * FROM customer WHERE login='?' AND password='?';";
+                query = "SELECT * FROM customer WHERE login=? AND password=?";
             }
 
             prepStatement = connection.prepareStatement(query);
@@ -64,7 +84,7 @@ public class MyAuction {
             prepStatement.setString(1, login);
             prepStatement.setString(2, password);
 
-            resultSet = prepStatement.executeQuery(query); //run the query on the DB table
+            resultSet = prepStatement.executeQuery(); //run the query on the DB table
 
             if(resultSet.next()) {
                 // User found! Authorize!
@@ -97,8 +117,8 @@ public class MyAuction {
 	   try blocks */
 
         String username, password;
-        username = ""; //This is your username in oracle
-        password = ""; //This is your password in oracle
+        username = args[0]; //This is your username in oracle
+        password = args[1]; //This is your password in oracle
 
         try{
 
