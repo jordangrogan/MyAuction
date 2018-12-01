@@ -37,14 +37,39 @@ public class MyAuction {
                     System.out.println("Sorry, those credentials are invalid. Enter your username:");
                 }
             } while(!loggedIn);
-            System.out.println("Customer Main Menu\n" +
+            do {
+                System.out.println("Customer Main Menu\n" +
                     "Select an option below:\n" +
+                    "0 - Quit\n" +
                     "1 - Browse products\n" +
                     "2 - Search for product by text\n" +
                     "3 - Put product for auction\n" +
                     "4 - Bid on product\n" +
                     "5 - Suggestions\n" +
                     "6 - Sell product"); // TODO: this option only available to customers who sell sell products
+                response = reader.nextLine();
+                switch (response) {
+                    case "1":
+                        browseProducts();
+                        break;
+                    case "2":
+                        searchForProductsByText();
+                        break;
+                    case "3":
+                        putProductForAuction();
+                        break;
+                    case "4":
+                        bidOnProduct();
+                        break;
+                    case "5":
+                        suggestions();
+                        break;
+                    case "6":
+                        sellProduct();
+                        break;
+                }
+            } while(!response.equals("0"));
+
         } else if(response.equals("admin")) {
             System.out.println("Welcome Admin! Please enter your login/username:");
             do {
@@ -57,14 +82,37 @@ public class MyAuction {
                     System.out.println("Sorry, those credentials are invalid. Enter your username:");
                 }
             } while(!loggedIn);
-            System.out.println("Administrator Main Menu\n" +
+            do {
+                System.out.println("Administrator Main Menu\n" +
                     "Select an option below:\n" +
+                    "0 - Quit\n" +
                     "1 - New customer registration\n" +
                     "2 - Update system date\n" +
                     "3 - Product statistics (all products)\n" +
                     "4 - Product statistics (by customer)\n" +
                     "5 - Statistics");
+                response = reader.nextLine();
+                switch (response) {
+                    case "1":
+                        newCustomerRegistration();
+                        break;
+                    case "2":
+                        updateSystemDate();
+                        break;
+                    case "3":
+                        productStatisticsAll();
+                        break;
+                    case "4":
+                        productStatisticsByCustomer();
+                        break;
+                    case "5":
+                        statistics();
+                        break;
+                }
+            } while(!response.equals("0"));
         }
+
+        reader.close();
 
     }
 
@@ -109,8 +157,51 @@ public class MyAuction {
         return authorized;
     }
 
-    public static void main(String args[]) throws SQLException
-    {
+    public void browseProducts() {
+        // TODO
+    }
+
+    public void searchForProductsByText() {
+        // TODO
+    }
+
+    public void putProductForAuction() {
+        // TODO
+    }
+
+    public void bidOnProduct() {
+        // TODO
+    }
+
+    public void suggestions() {
+        // TODO
+    }
+
+    public void sellProduct() {
+        // TODO
+    }
+
+    public void newCustomerRegistration() {
+        // TODO
+    }
+
+    public void updateSystemDate() {
+        // TODO
+    }
+
+    public void productStatisticsAll() {
+        // TODO
+    }
+
+    public void productStatisticsByCustomer() {
+        // TODO
+    }
+
+    public void statistics() {
+        // TODO
+    }
+
+    public static void main(String args[]) throws SQLException {
     /* Making a connection to a DB causes certain exceptions.  In order to handle
 	   these, you either put the DB stuff in a try block or have your function
 	   throw the Exceptions and handle them later.  For this demo I will use the
@@ -120,7 +211,7 @@ public class MyAuction {
         username = args[0]; //This is your username in oracle
         password = args[1]; //This is your password in oracle
 
-        try{
+        try {
 
             // Register the oracle driver.
             DriverManager.registerDriver (new oracle.jdbc.driver.OracleDriver());
