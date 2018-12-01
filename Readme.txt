@@ -4,6 +4,9 @@ John Wartonick - jww36
 Wyatt Bobis - wjb39
 
 To run our system:
+0. Setup environment
+     * `source /afs/pitt.edu/home/p/a/panos/1555/bash.env.class3`
+
 1. Run SQL files
      * `sqlplus`
      * Login with username and password
