@@ -439,7 +439,53 @@ public class MyAuction {
     }
 
     public void updateSystemDate() {
-        // TODO
+        System.out.println("Enter a month (01 = January, 02 = February, etc.):");
+        int month = reader.nextInt();
+        System.out.println("Enter a day (01, 02, 03, 04, etc.):");
+        int day = reader.nextInt();
+        System.out.println("Enter a year (2018, 2019, etc.):");
+        int year = reader.nextInt();
+        System.out.println("Enter an hour (in 24 hour format):");
+        int hour = reader.nextInt();
+        System.out.println("Enter a minute (00, 01, 02, etc.):");
+        int minute = reader.nextInt();
+        System.out.println("Enter a second (00, 01, 02, etc.):");
+        int second = reader.nextInt();
+        updateSystemDate(month, day, year, hour, minute, second);
+    }
+
+    private void updateSystemDate(int month, int day, int year, int hour, int minute, int second) {
+
+        try{
+
+            query = "UPDATE oursysdate SET c_date=? WHERE ROWNUM=1";
+            prepStatement = connection.prepareStatement(query);
+
+            // This is how you can specify the format for the dates you will use
+            java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM.dd/yyyy kk:mm:ss");
+            // This is how you format a date so that you can use the setDate format below
+            String userDate = month + "." + day + "/" + year + " " + hour + ":" + minute + ":" + second;
+            java.sql.Date date_reg = new java.sql.Date (df.parse(userDate).getTime());
+
+            prepStatement.setDate(1, date_reg);
+            prepStatement.executeUpdate();
+
+            System.out.println("System date updated!");
+
+        } catch(SQLException Ex) {
+            System.out.println("Error running the sample queries.  Machine Error: " +
+                    Ex.toString());
+        } catch (ParseException e) {
+            System.out.println("Error parsing the date. Machine Error: " +
+                    e.toString());
+        } finally{
+            try {
+                if (statement != null) statement.close();
+                if (prepStatement != null) prepStatement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
     }
 
     public void productStatisticsAll() {
