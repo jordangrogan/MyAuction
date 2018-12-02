@@ -489,11 +489,91 @@ public class MyAuction {
     }
 
     public void productStatisticsAll() {
-        // TODO
+
+        System.out.println("All Products:");
+
+        try{
+            statement = connection.createStatement(); //create an instance
+            query = "SELECT product.auction_id, product.name, product.status, product.amount, bidlog.bidder FROM product JOIN bidlog ON product.auction_id = bidlog.auction_id AND product.amount = bidlog.amount";
+
+            resultSet = statement.executeQuery(query); //run the query on the DB table
+
+            while (resultSet.next()) {
+                int auction_id = resultSet.getInt(1);
+                String name = resultSet.getString(2);
+                String status = resultSet.getString(3);
+                int amount = resultSet.getInt(4);
+                String bidder = resultSet.getString(5);
+
+                System.out.print(auction_id + " - " + name + " - " + status + " - $" + amount);
+
+                if(!status.equals("sold")) {
+                    System.out.println(" - Highest bidder: " + bidder);
+                } else {
+                    System.out.println("");
+                }
+            }
+
+            resultSet.close();
+
+        } catch(SQLException Ex) {
+            System.out.println("Error running the sample queries.  Machine Error: " +
+                    Ex.toString());
+        } finally {
+            try {
+                if (statement != null) statement.close();
+                if (prepStatement != null) prepStatement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
     }
 
     public void productStatisticsByCustomer() {
-        // TODO
+
+        System.out.println("What is the seller's login name?");
+        String seller = reader.nextLine();
+
+        try{
+            query = "SELECT product.auction_id, product.name, product.status, product.amount, bidlog.bidder FROM product JOIN bidlog ON product.auction_id = bidlog.auction_id AND product.amount = bidlog.amount WHERE product.seller=?";
+            prepStatement = connection.prepareStatement(query);
+
+            prepStatement.setString(1, seller);
+
+            resultSet = prepStatement.executeQuery(); //run the query on the DB table
+
+            System.out.println(seller + "'s Products:");
+
+            while (resultSet.next()) {
+                int auction_id = resultSet.getInt(1);
+                String name = resultSet.getString(2);
+                String status = resultSet.getString(3);
+                int amount = resultSet.getInt(4);
+                String bidder = resultSet.getString(5);
+
+                System.out.print(auction_id + " - " + name + " - " + status + " - $" + amount);
+
+                if(!status.equals("sold")) {
+                    System.out.println(" - Highest bidder: " + bidder);
+                } else {
+                    System.out.println("");
+                }
+            }
+
+            resultSet.close();
+
+        } catch(SQLException Ex) {
+            System.out.println("Error running the sample queries.  Machine Error: " +
+                    Ex.toString());
+        } finally {
+            try {
+                if (statement != null) statement.close();
+                if (prepStatement != null) prepStatement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
+
     }
 
     public void statistics() {
