@@ -377,28 +377,33 @@ public class MyAuction {
         String productName = reader.nextLine();
 
         //product description(optional)
-        System.out.println("Enter a product description (optional): ")
+        System.out.println("Enter a product description (optional): ");
         if(reader.hasNextLine()) {String desc = reader.nextLine(); }
 
         //product categories
-        boolean go = true
-        while(go == true){
-	        System.out.println("Enter 1 or 2 item categories (separated by a space): ")
-	        String categories = reader.nextLine();
-	        String[] categoriesArr = categories.split(" ");
-	        
-	        ArrayList<String> parentCategories = getParentCategories();
-	        if(parentCategories.contains(categoriesArr[0]) == true) {System.out.println(categoriesArr[0] + " is an invalid subcategory.");}
-	        else if(parentCategories.contains(categoriesArr[1]) == true) {System.out.println(categoriesArr[1] + " is an invalid subcategory.");}
-	        else {
-		        for(int i = 0; i < parentCategories.length; i++){
-		        	String parent = parentCategories.get(i);
-		        	ArrayList<String> childCategories = getChildCategories(String parent);
-		         	if(childCategories.contains(categoriesArr[0] == false) {System.out.println(categoriesArr[0] + " is an invalid subcategory.");}
-		         	if(childCategories.contains(categoriesArr[1] == false) {System.out.println(categoriesArr[1] + " is an invalid subcategory.");}
-		        }
-		    }
-	    }
+
+        System.out.println("Enter 1 or 2 item categories (separated by a space): ");
+        String categories = reader.nextLine();
+        System.out.println(categories);
+        String[] categoriesArr = categories.split(" ");
+        String[] validCategories = new String[2];
+
+        ArrayList<String> parentCategories = getParentCategories();
+        // for(int i = 0; i < categoriesArr.length; i++){
+        // 	if(parentCategories.contains(categoriesArr[i]) == false){
+        // 		System.out.println("Invalid subcategory: " + categoriesArr[i]);
+        // 	}
+        // }
+        for(int i = 0; i < parentCategories.size(); i++){
+        	ArrayList<String> childCategories = getChildCategories(parentCategories.get(i));
+        	for(int j = 0; j < categoriesArr.length; j++){
+        		if(childCategories.contains(categoriesArr[j]) == true){
+        			validCategories[j] = categoriesArr[j];
+        		}else {
+        			System.out.println("Invalid subcategory: " + categoriesArr[i]);
+        		}
+        	}
+        }		    
 	    //start date
 
         //produt auction days
@@ -407,17 +412,19 @@ public class MyAuction {
 
         //get new auction id
         int auction_id = -1;
+        int max_auction_id = -1;
         try{
         	statement = connection.createStatement();
-        	String query = "SELECT MAX (auction_id) FROM Bidlog"
-        	resultSet = statement.executeQuery(selectQuery);
-        	int max_auction_id = resultSet.next().getInt("auction_id");
+        	String query = "SELECT MAX (auction_id) FROM Bidlog";
+        	resultSet = statement.executeQuery(query);
+        	if(resultSet.next()){max_auction_id = resultSet.getInt("auction_id");}
+        	
         	auction_id = max_auction_id + 1;
-        }catch(SQLException(e){
+        }catch(SQLException e){
 			System.out.println("Cannot close Statement. Machine error: "+e.toString());
         }
 
-        return auction_id
+        return auction_id;
     }
 
     public void bidOnProduct() {
