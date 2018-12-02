@@ -381,29 +381,38 @@ public class MyAuction {
         if(reader.hasNextLine()) {String desc = reader.nextLine(); }
 
         //product categories
+        boolean go = true;
+        while(go == true){        	
+	        System.out.println("Enter an item category: ");
+	        String category = reader.nextLine();
 
-        System.out.println("Enter 1 or 2 item categories (separated by a space): ");
-        String categories = reader.nextLine();
-        System.out.println(categories);
-        String[] categoriesArr = categories.split(" ");
-        String[] validCategories = new String[2];
+	        ArrayList<String> parentCategories = getParentCategories();
+	       	
+	        for(int i = 0; i < parentCategories.size(); i++){
+	        	ArrayList<String> childCategories = getChildCategories(parentCategories.get(i));
+	        	if(childCategories.contains(category) == true){
+	        		go = false;
+	        	}	        	
+	        }
+	        if(go == true){System.out.println("Invalid item category: " + category);}	    
+        }
+        go = true;
+        while(go == true){        	
+	        System.out.println("Enter a second item category(optional): ");
+	        String category = reader.nextLine();
+	        System.out.println("Category 2: "+category);
+	        if(category.equals("")){ break;}
 
-        ArrayList<String> parentCategories = getParentCategories();
-        // for(int i = 0; i < categoriesArr.length; i++){
-        // 	if(parentCategories.contains(categoriesArr[i]) == false){
-        // 		System.out.println("Invalid subcategory: " + categoriesArr[i]);
-        // 	}
-        // }
-        for(int i = 0; i < parentCategories.size(); i++){
-        	ArrayList<String> childCategories = getChildCategories(parentCategories.get(i));
-        	for(int j = 0; j < categoriesArr.length; j++){
-        		if(childCategories.contains(categoriesArr[j]) == true){
-        			validCategories[j] = categoriesArr[j];
-        		}else {
-        			System.out.println("Invalid subcategory: " + categoriesArr[i]);
-        		}
-        	}
-        }		    
+	        ArrayList<String> parentCategories = getParentCategories();
+	       	
+	        for(int i = 0; i < parentCategories.size(); i++){
+	        	ArrayList<String> childCategories = getChildCategories(parentCategories.get(i));
+	        	if(childCategories.contains(category) == true){
+	        		go = false;
+	        	}	        	
+	        }
+	        if(go == true){System.out.println("Invalid item category: " + category);}	    
+        }
 	    //start date
 
         //produt auction days
