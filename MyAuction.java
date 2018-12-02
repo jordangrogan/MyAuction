@@ -505,6 +505,7 @@ public class MyAuction {
             resultSet.close();
 
             //this gets the second highest bid and displays it
+            /*
             query = "SELECT amount FROM Bidlog WHERE auction_id = " + auction_id + " ORDER BY amount DESC LIMIT 1, 1";
             prepStatement = connection.prepareStatement(query);
             resultSet = prepStatement.executeQuery();
@@ -531,6 +532,7 @@ public class MyAuction {
                 // update DB
             }
             resultSet.close();
+            */
         } catch(SQLException Ex) {
             System.out.println("Error running the  queries.  Machine Error: " +
                     Ex.toString());
