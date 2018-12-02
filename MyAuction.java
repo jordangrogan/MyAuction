@@ -12,11 +12,12 @@ public class MyAuction {
     private PreparedStatement prepStatement; // used to create a prepared statement, that will be later reused
     private ResultSet resultSet; // used to hold the result of your query (if one exists)
     private String query; // this will hold the query we are using
+    private String login; // holds the user's login
 
     public MyAuction() {
 
         String response;
-        String login;
+        // String login;
         boolean loggedIn = false;
 
         System.out.println("Welcome to My Auction!");
@@ -370,70 +371,95 @@ public class MyAuction {
         displayProductsByKeywords(keywordsArr);
     }
 
-    public int putProductForAuction() {
+    public void putProductForAuction() {
+        boolean go = true;
         
-        //Product name 
-        System.out.println("Enter a product name: ");
-        String productName = reader.nextLine();
+        //Product name
+        String productName = "";
+        while(go == true){
+	        System.out.println("Enter a product name: ");
+	        productName = reader.nextLine();
+        	if(productName.equals("") == false){ go = false;}
+        }
 
         //product description(optional)
         System.out.println("Enter a product description (optional): ");
-        if(reader.hasNextLine()) {String desc = reader.nextLine(); }
+        String desc = "";
+        if(reader.hasNextLine()) {desc = reader.nextLine(); }
 
         //product categories
-        boolean go = true;
-        while(go == true){        	
-	        System.out.println("Enter an item category: ");
-	        String category = reader.nextLine();
-
-	        ArrayList<String> parentCategories = getParentCategories();
-	       	
-	        for(int i = 0; i < parentCategories.size(); i++){
-	        	ArrayList<String> childCategories = getChildCategories(parentCategories.get(i));
-	        	if(childCategories.contains(category) == true){
-	        		go = false;
-	        	}	        	
-	        }
-	        if(go == true){System.out.println("Invalid item category: " + category);}	    
-        }
+        String category1 = "";
         go = true;
         while(go == true){        	
-	        System.out.println("Enter a second item category(optional): ");
-	        String category = reader.nextLine();
-	        System.out.println("Category 2: "+category);
-	        if(category.equals("")){ break;}
+	        System.out.println("Enter an item category: ");
+	        category1 = reader.nextLine();
 
 	        ArrayList<String> parentCategories = getParentCategories();
 	       	
 	        for(int i = 0; i < parentCategories.size(); i++){
 	        	ArrayList<String> childCategories = getChildCategories(parentCategories.get(i));
-	        	if(childCategories.contains(category) == true){
+	        	if(childCategories.contains(category1) == true){
 	        		go = false;
 	        	}	        	
 	        }
-	        if(go == true){System.out.println("Invalid item category: " + category);}	    
+	        if(go == true){System.out.println("Invalid item category: " + category1);}	    
         }
-	    //start date
+        go = true;
+        String category2 = "";
+        while(go == true){        	
+	        System.out.println("Enter a second item category(optional): ");
+	        category2 = reader.nextLine();
+	        // System.out.println("Category 2: "+category);
+	        if(category2.equals("")){ break;}
+
+	        ArrayList<String> parentCategories = getParentCategories();
+	       	
+	        for(int i = 0; i < parentCategories.size(); i++){
+	        	ArrayList<String> childCategories = getChildCategories(parentCategories.get(i));
+	        	if(childCategories.contains(category2) == true){
+	        		go = false;
+	        	}	        	
+	        }
+	        if(go == true){System.out.println("Invalid item category: " + category2);}	    
+        }
+
+        String categories_csv = "";
+        if(category2.equals("") == true){categories_csv = category1;}
+        else{categories_csv = category1 + "," + category2;}
+
+        //starting price
+        go = true;
+        int price = -1;
+        while(go == true){
+        	System.out.println("Enter a price (whole number): ");
+        	String sPrice = reader.nextLine();
+        	if(sPrice.equals("") == false){go = false;}
+        	price = Integer.parseInt(sPrice);
+        }
 
         //produt auction days
-        System.out.println("Enter a number of days for auction: ");
-        String auctDays = reader.nextLine();
-
-        //get new auction id
-        int auction_id = -1;
-        int max_auction_id = -1;
-        try{
-        	statement = connection.createStatement();
-        	String query = "SELECT MAX (auction_id) FROM Bidlog";
-        	resultSet = statement.executeQuery(query);
-        	if(resultSet.next()){max_auction_id = resultSet.getInt("auction_id");}
-        	
-        	auction_id = max_auction_id + 1;
-        }catch(SQLException e){
-			System.out.println("Cannot close Statement. Machine error: "+e.toString());
+        go = true;
+        String auctDays = "";
+        while(go == true){
+		    System.out.println("Enter a number of days for auction: ");
+		    auctDays = reader.nextLine();
+        	if(auctDays.equals("") == false){go = false;}
         }
-
-        return auction_id;
+		int numDays = Integer.parseInt(auctDays);
+			
+        try{
+        	// proc_putProduct (product_name, product_description, seller, categories_csv, min_price, num_days)
+        	CallableStatement cStatement = connection.prepareCall("{call proc_putProduct (?, ?, ?, ?, ?, ?)}");
+        	cStatement.setString(1, productName);
+        	cStatement.setString(2, desc);
+        	cStatement.setString(3, login);
+        	cStatement.setString(4, categories_csv);
+        	cStatement.setInt(5, price);
+        	cStatement.setInt(6, numDays);
+        	cStatement.execute();
+        }catch(SQLException e){
+        	System.out.println("Cannot close Statement. Machine error: "+e.toString());
+        }
     }
 
     public void bidOnProduct() {
