@@ -370,7 +370,26 @@ public class MyAuction {
     }
 
     public void putProductForAuction() {
-        // TODO
+        
+        //Product name 
+        System.out.println("Enter a product name: ");
+        String productName = reader.nextLine();
+
+        //product description(optional)
+        System.out.println("Enter a product description (optional): ")
+        if(reader.hasNextLine()) {String desc = reader.nextLine(); }
+
+        //product categories
+        System.out.println("Enter item categories (separated by a space): ")
+        String categories = reader.nextLine();
+        String[] categoriesArr = categories.split(" ");
+        
+        //produt auction days
+        System.out.println("Enter a number of days for auction: ");
+        String auctDays = reader.nextLine();
+
+
+
     }
 
     public void bidOnProduct() {
