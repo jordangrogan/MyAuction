@@ -12,12 +12,11 @@ public class MyAuction {
     private PreparedStatement prepStatement; // used to create a prepared statement, that will be later reused
     private ResultSet resultSet; // used to hold the result of your query (if one exists)
     private String query; // this will hold the query we are using
-    private String login; // holds the user's login
 
     public MyAuction() {
 
         String response;
-        // String login;
+        String login;
         boolean loggedIn = false;
 
         System.out.println("Welcome to My Auction!");
@@ -63,8 +62,7 @@ public class MyAuction {
                         searchForProductsByText();
                         break;
                     case "3":
-                    	System.out.println("here 3");
-                        putProductForAuction();
+                        putProductForAuction(login);
                         break;
                     case "4":
                         bidOnProduct();
@@ -371,7 +369,7 @@ public class MyAuction {
         displayProductsByKeywords(keywordsArr);
     }
 
-    public void putProductForAuction() {
+    public void putProductForAuction(String login) {
         boolean go = true;
         
         //Product name
