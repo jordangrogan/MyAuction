@@ -382,42 +382,46 @@ public class MyAuction {
 
         //product categories
         boolean go = true;
+        String category1;
         while(go == true){        	
 	        System.out.println("Enter an item category: ");
-	        String category = reader.nextLine();
+	        category1 = reader.nextLine();
 
 	        ArrayList<String> parentCategories = getParentCategories();
 	       	
 	        for(int i = 0; i < parentCategories.size(); i++){
 	        	ArrayList<String> childCategories = getChildCategories(parentCategories.get(i));
-	        	if(childCategories.contains(category) == true){
+	        	if(childCategories.contains(category1) == true){
 	        		go = false;
 	        	}	        	
 	        }
-	        if(go == true){System.out.println("Invalid item category: " + category);}	    
+	        if(go == true){System.out.println("Invalid item category: " + category1);}	    
         }
         go = true;
+        String category2;
         while(go == true){        	
 	        System.out.println("Enter a second item category(optional): ");
-	        String category = reader.nextLine();
-	        System.out.println("Category 2: "+category);
+	        category2 = reader.nextLine();
+	        // System.out.println("Category 2: "+category);
 	        if(category.equals("")){ break;}
 
 	        ArrayList<String> parentCategories = getParentCategories();
 	       	
 	        for(int i = 0; i < parentCategories.size(); i++){
 	        	ArrayList<String> childCategories = getChildCategories(parentCategories.get(i));
-	        	if(childCategories.contains(category) == true){
+	        	if(childCategories.contains(category2) == true){
 	        		go = false;
 	        	}	        	
 	        }
-	        if(go == true){System.out.println("Invalid item category: " + category);}	    
+	        if(go == true){System.out.println("Invalid item category: " + category2);}	    
         }
-	    //start date
 
         //produt auction days
         System.out.println("Enter a number of days for auction: ");
         String auctDays = reader.nextLine();
+
+        //start date
+
 
         //get new auction id
         int auction_id = -1;
