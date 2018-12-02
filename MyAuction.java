@@ -12,11 +12,12 @@ public class MyAuction {
     private PreparedStatement prepStatement; // used to create a prepared statement, that will be later reused
     private ResultSet resultSet; // used to hold the result of your query (if one exists)
     private String query; // this will hold the query we are using
+    private String login;
 
     public MyAuction() {
 
         String response;
-        String login;
+
         boolean loggedIn = false;
 
         System.out.println("Welcome to My Auction!");
