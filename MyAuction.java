@@ -640,7 +640,217 @@ public class MyAuction {
     }
 
     public void statistics() {
-        // TODO
+
+        int statistic;
+
+        do {
+
+            System.out.println("Which statistic would you like to run?\n" +
+                    "1 - the top k highest volume sub-categories (highest count of products sold)\n" +
+                    "2 - the top k highest volume main categories (highest count of products sold)\n" +
+                    "3 - the top k most active bidders (highest count of bids placed)\n" +
+                    "4 - the top k most active buyers (highest total dollar amount spent)");
+
+            statistic = reader.nextInt();
+
+        } while(statistic != 1 && statistic != 2 && statistic != 3 && statistic != 4);
+
+        System.out.println("How many months back should this statistic go?");
+        int x = reader.nextInt();
+
+        switch (statistic) {
+            case 1:
+                topKHighestVolumeSubCategories(x);
+                break;
+            case 2:
+                topKHighestVolumeMainCategories(x);
+                break;
+            case 3:
+                System.out.println("here 3");
+                topKMostActiveBidders(x);
+                break;
+            case 4:
+                topKMostActiveBuyers(x);
+                break;
+        }
+
+    }
+
+    private void topKHighestVolumeSubCategories(int x) {
+
+        System.out.println("How many top k sub-categories would you like reported? k=");
+        int k = reader.nextInt();
+        reader.nextLine();
+
+        topKHighestVolumeSubCategories(x, k);
+
+    }
+
+    private void topKHighestVolumeSubCategories(int x, int k) {
+
+
+        try {
+
+            statement = connection.createStatement(); //create an instance
+            String selectQuery = "SELECT name, func_productCount(" + x + ", name) as product_count FROM category WHERE parent_category IS NOT NULL ORDER BY product_count DESC";
+
+            resultSet = statement.executeQuery(selectQuery); //run the query on the DB table
+
+            int count = 0;
+            while (resultSet.next()) //this not only keeps track of if another record
+            //exists but moves us forward to the first record
+            {
+                System.out.println("Category: " + resultSet.getString("name") + " | Number of Products: " + resultSet.getString("product_count"));
+                count++;
+                if(count == k) break;
+            }
+
+            resultSet.close();
+
+        } catch(SQLException Ex) {
+            System.out.println("Error running the sample queries.  Machine Error: " +
+                    Ex.toString());
+        } finally {
+            try {
+                if (statement != null) statement.close();
+                if (prepStatement != null) prepStatement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
+
+    }
+
+    private void topKHighestVolumeMainCategories(int x) {
+
+        System.out.println("How many top k main categories would you like reported? k=");
+        int k = reader.nextInt();
+        reader.nextLine();
+
+        topKHighestVolumeMainCategories(x, k);
+
+    }
+
+    private void topKHighestVolumeMainCategories(int x, int k) {
+
+        try {
+
+            statement = connection.createStatement(); //create an instance
+            String selectQuery = "SELECT name, func_productCount(" + x + ", name) as product_count FROM category WHERE parent_category IS NULL ORDER BY product_count DESC";
+
+            resultSet = statement.executeQuery(selectQuery); //run the query on the DB table
+
+            int count = 0;
+            while (resultSet.next()) //this not only keeps track of if another record
+            //exists but moves us forward to the first record
+            {
+                System.out.println("Category: " + resultSet.getString("name") + " | Number of Products: " + resultSet.getString("product_count"));
+                count++;
+                if(count == k) break;
+            }
+
+            resultSet.close();
+
+        } catch(SQLException Ex) {
+            System.out.println("Error running the sample queries.  Machine Error: " +
+                    Ex.toString());
+        } finally {
+            try {
+                if (statement != null) statement.close();
+                if (prepStatement != null) prepStatement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
+
+    }
+
+    private void topKMostActiveBidders(int x) {
+
+        System.out.println("How many top k active buyers would you like reported? k=");
+        int k = reader.nextInt();
+        reader.nextLine();
+
+        topKMostActiveBidders(x, k);
+
+    }
+
+    private void topKMostActiveBidders(int x, int k) {
+
+        try {
+
+            statement = connection.createStatement(); //create an instance
+            String selectQuery = "SELECT bidder, func_bidCount(" + x + ", bidder) as bid_count FROM bidlog GROUP BY bidder ORDER BY bid_count DESC";
+
+            resultSet = statement.executeQuery(selectQuery); //run the query on the DB table
+
+            int count = 0;
+            while (resultSet.next()) //this not only keeps track of if another record
+            //exists but moves us forward to the first record
+            {
+                System.out.println("Bidder: " + resultSet.getString("bidder") + " | Number of Bids: " + resultSet.getString("bid_count"));
+                count++;
+                if(count == k) break;
+            }
+
+            resultSet.close();
+
+        } catch(SQLException Ex) {
+            System.out.println("Error running the queries.  Machine Error: " +
+                    Ex.toString());
+        } finally {
+            try {
+                if (statement != null) statement.close();
+                if (prepStatement != null) prepStatement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
+
+    }
+
+    private void topKMostActiveBuyers(int x) {
+
+        System.out.println("How many top k active buyers would you like reported? k=");
+        int k = reader.nextInt();
+        reader.nextLine();
+
+        topKMostActiveBuyers(x, k);
+
+    }
+
+    private void topKMostActiveBuyers(int x, int k) {
+
+        try {
+
+            statement = connection.createStatement(); //create an instance
+            String selectQuery = "SELECT buyer, func_buyingAmount(" + x + ", buyer) as amount FROM product WHERE status='sold' GROUP BY buyer ORDER BY amount DESC";
+
+            resultSet = statement.executeQuery(selectQuery); //run the query on the DB table
+
+            int count = 0;
+            while (resultSet.next()) //this not only keeps track of if another record
+            //exists but moves us forward to the first record
+            {
+                System.out.println("Buyer: " + resultSet.getString("buyer") + " | Amount Spent: " + resultSet.getString("amount"));
+                count++;
+                if(count == k) break;
+            }
+
+            resultSet.close();
+
+        } catch(SQLException Ex) {
+            System.out.println("Error running the queries.  Machine Error: " +
+                    Ex.toString());
+        } finally {
+            try {
+                if (statement != null) statement.close();
+                if (prepStatement != null) prepStatement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
+
     }
 
     public static void main(String args[]) throws SQLException {
