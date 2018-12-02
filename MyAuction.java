@@ -467,7 +467,37 @@ public class MyAuction {
     }
 
     public void suggestions() {
-        // TODO
+
+        System.out.println("Here are some products you may want to bid on based on your bidding friends:");
+
+        try {
+
+            statement = connection.createStatement(); //create an instance
+            String query = "SELECT DISTINCT product.auction_id, product.name, product.description FROM product JOIN bidlog on product.auction_id = bidlog.auction_id WHERE bidder IN (" +
+                    "SELECT DISTINCT bidder as bidding_friend FROM bidlog WHERE auction_id IN (SELECT auction_id FROM bidlog WHERE bidder='" + login + "') AND bidder != '" + login + "' AND product.status = 'under auction')";
+
+            resultSet = statement.executeQuery(query); //run the query on the DB table
+
+            while (resultSet.next()) //this not only keeps track of if another record
+            //exists but moves us forward to the first record
+            {
+                System.out.println("Auction ID: " + resultSet.getInt("auction_id") + " | " + resultSet.getString("name") + " | " + resultSet.getString("description"));
+            }
+
+            resultSet.close();
+
+        } catch(SQLException Ex) {
+            System.out.println("Error running the queries.  Machine Error: " +
+                    Ex.toString());
+        } finally {
+            try {
+                if (statement != null) statement.close();
+                if (prepStatement != null) prepStatement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
+
     }
 
     public void sellProduct() {
