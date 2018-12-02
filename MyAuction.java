@@ -375,7 +375,7 @@ public class MyAuction {
         boolean go = true;
         
         //Product name
-        String productName;
+        String productName = "";
         while(go == true){
 	        System.out.println("Enter a product name: ");
 	        productName = reader.nextLine();
@@ -384,11 +384,11 @@ public class MyAuction {
 
         //product description(optional)
         System.out.println("Enter a product description (optional): ");
-        String desc;
+        String desc = "";
         if(reader.hasNextLine()) {desc = reader.nextLine(); }
 
         //product categories
-        String category1;
+        String category1 = "";
         go = true;
         while(go == true){        	
 	        System.out.println("Enter an item category: ");
@@ -405,7 +405,7 @@ public class MyAuction {
 	        if(go == true){System.out.println("Invalid item category: " + category1);}	    
         }
         go = true;
-        String category2;
+        String category2 = "";
         while(go == true){        	
 	        System.out.println("Enter a second item category(optional): ");
 	        category2 = reader.nextLine();
@@ -423,6 +423,20 @@ public class MyAuction {
 	        if(go == true){System.out.println("Invalid item category: " + category2);}	    
         }
 
+        String categories_csv = "";
+        if(category2.equals("") == true){categories_csv = category1;}
+        else{categories_csv = category1 + "," + category2;}
+
+        //starting price
+        go = true;
+        int price = -1;
+        while(go == true){
+        	System.out.println("Enter a price (whole number): ");
+        	String sPrice = reader.nextLine();
+        	if(sPrice.equals("") == false){go = false;}
+        	price = Integer.parseInt(sPrice);
+        }
+
         //produt auction days
         go = true;
         String auctDays = "";
@@ -432,11 +446,17 @@ public class MyAuction {
         	if(auctDays.equals("") == false){go = false;}
         }
 		int numDays = Integer.parseInt(auctDays);
-
+			
         try{
         	// proc_putProduct (product_name, product_description, seller, categories_csv, min_price, num_days)
-        	CallableStatement cStatement = connection.prepareCall("{call proc_putProduct (?, ?, ?, ?, ?, ?)");
-
+        	CallableStatement cStatement = connection.prepareCall("{call proc_putProduct (?, ?, ?, ?, ?, ?)}");
+        	cStatement.setString(1, productName);
+        	cStatement.setString(2, desc);
+        	cStatement.setString(3, login);
+        	cStatement.setString(4, categories_csv);
+        	cStatement.setInt(5, price);
+        	cStatement.setInt(6, numDays);
+        	cStatement.execute();
         }catch(SQLException e){
         	System.out.println("Cannot close Statement. Machine error: "+e.toString());
         }
