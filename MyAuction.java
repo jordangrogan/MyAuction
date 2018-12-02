@@ -471,7 +471,7 @@ public class MyAuction {
     }
 
     public void sellProduct() {
-        // TODO
+        
     }
 
     public void newCustomerRegistration() {
