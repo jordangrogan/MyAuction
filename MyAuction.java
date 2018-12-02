@@ -480,12 +480,11 @@ public class MyAuction {
 
             ResultSetMetaData rsltMD = resultSet.getMetaData();
             int colNumber = rsltMD.getColumnCount();
-            for(int i = 1; i <= colNumber; i++){
-
-            }
+            int auction_id = -1;
             System.out.println("Current products:");
             while(resultSet.next()){
             	for(int i = 1; i <= colNumber; i++){
+                    if(rsltMD.getColumnName(i).equalsIgnoreCase("auction_id")) auction_id = resultSet.getInt(i);
             		if(rsltMD.getColumnName(i).equalsIgnoreCase("name")){
 	            		String val = resultSet.getString(i);
 	            		System.out.print(" - " + val);
@@ -499,12 +498,39 @@ public class MyAuction {
             }
 
             while(go == true){
-            	String productName = reader.nextLine();
-            	if(productName.equals("") == false) go = false;
-            	else{System.out.println("Which product would you like to sell:");}
+            	System.out.println("Which product would you like to sell:");
+                String productName = reader.nextLine();
+                if(productName.equals("") == false) go = false;
             }
             resultSet.close();
 
+            //this gets the second highest bid and displays it
+            query = "SELECT amount FROM Bidlog WHERE auction_id = " + auction_id + " ORDER BY amount DESC LIMIT 1, 1";
+            prepStatement = connection.prepareStatement(query);
+            resultSet = prepStatement.executeQuery();
+            int bid_amount = -1;
+            rsltMD = resultSet.getMetaData();
+            colNumber = rsltMD.getColumnCount();
+            while(resultSet.next()){
+                for(int i = 1; i <= colNumber; i++){
+                    if(rsltMD.getColumnName(i).equalsIgnoreCase("amount")) bid_amount = resultSet.getInt(i);
+                }
+            }
+            go = true;
+            String res = "";
+            while(go == true){
+                System.out.println("Last bid: " + bid_amount);
+                System.out.println("Withdraw or Sell: ");
+                res = reader.nextLine();
+                if(res.equals("") == false) go = false;                
+            }
+
+            if(res.equalsIgnoreCase("Withdraw")){
+                //update product status
+            }else if(res.equalsIgnoreCase("Sell")){
+                // update DB
+            }
+            resultSet.close();
         } catch(SQLException Ex) {
             System.out.println("Error running the  queries.  Machine Error: " +
                     Ex.toString());
