@@ -12,11 +12,12 @@ public class MyAuction {
     private PreparedStatement prepStatement; // used to create a prepared statement, that will be later reused
     private ResultSet resultSet; // used to hold the result of your query (if one exists)
     private String query; // this will hold the query we are using
+    private String login; // holds the user's login
 
     public MyAuction() {
 
         String response;
-        String login;
+        // String login;
         boolean loggedIn = false;
 
         System.out.println("Welcome to My Auction!");
@@ -409,7 +410,7 @@ public class MyAuction {
 	        System.out.println("Enter a second item category(optional): ");
 	        category2 = reader.nextLine();
 	        // System.out.println("Category 2: "+category);
-	        if(category.equals("")){ break;}
+	        if(category2.equals("")){ break;}
 
 	        ArrayList<String> parentCategories = getParentCategories();
 	       	
@@ -424,7 +425,7 @@ public class MyAuction {
 
         //produt auction days
         go = true;
-        String auctDays
+        String auctDays = "";
         while(go == true){
 		    System.out.println("Enter a number of days for auction: ");
 		    auctDays = reader.nextLine();
@@ -434,7 +435,7 @@ public class MyAuction {
 
         try{
         	// proc_putProduct (product_name, product_description, seller, categories_csv, min_price, num_days)
-        	CallableStatement cStatement = connection.prepareCall("{call proc_putProduct (?, ?, ?, ?, ?, ?)")
+        	CallableStatement cStatement = connection.prepareCall("{call proc_putProduct (?, ?, ?, ?, ?, ?)");
 
         }catch(SQLException e){
         	System.out.println("Cannot close Statement. Machine error: "+e.toString());
