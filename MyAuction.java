@@ -12,12 +12,11 @@ public class MyAuction {
     private PreparedStatement prepStatement; // used to create a prepared statement, that will be later reused
     private ResultSet resultSet; // used to hold the result of your query (if one exists)
     private String query; // this will hold the query we are using
-    private String login; // holds the user's login
 
     public MyAuction() {
 
         String response;
-        // String login;
+        String login;
         boolean loggedIn = false;
 
         System.out.println("Welcome to My Auction!");
@@ -63,8 +62,7 @@ public class MyAuction {
                         searchForProductsByText();
                         break;
                     case "3":
-                    	System.out.println("here 3");
-                        putProductForAuction();
+                        putProductForAuction(login);
                         break;
                     case "4":
                         bidOnProduct();
@@ -73,7 +71,7 @@ public class MyAuction {
                         suggestions();
                         break;
                     case "6":
-                        sellProduct();
+                        sellProduct(login);
                         break;
                 }
             } while(!response.equals("0"));
@@ -371,7 +369,7 @@ public class MyAuction {
         displayProductsByKeywords(keywordsArr);
     }
 
-    public void putProductForAuction() {
+    public void putProductForAuction(String login) {
         boolean go = true;
         
         //Product name
@@ -500,8 +498,81 @@ public class MyAuction {
 
     }
 
-    public void sellProduct() {
-        // TODO
+    public void sellProduct(String login) {
+    	boolean go = true;
+    	// this try catch just gets the items with closed status and displays them
+        try {
+            query = "SELECT * FROM product WHERE seller=? AND status=?";
+            prepStatement = connection.prepareStatement(query);
+            prepStatement.setString(1, login);
+            prepStatement.setString(2, "closed");
+            resultSet = prepStatement.executeQuery(); //run the query on the DB table
+
+            ResultSetMetaData rsltMD = resultSet.getMetaData();
+            int colNumber = rsltMD.getColumnCount();
+            int auction_id = -1;
+            System.out.println("Current products:");
+            while(resultSet.next()){
+            	for(int i = 1; i <= colNumber; i++){
+                    if(rsltMD.getColumnName(i).equalsIgnoreCase("auction_id")) auction_id = resultSet.getInt(i);
+            		if(rsltMD.getColumnName(i).equalsIgnoreCase("name")){
+	            		String val = resultSet.getString(i);
+	            		System.out.print(" - " + val);
+	            	}
+	            	if(rsltMD.getColumnName(i).equalsIgnoreCase("status")){
+	            		String val = resultSet.getString(i);
+	            		System.out.print("  " + val);
+	            	}
+            	}
+	            System.out.println("");
+            }
+
+            while(go == true){
+            	System.out.println("Which product would you like to sell:");
+                String productName = reader.nextLine();
+                if(productName.equals("") == false) go = false;
+            }
+            resultSet.close();
+
+            //this gets the second highest bid and displays it
+            /*
+            query = "SELECT amount FROM Bidlog WHERE auction_id = " + auction_id + " ORDER BY amount DESC LIMIT 1, 1";
+            prepStatement = connection.prepareStatement(query);
+            resultSet = prepStatement.executeQuery();
+            int bid_amount = -1;
+            rsltMD = resultSet.getMetaData();
+            colNumber = rsltMD.getColumnCount();
+            while(resultSet.next()){
+                for(int i = 1; i <= colNumber; i++){
+                    if(rsltMD.getColumnName(i).equalsIgnoreCase("amount")) bid_amount = resultSet.getInt(i);
+                }
+            }
+            go = true;
+            String res = "";
+            while(go == true){
+                System.out.println("Last bid: " + bid_amount);
+                System.out.println("Withdraw or Sell: ");
+                res = reader.nextLine();
+                if(res.equals("") == false) go = false;                
+            }
+
+            if(res.equalsIgnoreCase("Withdraw")){
+                //update product status
+            }else if(res.equalsIgnoreCase("Sell")){
+                // update DB
+            }
+            resultSet.close();
+            */
+        } catch(SQLException Ex) {
+            System.out.println("Error running the  queries.  Machine Error: " +
+                    Ex.toString());
+        } finally{
+            try {
+                if (prepStatement != null) prepStatement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
     }
 
     public void newCustomerRegistration() {
