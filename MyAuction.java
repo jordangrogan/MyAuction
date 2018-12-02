@@ -71,7 +71,7 @@ public class MyAuction {
                         suggestions();
                         break;
                     case "6":
-                        sellProduct();
+                        sellProduct(login);
                         break;
                 }
             } while(!response.equals("0"));
@@ -468,8 +468,53 @@ public class MyAuction {
         // TODO
     }
 
-    public void sellProduct() {
-        
+    public void sellProduct(String login) {
+    	boolean go = true;
+    	// this try catch just gets the items with closed status and displays them
+        try {
+            query = "SELECT * FROM product WHERE seller=? AND status=?";
+            prepStatement = connection.prepareStatement(query);
+            prepStatement.setString(1, login);
+            prepStatement.setString(2, "closed");
+            resultSet = prepStatement.executeQuery(); //run the query on the DB table
+
+            ResultSetMetaData rsltMD = resultSet.getMetaData();
+            int colNumber = rsltMD.getColumnCount();
+            for(int i = 1; i <= colNumber; i++){
+
+            }
+            System.out.println("Current products:");
+            while(resultSet.next()){
+            	for(int i = 1; i <= colNumber; i++){
+            		if(rsltMD.getColumnName(i).equalsIgnoreCase("name")){
+	            		String val = resultSet.getString(i);
+	            		System.out.print(" - " + val);
+	            	}
+	            	if(rsltMD.getColumnName(i).equalsIgnoreCase("status")){
+	            		String val = resultSet.getString(i);
+	            		System.out.print("  " + val);
+	            	}
+            	}
+	            System.out.println("");
+            }
+
+            while(go == true){
+            	String productName = reader.nextLine();
+            	if(productName.equals("") == false) go = false;
+            	else{System.out.println("Which product would you like to sell:");}
+            }
+            resultSet.close();
+
+        } catch(SQLException Ex) {
+            System.out.println("Error running the  queries.  Machine Error: " +
+                    Ex.toString());
+        } finally{
+            try {
+                if (prepStatement != null) prepStatement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
     }
 
     public void newCustomerRegistration() {
