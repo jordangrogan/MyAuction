@@ -370,19 +370,25 @@ public class MyAuction {
         displayProductsByKeywords(keywordsArr);
     }
 
-    public int putProductForAuction() {
+    public void putProductForAuction() {
+        boolean go = true;
         
-        //Product name 
-        System.out.println("Enter a product name: ");
-        String productName = reader.nextLine();
+        //Product name
+        String productName;
+        while(go == true){
+	        System.out.println("Enter a product name: ");
+	        productName = reader.nextLine();
+        	if(productName.equals("") == false){ go = false;}
+        }
 
         //product description(optional)
         System.out.println("Enter a product description (optional): ");
-        if(reader.hasNextLine()) {String desc = reader.nextLine(); }
+        String desc;
+        if(reader.hasNextLine()) {desc = reader.nextLine(); }
 
         //product categories
-        boolean go = true;
         String category1;
+        go = true;
         while(go == true){        	
 	        System.out.println("Enter an item category: ");
 	        category1 = reader.nextLine();
@@ -417,27 +423,22 @@ public class MyAuction {
         }
 
         //produt auction days
-        System.out.println("Enter a number of days for auction: ");
-        String auctDays = reader.nextLine();
-
-        //start date
-
-
-        //get new auction id
-        int auction_id = -1;
-        int max_auction_id = -1;
-        try{
-        	statement = connection.createStatement();
-        	String query = "SELECT MAX (auction_id) FROM Bidlog";
-        	resultSet = statement.executeQuery(query);
-        	if(resultSet.next()){max_auction_id = resultSet.getInt("auction_id");}
-        	
-        	auction_id = max_auction_id + 1;
-        }catch(SQLException e){
-			System.out.println("Cannot close Statement. Machine error: "+e.toString());
+        go = true;
+        String auctDays
+        while(go == true){
+		    System.out.println("Enter a number of days for auction: ");
+		    auctDays = reader.nextLine();
+        	if(auctDays.equals("") == false){go = false;}
         }
+		int numDays = Integer.parseInt(auctDays);
 
-        return auction_id;
+        try{
+        	// proc_putProduct (product_name, product_description, seller, categories_csv, min_price, num_days)
+        	CallableStatement cStatement = connection.prepareCall("{call proc_putProduct (?, ?, ?, ?, ?, ?)")
+
+        }catch(SQLException e){
+        	System.out.println("Cannot close Statement. Machine error: "+e.toString());
+        }
     }
 
     public void bidOnProduct() {
