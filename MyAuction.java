@@ -515,7 +515,10 @@ public class MyAuction {
             System.out.println("Current products:");
             while(resultSet.next()){
             	for(int i = 1; i <= colNumber; i++){
-                    if(rsltMD.getColumnName(i).equalsIgnoreCase("auction_id")) auction_id = resultSet.getInt(i);
+                    if(rsltMD.getColumnName(i).equalsIgnoreCase("auction_id")) {
+                        auction_id = resultSet.getInt(i);
+                        System.out.print(auction_id + "");
+                    }
             		if(rsltMD.getColumnName(i).equalsIgnoreCase("name")){
 	            		String val = resultSet.getString(i);
 	            		System.out.print(" - " + val);
@@ -525,19 +528,19 @@ public class MyAuction {
 	            		System.out.print("  " + val);
 	            	}
             	}
-	            System.out.println("");
+	            System.out.println();
             }
 
             while(go == true){
-            	System.out.println("Which product would you like to sell:");
-                String productName = reader.nextLine();
-                if(productName.equals("") == false) go = false;
+            	System.out.println("Which product would you like to sell (enter id):");
+                String response = reader.nextLine();
+                auction_id = Integer.parseInt(response);
+                if(response.equals("") == false) go = false;
             }
             resultSet.close();
 
             //this gets the second highest bid and displays it
-            /*
-            query = "SELECT amount FROM Bidlog WHERE auction_id = " + auction_id + " ORDER BY amount DESC LIMIT 1, 1";
+            query = "SELECT amount FROM ( SELECT amount, DENSE_RANK() OVER (ORDER BY amount DESC) ranking FROM bidlog WHERE auction_id=" + auction_id + " ) WHERE ranking=2";
             prepStatement = connection.prepareStatement(query);
             resultSet = prepStatement.executeQuery();
             int bid_amount = -1;
@@ -551,7 +554,7 @@ public class MyAuction {
             go = true;
             String res = "";
             while(go == true){
-                System.out.println("Last bid: " + bid_amount);
+                System.out.println("Second highest bid: " + bid_amount);
                 System.out.println("Withdraw or Sell: ");
                 res = reader.nextLine();
                 if(res.equals("") == false) go = false;                
@@ -559,11 +562,14 @@ public class MyAuction {
 
             if(res.equalsIgnoreCase("Withdraw")){
                 //update product status
+                System.out.println("NEED TO WIDTHDRAW");
+
             }else if(res.equalsIgnoreCase("Sell")){
                 // update DB
+                System.out.println("NEED TO SELL");
             }
             resultSet.close();
-            */
+
         } catch(SQLException Ex) {
             System.out.println("Error running the  queries.  Machine Error: " +
                     Ex.toString());
