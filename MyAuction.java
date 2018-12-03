@@ -580,10 +580,9 @@ public class MyAuction {
     	boolean go = true;
     	// this try catch just gets the items with closed status and displays them
         try {
-            query = "SELECT * FROM product WHERE seller=? AND status=?";
+            query = "SELECT * FROM product WHERE seller=? AND (status='closed' OR status='under auction')";
             prepStatement = connection.prepareStatement(query);
             prepStatement.setString(1, login);
-            prepStatement.setString(2, "closed");
             resultSet = prepStatement.executeQuery(); //run the query on the DB table
 
             ResultSetMetaData rsltMD = resultSet.getMetaData();
