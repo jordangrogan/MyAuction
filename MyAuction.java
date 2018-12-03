@@ -52,7 +52,7 @@ public class MyAuction {
                     "4 - Bid on product\n" +
                     "5 - Suggestions");
                     if(checkIfCustomerSellsProducts(login)) { // this option only available to customers who sell sell products
-                        System.out.println("6 - Sell product");
+                        System.out.println("6 - Sell/withdraw product");
                     }
                 response = reader.nextLine();
                 switch (response) {
@@ -167,7 +167,7 @@ public class MyAuction {
         boolean sellsProducts = false;
 
         try {
-            query = "SELECT * FROM product WHERE seller=?";
+            query = "SELECT * FROM product WHERE seller=? AND (status='closed' OR status='under auction')";
 
             prepStatement = connection.prepareStatement(query);
 
