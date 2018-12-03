@@ -562,16 +562,21 @@ public class MyAuction {
 
             if(res.equalsIgnoreCase("Withdraw")){
                 //update product status
-                System.out.println("NEED TO WIDTHDRAW");
-
+                query = "UPDATE product SET status='withdraw' WHERE auction_id=?";
+                prepStatement = connection.prepareStatement(query);
+                prepStatement.setInt(1, auction_id);
+                prepStatement.executeUpdate();
             }else if(res.equalsIgnoreCase("Sell")){
                 // update DB
-                System.out.println("NEED TO SELL");
+                query = "UPDATE product SET status='sold' WHERE auction_id=?";
+                prepStatement = connection.prepareStatement(query);
+                prepStatement.setInt(1, auction_id);
+                prepStatement.executeUpdate();
             }
             resultSet.close();
 
         } catch(SQLException Ex) {
-            System.out.println("Error running the  queries.  Machine Error: " +
+            System.out.println("Error running the queries.  Machine Error: " +
                     Ex.toString());
         } finally{
             try {
