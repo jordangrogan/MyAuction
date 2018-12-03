@@ -160,3 +160,13 @@ END;
 /
 -- Test:
 -- INSERT INTO BIDLOG (BIDSN, AUCTION_ID, BIDDER, BID_TIME, AMOUNT) VALUES ('13', '5', 'wjb39', TO_DATE('2018-11-27 12:23:47', 'YYYY-MM-DD HH24:MI:SS'), '2');
+
+CREATE OR REPLACE TRIGGER trig_bidsnAutoInc
+BEFORE INSERT ON bidlog
+FOR EACH ROW
+DECLARE next_id integer;
+BEGIN
+    SELECT bidlog_id_seq.NEXTVAL INTO next_id FROM dual;
+    :new.bidsn := next_id;
+END;
+/
