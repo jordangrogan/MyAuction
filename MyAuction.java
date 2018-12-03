@@ -464,7 +464,6 @@ public class MyAuction {
     }
 
     public void bidOnProduct(String bidder){
-        int bidsn = -1;
         System.out.print("Enter an Auction Id: ");
         int auction_id = reader.nextInt();
         reader.nextLine();
@@ -509,26 +508,16 @@ public class MyAuction {
                 bidTime = resultSet.getDate("c_date");
             }
 
-            query = "SELECT * FROM Bidlog WHERE auction_id="+auction_id;
-            prepStatement = connection.prepareStatement(query);
-            prepStatement.executeQuery(query);
-            int numBids = 0;
-            while(resultSet.next()){
-                // bidsn = resultSet.getInt("num") + 1;
-                numBids++;
-            }
-            bidsn = numBids + 1;
-            System.out.println("BIDSN: " + bidsn + "BIDTIME: " + bidTime);
+            System.out.println("BIDTIME: " + bidTime);
             //add bid to DB
-            query = "INSERT INTO Bidlog (bidsn, auction_id, bidder, bid_time, amount) VALUES (?, ?, ?, ?, ?)";          
+            query = "INSERT INTO Bidlog (auction_id, bidder, bid_time, amount) VALUES (?, ?, ?, ?)";
             
             prepStatement = connection.prepareStatement(query);
 
-            prepStatement.setInt(1, bidsn);
-            prepStatement.setInt(2, auction_id);
-            prepStatement.setString(3, bidder);
-            prepStatement.setDate(4, bidTime);
-            prepStatement.setInt(5, your_amount);
+            prepStatement.setInt(1, auction_id);
+            prepStatement.setString(2, bidder);
+            prepStatement.setDate(3, bidTime);
+            prepStatement.setInt(4, your_amount);
 
             prepStatement.executeUpdate();
 
