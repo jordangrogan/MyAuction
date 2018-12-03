@@ -12,11 +12,12 @@ public class MyAuction {
     private PreparedStatement prepStatement; // used to create a prepared statement, that will be later reused
     private ResultSet resultSet; // used to hold the result of your query (if one exists)
     private String query; // this will hold the query we are using
+    private String login;
 
     public MyAuction() {
 
         String response;
-        String login;
+
         boolean loggedIn = false;
 
         System.out.println("Welcome to My Auction!");
@@ -62,7 +63,7 @@ public class MyAuction {
                         searchForProductsByText();
                         break;
                     case "3":
-                        putProductForAuction();
+                        putProductForAuction(login);
                         break;
                     case "4":
                         bidOnProduct();
@@ -71,7 +72,7 @@ public class MyAuction {
                         suggestions();
                         break;
                     case "6":
-                        sellProduct();
+                        sellProduct(login);
                         break;
                 }
             } while(!response.equals("0"));
@@ -369,31 +370,297 @@ public class MyAuction {
         displayProductsByKeywords(keywordsArr);
     }
 
-    public void putProductForAuction() {
-        System.out.println("Enter a Product Name: ");
-        String productName = reader.nextLine();
-        System.out.println("Enter a product description (optional) :");
-        if(reader.hasNextLine())
-        {
-        	String desc = reader.nextLine();
+
+    public void putProductForAuction(String login) {
+        boolean go = true;
+        
+        //Product name
+        String productName = "";
+        while(go == true){
+	        System.out.println("Enter a product name: ");
+	        productName = reader.nextLine();
+        	if(productName.equals("") == false){ go = false;}
         }
-        System.out.println("Enter item catagories (separated by a space): ");
-        String categories = reader.nextLine();
-        String[] catagoriesArr = catagories.split(" ");
-        System.out.println("Enter a number of days for auction: ");
-        String auctDays = reader.nextLine();
+
+        //product description(optional)
+        System.out.println("Enter a product description (optional): ");
+        String desc = "";
+        if(reader.hasNextLine()) {desc = reader.nextLine(); }
+
+        //product categories
+        String category1 = "";
+        go = true;
+        while(go == true){        	
+	        System.out.println("Enter an item category: ");
+	        category1 = reader.nextLine();
+
+	        ArrayList<String> parentCategories = getParentCategories();
+	       	
+	        for(int i = 0; i < parentCategories.size(); i++){
+	        	ArrayList<String> childCategories = getChildCategories(parentCategories.get(i));
+	        	if(childCategories.contains(category1) == true){
+	        		go = false;
+	        	}	        	
+	        }
+	        if(go == true){System.out.println("Invalid item category: " + category1);}	    
+        }
+        go = true;
+        String category2 = "";
+        while(go == true){        	
+	        System.out.println("Enter a second item category(optional): ");
+	        category2 = reader.nextLine();
+	        // System.out.println("Category 2: "+category);
+	        if(category2.equals("")){ break;}
+
+	        ArrayList<String> parentCategories = getParentCategories();
+	       	
+	        for(int i = 0; i < parentCategories.size(); i++){
+	        	ArrayList<String> childCategories = getChildCategories(parentCategories.get(i));
+	        	if(childCategories.contains(category2) == true){
+	        		go = false;
+	        	}	        	
+	        }
+	        if(go == true){System.out.println("Invalid item category: " + category2);}	    
+        }
+
+        String categories_csv = "";
+        if(category2.equals("") == true){categories_csv = category1;}
+        else{categories_csv = category1 + "," + category2;}
+
+        //starting price
+        go = true;
+        int price = -1;
+        while(go == true){
+        	System.out.println("Enter a price (whole number): ");
+        	String sPrice = reader.nextLine();
+        	if(sPrice.equals("") == false){go = false;}
+        	price = Integer.parseInt(sPrice);
+        }
+
+        //produt auction days
+        go = true;
+        String auctDays = "";
+        while(go == true){
+		    System.out.println("Enter a number of days for auction: ");
+		    auctDays = reader.nextLine();
+        	if(auctDays.equals("") == false){go = false;}
+        }
+		int numDays = Integer.parseInt(auctDays);
+			
+        try{
+        	// proc_putProduct (product_name, product_description, seller, categories_csv, min_price, num_days)
+        	CallableStatement cStatement = connection.prepareCall("{call proc_putProduct (?, ?, ?, ?, ?, ?)}");
+        	cStatement.setString(1, productName);
+        	cStatement.setString(2, desc);
+        	cStatement.setString(3, login);
+        	cStatement.setString(4, categories_csv);
+        	cStatement.setInt(5, price);
+        	cStatement.setInt(6, numDays);
+        	cStatement.execute();
+        }catch(SQLException e){
+        	System.out.println("Cannot close Statement. Machine error: "+e.toString());
+        }
+
     }
 
-    public void bidOnProduct() {
-        // TODO
+   public void bidOnProduct(String bidder, int bidTime, int bidsn )
+    {
+        System.out.print("Enter an Auction Id: ");
+        int auction_id = input.nextInt();
+        input.nextLine();
+        query = "SELECT amount FROM ( SELECT amount, DENSE_RANK() OVER (ORDER BY amount DESC) ranking FROM bidlog WHERE auction_id=" + auction_id + " ) WHERE ranking= 1";
+        prepStatement = connection.prepareStatement(query);
+        resultSet = prepStatement.executeQuery();
+        int bid_amount = -1;
+        rsltMD = resultSet.getMetaData();
+        colNumber = rsltMD.getColumnCount();
+        while(resultSet.next())
+        {
+            for(int i = 1; i <= colNumber; i++)
+            {
+                if(rsltMD.getColumnName(i).equalsIgnoreCase("amount"))
+                {
+                    bid_amount = resultSet.getInt(i);
+                }
+            }
+        }
+        if(bid_amount = NULL)
+        {
+            bid_amount = 0;
+        }
+        System.out.println("The current highest bid for This product is: " + bid_amount);
+
+
+        System.out.print("Enter an Amount to bid on : " + auction_id);
+        int your_amount = input.nextInt();
+        input.nextLine();
+        while(your_amount <= bid_amount)
+        {
+            System.out.println("The current highest bid for This product is: " + bid_amount);
+            System.out.print("Enter an Amount to bid on : " + auction_id);
+            your_amount = input.nextInt();
+            input.nextLine();
+        }
+         try 
+         {
+
+            
+            query = "INSERT INTO Bidlog (bidsn, auction_id, bidder, bid_time, amount) VALUES (?, ?, ?, ?, ?)";
+           
+            
+            prepStatement = connection.prepareStatement(query);
+
+            prepStatement.setString(1, bidsn);
+            prepStatement.setString(2, auction_id);
+            prepStatement.setString(3, bidder);
+            prepStatement.setString(4, bidTime);
+            prepStatement.setString(5, your_amount);
+
+            prepStatement.executeUpdate();
+
+            System.out.println("Bid Added!");
+
+        } catch(SQLException Ex) 
+        {
+            System.out.println("Error running the sample queries.  Machine Error: " + Ex.toString());
+        } 
+        finally
+         {
+            try 
+            {
+                if (prepStatement != null) prepStatement.close();
+            } 
+            catch (SQLException e) 
+            {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
+
+        
     }
 
     public void suggestions() {
-        // TODO
+
+        System.out.println("Here are some products you may want to bid on based on your bidding friends:");
+
+        try {
+
+            statement = connection.createStatement(); //create an instance
+            String query = "SELECT DISTINCT product.auction_id, product.name, product.description FROM product JOIN bidlog on product.auction_id = bidlog.auction_id WHERE bidder IN (" +
+                    "SELECT DISTINCT bidder as bidding_friend FROM bidlog WHERE auction_id IN (SELECT auction_id FROM bidlog WHERE bidder='" + login + "') AND bidder != '" + login + "' AND product.status = 'under auction')";
+
+            resultSet = statement.executeQuery(query); //run the query on the DB table
+
+            while (resultSet.next()) //this not only keeps track of if another record
+            //exists but moves us forward to the first record
+            {
+                System.out.println("Auction ID: " + resultSet.getInt("auction_id") + " | " + resultSet.getString("name") + " | " + resultSet.getString("description"));
+            }
+
+            resultSet.close();
+
+        } catch(SQLException Ex) {
+            System.out.println("Error running the queries.  Machine Error: " +
+                    Ex.toString());
+        } finally {
+            try {
+                if (statement != null) statement.close();
+                if (prepStatement != null) prepStatement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
+
     }
 
-    public void sellProduct() {
-        // TODO
+    public void sellProduct(String login) {
+    	boolean go = true;
+    	// this try catch just gets the items with closed status and displays them
+        try {
+            query = "SELECT * FROM product WHERE seller=? AND status=?";
+            prepStatement = connection.prepareStatement(query);
+            prepStatement.setString(1, login);
+            prepStatement.setString(2, "closed");
+            resultSet = prepStatement.executeQuery(); //run the query on the DB table
+
+            ResultSetMetaData rsltMD = resultSet.getMetaData();
+            int colNumber = rsltMD.getColumnCount();
+            int auction_id = -1;
+            System.out.println("Current products:");
+            while(resultSet.next()){
+            	for(int i = 1; i <= colNumber; i++){
+                    if(rsltMD.getColumnName(i).equalsIgnoreCase("auction_id")) {
+                        auction_id = resultSet.getInt(i);
+                        System.out.print(auction_id + "");
+                    }
+            		if(rsltMD.getColumnName(i).equalsIgnoreCase("name")){
+	            		String val = resultSet.getString(i);
+	            		System.out.print(" - " + val);
+	            	}
+	            	if(rsltMD.getColumnName(i).equalsIgnoreCase("status")){
+	            		String val = resultSet.getString(i);
+	            		System.out.print("  " + val);
+	            	}
+            	}
+	            System.out.println();
+            }
+
+            while(go == true){
+            	System.out.println("Which product would you like to sell (enter id):");
+                String response = reader.nextLine();
+                auction_id = Integer.parseInt(response);
+                if(response.equals("") == false) go = false;
+            }
+            resultSet.close();
+
+            //this gets the second highest bid and displays it
+            query = "SELECT amount FROM ( SELECT amount, DENSE_RANK() OVER (ORDER BY amount DESC) ranking FROM bidlog WHERE auction_id=" + auction_id + " ) WHERE ranking=2";
+            prepStatement = connection.prepareStatement(query);
+            resultSet = prepStatement.executeQuery();
+            int bid_amount = -1;
+            rsltMD = resultSet.getMetaData();
+            colNumber = rsltMD.getColumnCount();
+            while(resultSet.next()){
+                for(int i = 1; i <= colNumber; i++){
+                    if(rsltMD.getColumnName(i).equalsIgnoreCase("amount")) bid_amount = resultSet.getInt(i);
+                }
+            }
+            go = true;
+            String res = "";
+            while(go == true){
+                System.out.println("Second highest bid: " + bid_amount);
+                System.out.println("Choose an option: \"withdraw\" or \"sell\":");
+                res = reader.nextLine();
+                if(res.equals("") == false) go = false;                
+            }
+
+            if(res.equalsIgnoreCase("Withdraw")){
+                //update product status
+                query = "UPDATE product SET status='withdrawn' WHERE auction_id=?";
+                prepStatement = connection.prepareStatement(query);
+                prepStatement.setInt(1, auction_id);
+                prepStatement.executeUpdate();
+                System.out.println("Product withdrawn.");
+            }else if(res.equalsIgnoreCase("Sell")){
+                // update DB
+                query = "UPDATE product SET status='sold' WHERE auction_id=?";
+                prepStatement = connection.prepareStatement(query);
+                prepStatement.setInt(1, auction_id);
+                prepStatement.executeUpdate();
+                System.out.println("Product sold.");
+            }
+            resultSet.close();
+
+        } catch(SQLException Ex) {
+            System.out.println("Error running the queries.  Machine Error: " +
+                    Ex.toString());
+        } finally{
+            try {
+                if (prepStatement != null) prepStatement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
     }
 
     public void newCustomerRegistration() {
@@ -450,19 +717,355 @@ public class MyAuction {
     }
 
     public void updateSystemDate() {
-        // TODO
+        System.out.println("Enter a month (01 = January, 02 = February, etc.):");
+        int month = reader.nextInt();
+        System.out.println("Enter a day (01, 02, 03, 04, etc.):");
+        int day = reader.nextInt();
+        System.out.println("Enter a year (2018, 2019, etc.):");
+        int year = reader.nextInt();
+        System.out.println("Enter an hour (in 24 hour format):");
+        int hour = reader.nextInt();
+        System.out.println("Enter a minute (00, 01, 02, etc.):");
+        int minute = reader.nextInt();
+        System.out.println("Enter a second (00, 01, 02, etc.):");
+        int second = reader.nextInt();
+        updateSystemDate(month, day, year, hour, minute, second);
+    }
+
+    private void updateSystemDate(int month, int day, int year, int hour, int minute, int second) {
+
+        try{
+
+            query = "UPDATE oursysdate SET c_date=? WHERE ROWNUM=1";
+            prepStatement = connection.prepareStatement(query);
+
+            // This is how you can specify the format for the dates you will use
+            java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM.dd/yyyy kk:mm:ss");
+            // This is how you format a date so that you can use the setDate format below
+            String userDate = month + "." + day + "/" + year + " " + hour + ":" + minute + ":" + second;
+            java.sql.Date date_reg = new java.sql.Date (df.parse(userDate).getTime());
+
+            prepStatement.setDate(1, date_reg);
+            prepStatement.executeUpdate();
+
+            System.out.println("System date updated!");
+
+        } catch(SQLException Ex) {
+            System.out.println("Error running the sample queries.  Machine Error: " +
+                    Ex.toString());
+        } catch (ParseException e) {
+            System.out.println("Error parsing the date. Machine Error: " +
+                    e.toString());
+        } finally{
+            try {
+                if (statement != null) statement.close();
+                if (prepStatement != null) prepStatement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
     }
 
     public void productStatisticsAll() {
-        // TODO
+
+        System.out.println("All Products:");
+
+        try{
+            statement = connection.createStatement(); //create an instance
+            query = "SELECT product.auction_id, product.name, product.status, product.amount, bidlog.bidder FROM product JOIN bidlog ON product.auction_id = bidlog.auction_id AND product.amount = bidlog.amount";
+
+            resultSet = statement.executeQuery(query); //run the query on the DB table
+
+            while (resultSet.next()) {
+                int auction_id = resultSet.getInt(1);
+                String name = resultSet.getString(2);
+                String status = resultSet.getString(3);
+                int amount = resultSet.getInt(4);
+                String bidder = resultSet.getString(5);
+
+                System.out.print(auction_id + " - " + name + " - " + status + " - $" + amount);
+
+                if(!status.equals("sold")) {
+                    System.out.println(" - Highest bidder: " + bidder);
+                } else {
+                    System.out.println("");
+                }
+            }
+
+            resultSet.close();
+
+        } catch(SQLException Ex) {
+            System.out.println("Error running the sample queries.  Machine Error: " +
+                    Ex.toString());
+        } finally {
+            try {
+                if (statement != null) statement.close();
+                if (prepStatement != null) prepStatement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
     }
 
     public void productStatisticsByCustomer() {
-        // TODO
+
+        System.out.println("What is the seller's login name?");
+        String seller = reader.nextLine();
+
+        try{
+            query = "SELECT product.auction_id, product.name, product.status, product.amount, bidlog.bidder FROM product JOIN bidlog ON product.auction_id = bidlog.auction_id AND product.amount = bidlog.amount WHERE product.seller=?";
+            prepStatement = connection.prepareStatement(query);
+
+            prepStatement.setString(1, seller);
+
+            resultSet = prepStatement.executeQuery(); //run the query on the DB table
+
+            System.out.println(seller + "'s Products:");
+
+            while (resultSet.next()) {
+                int auction_id = resultSet.getInt(1);
+                String name = resultSet.getString(2);
+                String status = resultSet.getString(3);
+                int amount = resultSet.getInt(4);
+                String bidder = resultSet.getString(5);
+
+                System.out.print(auction_id + " - " + name + " - " + status + " - $" + amount);
+
+                if(!status.equals("sold")) {
+                    System.out.println(" - Highest bidder: " + bidder);
+                } else {
+                    System.out.println("");
+                }
+            }
+
+            resultSet.close();
+
+        } catch(SQLException Ex) {
+            System.out.println("Error running the sample queries.  Machine Error: " +
+                    Ex.toString());
+        } finally {
+            try {
+                if (statement != null) statement.close();
+                if (prepStatement != null) prepStatement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
+
     }
 
     public void statistics() {
-        // TODO
+
+        int statistic;
+
+        do {
+
+            System.out.println("Which statistic would you like to run?\n" +
+                    "1 - the top k highest volume sub-categories (highest count of products sold)\n" +
+                    "2 - the top k highest volume main categories (highest count of products sold)\n" +
+                    "3 - the top k most active bidders (highest count of bids placed)\n" +
+                    "4 - the top k most active buyers (highest total dollar amount spent)");
+
+            statistic = reader.nextInt();
+
+        } while(statistic != 1 && statistic != 2 && statistic != 3 && statistic != 4);
+
+        System.out.println("How many months back should this statistic go?");
+        int x = reader.nextInt();
+
+        switch (statistic) {
+            case 1:
+                topKHighestVolumeSubCategories(x);
+                break;
+            case 2:
+                topKHighestVolumeMainCategories(x);
+                break;
+            case 3:
+                System.out.println("here 3");
+                topKMostActiveBidders(x);
+                break;
+            case 4:
+                topKMostActiveBuyers(x);
+                break;
+        }
+
+    }
+
+    private void topKHighestVolumeSubCategories(int x) {
+
+        System.out.println("How many top k sub-categories would you like reported? k=");
+        int k = reader.nextInt();
+        reader.nextLine();
+
+        topKHighestVolumeSubCategories(x, k);
+
+    }
+
+    private void topKHighestVolumeSubCategories(int x, int k) {
+
+
+        try {
+
+            statement = connection.createStatement(); //create an instance
+            String selectQuery = "SELECT name, func_productCount(" + x + ", name) as product_count FROM category WHERE parent_category IS NOT NULL ORDER BY product_count DESC";
+
+            resultSet = statement.executeQuery(selectQuery); //run the query on the DB table
+
+            int count = 0;
+            while (resultSet.next()) //this not only keeps track of if another record
+            //exists but moves us forward to the first record
+            {
+                System.out.println("Category: " + resultSet.getString("name") + " | Number of Products: " + resultSet.getString("product_count"));
+                count++;
+                if(count == k) break;
+            }
+
+            resultSet.close();
+
+        } catch(SQLException Ex) {
+            System.out.println("Error running the sample queries.  Machine Error: " +
+                    Ex.toString());
+        } finally {
+            try {
+                if (statement != null) statement.close();
+                if (prepStatement != null) prepStatement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
+
+    }
+
+    private void topKHighestVolumeMainCategories(int x) {
+
+        System.out.println("How many top k main categories would you like reported? k=");
+        int k = reader.nextInt();
+        reader.nextLine();
+
+        topKHighestVolumeMainCategories(x, k);
+
+    }
+
+    private void topKHighestVolumeMainCategories(int x, int k) {
+
+        try {
+
+            statement = connection.createStatement(); //create an instance
+            String selectQuery = "SELECT name, func_productCount(" + x + ", name) as product_count FROM category WHERE parent_category IS NULL ORDER BY product_count DESC";
+
+            resultSet = statement.executeQuery(selectQuery); //run the query on the DB table
+
+            int count = 0;
+            while (resultSet.next()) //this not only keeps track of if another record
+            //exists but moves us forward to the first record
+            {
+                System.out.println("Category: " + resultSet.getString("name") + " | Number of Products: " + resultSet.getString("product_count"));
+                count++;
+                if(count == k) break;
+            }
+
+            resultSet.close();
+
+        } catch(SQLException Ex) {
+            System.out.println("Error running the sample queries.  Machine Error: " +
+                    Ex.toString());
+        } finally {
+            try {
+                if (statement != null) statement.close();
+                if (prepStatement != null) prepStatement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
+
+    }
+
+    private void topKMostActiveBidders(int x) {
+
+        System.out.println("How many top k active buyers would you like reported? k=");
+        int k = reader.nextInt();
+        reader.nextLine();
+
+        topKMostActiveBidders(x, k);
+
+    }
+
+    private void topKMostActiveBidders(int x, int k) {
+
+        try {
+
+            statement = connection.createStatement(); //create an instance
+            String selectQuery = "SELECT bidder, func_bidCount(" + x + ", bidder) as bid_count FROM bidlog GROUP BY bidder ORDER BY bid_count DESC";
+
+            resultSet = statement.executeQuery(selectQuery); //run the query on the DB table
+
+            int count = 0;
+            while (resultSet.next()) //this not only keeps track of if another record
+            //exists but moves us forward to the first record
+            {
+                System.out.println("Bidder: " + resultSet.getString("bidder") + " | Number of Bids: " + resultSet.getString("bid_count"));
+                count++;
+                if(count == k) break;
+            }
+
+            resultSet.close();
+
+        } catch(SQLException Ex) {
+            System.out.println("Error running the queries.  Machine Error: " +
+                    Ex.toString());
+        } finally {
+            try {
+                if (statement != null) statement.close();
+                if (prepStatement != null) prepStatement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
+
+    }
+
+    private void topKMostActiveBuyers(int x) {
+
+        System.out.println("How many top k active buyers would you like reported? k=");
+        int k = reader.nextInt();
+        reader.nextLine();
+
+        topKMostActiveBuyers(x, k);
+
+    }
+
+    private void topKMostActiveBuyers(int x, int k) {
+
+        try {
+
+            statement = connection.createStatement(); //create an instance
+            String selectQuery = "SELECT buyer, func_buyingAmount(" + x + ", buyer) as amount FROM product WHERE status='sold' GROUP BY buyer ORDER BY amount DESC";
+
+            resultSet = statement.executeQuery(selectQuery); //run the query on the DB table
+
+            int count = 0;
+            while (resultSet.next()) //this not only keeps track of if another record
+            //exists but moves us forward to the first record
+            {
+                System.out.println("Buyer: " + resultSet.getString("buyer") + " | Amount Spent: " + resultSet.getString("amount"));
+                count++;
+                if(count == k) break;
+            }
+
+            resultSet.close();
+
+        } catch(SQLException Ex) {
+            System.out.println("Error running the queries.  Machine Error: " +
+                    Ex.toString());
+        } finally {
+            try {
+                if (statement != null) statement.close();
+                if (prepStatement != null) prepStatement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
+
     }
 
     public static void main(String args[]) throws SQLException {
