@@ -555,23 +555,25 @@ public class MyAuction {
             String res = "";
             while(go == true){
                 System.out.println("Second highest bid: " + bid_amount);
-                System.out.println("Withdraw or Sell: ");
+                System.out.println("Choose an option: \"withdraw\" or \"sell\":");
                 res = reader.nextLine();
                 if(res.equals("") == false) go = false;                
             }
 
             if(res.equalsIgnoreCase("Withdraw")){
                 //update product status
-                query = "UPDATE product SET status='withdraw' WHERE auction_id=?";
+                query = "UPDATE product SET status='withdrawn' WHERE auction_id=?";
                 prepStatement = connection.prepareStatement(query);
                 prepStatement.setInt(1, auction_id);
                 prepStatement.executeUpdate();
+                System.out.println("Product withdrawn.");
             }else if(res.equalsIgnoreCase("Sell")){
                 // update DB
                 query = "UPDATE product SET status='sold' WHERE auction_id=?";
                 prepStatement = connection.prepareStatement(query);
                 prepStatement.setInt(1, auction_id);
                 prepStatement.executeUpdate();
+                System.out.println("Product sold.");
             }
             resultSet.close();
 
