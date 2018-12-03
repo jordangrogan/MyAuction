@@ -505,7 +505,6 @@ public class MyAuction {
             prepStatement = connection.prepareStatement(query);
             resultSet = prepStatement.executeQuery();
             while(resultSet.next()){
-                System.out.println("HERE");
                 bidTime = resultSet.getDate("c_date");
             }
 
