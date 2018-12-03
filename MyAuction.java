@@ -508,7 +508,7 @@ public class MyAuction {
                 bidTime = resultSet.getDate("c_date");
             }
 
-            System.out.println("BIDTIME: " + bidTime);
+            // System.out.println("BIDTIME: " + bidTime);
             //add bid to DB
             query = "INSERT INTO Bidlog (auction_id, bidder, bid_time, amount) VALUES (?, ?, ?, ?)";
             
