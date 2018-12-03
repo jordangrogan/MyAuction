@@ -489,7 +489,7 @@ public class MyAuction {
             System.out.println("The current highest bid for This product is: " + bid_amount);
 
 
-            System.out.print("Enter an Amount to bid on " + auction_id + ": ");
+            System.out.print("Enter an Amount to bid on Auction " + auction_id + ": ");
             int your_amount = reader.nextInt();
             reader.nextLine();
             while(your_amount <= bid_amount){
@@ -503,8 +503,9 @@ public class MyAuction {
             java.sql.Date bidTime = null;
             query = "SELECT c_date FROM oursysdate WHERE ROWNUM=1";
             prepStatement = connection.prepareStatement(query);
-            prepStatement.executeQuery(query);
+            resultSet = prepStatement.executeQuery();
             while(resultSet.next()){
+                System.out.println("HERE");
                 bidTime = resultSet.getDate("c_date");
             }
 
