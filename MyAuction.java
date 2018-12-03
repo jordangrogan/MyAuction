@@ -468,7 +468,11 @@ public class MyAuction {
         int auction_id = reader.nextInt();
         reader.nextLine();
 
-        try{
+        try {
+
+            connection.setAutoCommit(false); //the default is true and every statement executed is considered a transaction.
+            connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+
             query = "SELECT amount FROM ( SELECT amount, DENSE_RANK() OVER (ORDER BY amount DESC) ranking FROM bidlog WHERE auction_id=" + auction_id + " ) WHERE ranking= 1";
             prepStatement = connection.prepareStatement(query);
             resultSet = prepStatement.executeQuery();
@@ -508,10 +512,10 @@ public class MyAuction {
                 bidTime = resultSet.getDate("c_date");
             }
 
-            // System.out.println("BIDTIME: " + bidTime);
+            //System.out.println("BIDTIME: " + bidTime);
             //add bid to DB
             query = "INSERT INTO Bidlog (auction_id, bidder, bid_time, amount) VALUES (?, ?, ?, ?)";
-            
+
             prepStatement = connection.prepareStatement(query);
 
             prepStatement.setInt(1, auction_id);
@@ -520,6 +524,8 @@ public class MyAuction {
             prepStatement.setInt(4, your_amount);
 
             prepStatement.executeUpdate();
+
+            connection.commit();
 
             System.out.println("Bid Added!");
 
