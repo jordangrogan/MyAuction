@@ -463,29 +463,28 @@ public class MyAuction {
 
     }
 
-   public void bidOnProduct(String bidder, int bidTime, int bidsn )
-    {
+    public void bidOnProduct(String bidder){
+        String bidTime = "-1";
+        int bidsn = -1;
         System.out.print("Enter an Auction Id: ");
         int auction_id = reader.nextInt();
         reader.nextLine();
+
         query = "SELECT amount FROM ( SELECT amount, DENSE_RANK() OVER (ORDER BY amount DESC) ranking FROM bidlog WHERE auction_id=" + auction_id + " ) WHERE ranking= 1";
         prepStatement = connection.prepareStatement(query);
         resultSet = prepStatement.executeQuery();
         int bid_amount = -1;
         ResultSetMetaData rsltMD = resultSet.getMetaData();
         int colNumber = rsltMD.getColumnCount();
-        while(resultSet.next())
-        {
-            for(int i = 1; i <= colNumber; i++)
-            {
-                if(rsltMD.getColumnName(i).equalsIgnoreCase("amount"))
-                {
+
+        while(resultSet.next()){
+            for(int i = 1; i <= colNumber; i++){
+                if(rsltMD.getColumnName(i).equalsIgnoreCase("amount")){
                     bid_amount = resultSet.getInt(i);
                 }
             }
         }
-        if(bid_amount == -1)
-        {
+        if(bid_amount == -1){
             bid_amount = 0;
         }
         System.out.println("The current highest bid for This product is: " + bid_amount);
@@ -494,16 +493,20 @@ public class MyAuction {
         System.out.print("Enter an Amount to bid on : " + auction_id);
         int your_amount = reader.nextInt();
         reader.nextLine();
-        while(your_amount <= bid_amount)
-        {
+        while(your_amount <= bid_amount){
             System.out.println("The current highest bid for This product is: " + bid_amount);
             System.out.print("Enter an Amount to bid on : " + auction_id);
             your_amount = reader.nextInt();
             reader.nextLine();
         }
-         try 
-         {
+        try{
 
+            query = "SELECT c_date FROM oursysdate WHERE ROWNUM=1";
+            prepStatement = connection.prepareStatement(querey);
+            prepStatement.executeQuery(querey);
+            while(resultSet.next()){
+                bidTime = resultSet.getString();
+            }
             
             query = "INSERT INTO Bidlog (bidsn, auction_id, bidder, bid_time, amount) VALUES (?, ?, ?, ?, ?)";
            
@@ -513,30 +516,24 @@ public class MyAuction {
             prepStatement.setInt(1, bidsn);
             prepStatement.setInt(2, auction_id);
             prepStatement.setString(3, bidder);
-            prepStatement.setInt(4, bidTime);
+            prepStatement.setString(4, bidTime);
             prepStatement.setInt(5, your_amount);
 
             prepStatement.executeUpdate();
 
             System.out.println("Bid Added!");
 
-        } catch(SQLException Ex) 
-        {
+        } catch(SQLException Ex) {
             System.out.println("Error running the sample queries.  Machine Error: " + Ex.toString());
         } 
-        finally
-         {
-            try 
-            {
+        finally{
+            try {
                 if (prepStatement != null) prepStatement.close();
             } 
-            catch (SQLException e) 
-            {
+            catch (SQLException e) {
                 System.out.println("Cannot close Statement. Machine error: "+e.toString());
             }
-        }
-
-        
+        }        
     }
 
     public void suggestions() {
