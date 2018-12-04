@@ -731,6 +731,7 @@ public class MyAuction {
         int minute = reader.nextInt();
         System.out.println("Enter a second (00, 01, 02, etc.):");
         int second = reader.nextInt();
+        reader.nextLine();
         updateSystemDate(month, day, year, hour, minute, second);
     }
 
