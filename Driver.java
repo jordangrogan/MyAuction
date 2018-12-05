@@ -88,7 +88,12 @@ public class Driver {
     }
 
     public static void test_getChildCategories(MyAuction myauction){
-
+    	ArrayList<String> parentCategories = myauction.getParentCategories();
+    	ArrayList<String> childCategories;
+    	for(int i = 0; i < parentCategories.size(); i++){
+    		childCategories = getChildCategories(parentCategories.get(i));
+    		System.out.println(childCategories.toString());
+    	}
     }
 
     public static void test_displayProducts(MyAuction myauction){
@@ -100,7 +105,7 @@ public class Driver {
     }
 
     public static void test_searchForProductsByText(MyAuction myauction){
-
+    	myauction.searchForProductsByText();
     }
 
     public static void test_putProductForAuction(MyAuction myauction){
@@ -112,7 +117,7 @@ public class Driver {
     }
 
     public static void test_suggestions(MyAuction myauction){
-
+    	myauction.suggestions();
     }
 
     public static void test_sellProduct(MyAuction myauction){
@@ -120,7 +125,7 @@ public class Driver {
     }
 
     public static void test_newCustomerRegisteration(MyAuction myauction){
-
+    	myauction.newCustomerRegistration();
     }
 
     public static void test_registerUser(MyAuction myauction){
@@ -128,7 +133,7 @@ public class Driver {
     }
 
     public static void test_updateSystemDate(MyAuction myauction){
-
+    	myauction.updateSystemDate();
     }
 
     public static void test_productStatisticsAll(MyAuction myauction){
