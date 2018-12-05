@@ -10,6 +10,8 @@ import java.text.ParseException; //needed by java for database connection and ma
 
 public class Driver {
 
+	// private MyAuction auction;
+
     public static void main(String args[]) throws SQLException {
 
         if(args.length != 2) {
@@ -48,4 +50,22 @@ public class Driver {
 
     }
 
+    // public void test_MyAuction_Constructor(){
+    // 	auction = new MyAuction();
+    // }
+    public void test_checkCredentials_Customer(){
+    	boolean expectedT = true;
+    	boolean expectedF = false;
+    	boolean result;
+    	// test valid login
+    	result = auction.checkCredentials("jww36", "mypass", false);
+    	if(result == expectedT) System.out.println("Valid login: Test Passed");
+    	else System.out.println("Test Failed");
+    	// test invalid login
+    	result = auction.checkCredentials("abc123", "password", false);
+    	if(result == expected) System.out.prntln("Invalid Login: Test Passed");
+    	else System.out.println("Test Failed");
+
+    	result = auction.checkCredentials()
+    }
 }

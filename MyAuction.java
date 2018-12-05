@@ -128,7 +128,7 @@ public class MyAuction {
 
     }
 
-    private boolean checkCredentials(String login, String password, boolean isAdmin) {
+    public boolean checkCredentials(String login, String password, boolean isAdmin) {
 
         boolean authorized = false;
 
@@ -167,7 +167,7 @@ public class MyAuction {
         return authorized;
     }
 
-    private boolean checkIfCustomerSellsProducts(String login) {
+    public boolean checkIfCustomerSellsProducts(String login) {
 
         boolean sellsProducts = false;
 
@@ -227,7 +227,7 @@ public class MyAuction {
         displayProducts(childCategories.get((Integer.parseInt(category))), Integer.parseInt(response));
     }
 
-    private ArrayList<String> getParentCategories() {
+    public ArrayList<String> getParentCategories() {
         ArrayList<String> parentCategories = new ArrayList<>();
 
         try {
@@ -257,7 +257,7 @@ public class MyAuction {
         return parentCategories;
     }
 
-    private ArrayList<String> getChildCategories(String parent) {
+    public ArrayList<String> getChildCategories(String parent) {
         ArrayList<String> childCategories = new ArrayList<>();
 
         try {
@@ -287,7 +287,7 @@ public class MyAuction {
         return childCategories;
     }
 
-    private void displayProducts(String category, int sort) {
+    public void displayProducts(String category, int sort) {
 
         try {
 
@@ -325,7 +325,7 @@ public class MyAuction {
 
     }
 
-    private void displayProductsByKeywords(String[] keywords) {
+    public void displayProductsByKeywords(String[] keywords) {
 
         try {
 
@@ -691,7 +691,7 @@ public class MyAuction {
         registerUser(name, address, email, login, password, isAdmin);
     }
 
-    private void registerUser(String name, String address, String email, String login, String password, boolean isAdmin) {
+    public void registerUser(String name, String address, String email, String login, String password, boolean isAdmin) {
         try {
 
             if(isAdmin) {
@@ -740,7 +740,7 @@ public class MyAuction {
         updateSystemDate(month, day, year, hour, minute, second);
     }
 
-    private void updateSystemDate(int month, int day, int year, int hour, int minute, int second) {
+    public void updateSystemDate(int month, int day, int year, int hour, int minute, int second) {
 
         try{
 
@@ -899,7 +899,7 @@ public class MyAuction {
 
     }
 
-    private void topKHighestVolumeSubCategories(int x) {
+    public void topKHighestVolumeSubCategories(int x) {
 
         System.out.println("How many top k sub-categories would you like reported? k=");
         int k = reader.nextInt();
@@ -909,7 +909,7 @@ public class MyAuction {
 
     }
 
-    private void topKHighestVolumeSubCategories(int x, int k) {
+    public void topKHighestVolumeSubCategories(int x, int k) {
 
 
         try {
@@ -944,7 +944,7 @@ public class MyAuction {
 
     }
 
-    private void topKHighestVolumeMainCategories(int x) {
+    public void topKHighestVolumeMainCategories(int x) {
 
         System.out.println("How many top k main categories would you like reported? k=");
         int k = reader.nextInt();
@@ -954,7 +954,7 @@ public class MyAuction {
 
     }
 
-    private void topKHighestVolumeMainCategories(int x, int k) {
+    public void topKHighestVolumeMainCategories(int x, int k) {
 
         try {
 
@@ -988,7 +988,7 @@ public class MyAuction {
 
     }
 
-    private void topKMostActiveBidders(int x) {
+    public void topKMostActiveBidders(int x) {
 
         System.out.println("How many top k active buyers would you like reported? k=");
         int k = reader.nextInt();
@@ -998,7 +998,7 @@ public class MyAuction {
 
     }
 
-    private void topKMostActiveBidders(int x, int k) {
+    public void topKMostActiveBidders(int x, int k) {
 
         try {
 
@@ -1032,7 +1032,7 @@ public class MyAuction {
 
     }
 
-    private void topKMostActiveBuyers(int x) {
+    public void topKMostActiveBuyers(int x) {
 
         System.out.println("How many top k active buyers would you like reported? k=");
         int k = reader.nextInt();
@@ -1042,7 +1042,7 @@ public class MyAuction {
 
     }
 
-    private void topKMostActiveBuyers(int x, int k) {
+    public void topKMostActiveBuyers(int x, int k) {
 
         try {
 
