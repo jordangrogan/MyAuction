@@ -20,8 +20,8 @@ public class Driver {
             System.exit(0);
         }
 
-        reader  = new Scanner(System.in);
-
+        Scanner reader  = new Scanner(System.in);
+        Connection connection = null;
         String username, password;
         username = args[0]; //This is your username in oracle
         password = args[1]; //This is your password in oracle
@@ -39,6 +39,13 @@ public class Driver {
             connection = DriverManager.getConnection(url, username, password);
             MyAuction myauction = new MyAuction();
 
+            test_checkCredentials(myauction);
+            test_checkIfCustomerSellsProducts(myauction);
+            test_browseProducts(myauction);
+            test_browseProducts(myauction);
+            test_getParentCategories(myauction);
+
+
 
         } catch(Exception Ex)  {
             System.out.println("Error connecting to database.  Machine Error: " + Ex.toString());
@@ -50,22 +57,117 @@ public class Driver {
 
     }
 
-    // public void test_MyAuction_Constructor(){
-    // 	auction = new MyAuction();
-    // }
-    public void test_checkCredentials_Customer(){
-    	boolean expectedT = true;
-    	boolean expectedF = false;
-    	boolean result;
-    	// test valid login
-    	result = auction.checkCredentials("jww36", "mypass", false);
-    	if(result == expectedT) System.out.println("Valid login: Test Passed");
-    	else System.out.println("Test Failed");
-    	// test invalid login
-    	result = auction.checkCredentials("abc123", "password", false);
-    	if(result == expected) System.out.prntln("Invalid Login: Test Passed");
-    	else System.out.println("Test Failed");
+    public static void test_checkCredentials(MyAuction myauction){
+    	boolean expected = true;
+        boolean result;
 
-    	result = auction.checkCredentials()
+        result = myauction.checkCredentials("jww36", "mypass", false);
+        System.out.println("Expected Output: " + expected + "\tResult Output: " + result);
+    }
+
+    public static void test_checkIfCustomerSellsProducts(MyAuction myauction){
+		boolean expected = true;
+        boolean result;
+
+    	result = myauction.checkIfCustomerSellsProducts("jww36");
+        System.out.println("Expected Output: " + expected + "\tResult Output: " + result);
+    }
+
+    public static void test_browseProducts(MyAuction myauction){
+    	myauction.browseProducts();
+    }
+
+    public static void test_getParentCategories(MyAuction myauction){
+    	ArrayList<String> expected = new ArrayList<>();
+    	ArrayList<String> result;
+    	expected.add("Home");
+    	expected.add("Sports");
+
+    	result = myauction.getParentCategories();
+    	System.out.println("Expected Output: " + expected.toString() + "\tResult Output: " + result.toString());
+    }
+
+    public static void test_getChildCategories(MyAuction myauction){
+
+    }
+
+    public static void test_displayProducts(MyAuction myauction){
+
+    }
+
+    public static void test_displayProductsByKeywords(MyAuction myauction){
+
+    }
+
+    public static void test_searchForProductsByText(MyAuction myauction){
+
+    }
+
+    public static void test_putProductForAuction(MyAuction myauction){
+
+    }
+
+    public static void test_bidOnProduct(MyAuction myauction){
+
+    }
+
+    public static void test_suggestions(MyAuction myauction){
+
+    }
+
+    public static void test_sellProduct(MyAuction myauction){
+
+    }
+
+    public static void test_newCustomerRegisteration(MyAuction myauction){
+
+    }
+
+    public static void test_registerUser(MyAuction myauction){
+
+    }
+
+    public static void test_updateSystemDate(MyAuction myauction){
+
+    }
+
+    public static void test_productStatisticsAll(MyAuction myauction){
+
+    }
+
+    public static void test_productStatisticsByCustomer(MyAuction myauction){
+
+    }
+
+    public static void test_statistics(MyAuction myauction){
+
+    }
+
+    public static void test_topKHighestVolumeSubCategories(MyAuction myauction){
+
+    }
+
+    public static void test_topKHighestVolumeSubCategories(MyAuction myauction){
+
+    }
+
+    public static void test_topKHighestVolumeMainCategories(MyAuction myauction){
+
+    }
+
+    public static void test_topKHighestVolumeMainCategories(MyAuction myauction){
+
+    }
+
+    public static void test_topKMostActiveBidders(MyAuction myauction){
+
+    }
+
+    public static void test_topKMostActiveBidders(MyAuction myauction){
+
+    }
+
+    public static void test_topKMostActiveBuyers(MyAuction myauction){
+
     }
 }
