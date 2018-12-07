@@ -10,6 +10,9 @@ import java.text.ParseException; //needed by java for database connection and ma
 
 public class Benchmark {
 
+    private static Scanner reader;
+    private static Connection connection; // used to hold the jdbc connection to the DB
+
     public static void main(String args[]) throws SQLException {
 
         if(args.length != 2) {

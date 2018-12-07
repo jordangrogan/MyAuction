@@ -89,9 +89,9 @@ public class Driver {
 
     public static void test_getChildCategories(MyAuction myauction){
     	ArrayList<String> parentCategories = myauction.getParentCategories();
-    	ArrayList<String> childCategories;
+    	String childCategories;
     	for(int i = 0; i < parentCategories.size(); i++){
-    		childCategories = getChildCategories(parentCategories.get(i));
+    		childCategories = parentCategories.get(i);
     		System.out.println(childCategories.toString());
     	}
     }
@@ -152,14 +152,6 @@ public class Driver {
 
     }
 
-    public static void test_topKHighestVolumeSubCategories(MyAuction myauction){
-
-    }
-
-    public static void test_topKHighestVolumeMainCategories(MyAuction myauction){
-
-    }
-
     public static void test_topKHighestVolumeMainCategories(MyAuction myauction){
 
     }
@@ -168,11 +160,4 @@ public class Driver {
 
     }
 
-    public static void test_topKMostActiveBidders(MyAuction myauction){
-
-    }
-
-    public static void test_topKMostActiveBuyers(MyAuction myauction){
-
-    }
 }
