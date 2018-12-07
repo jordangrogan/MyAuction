@@ -654,6 +654,19 @@ public class MyAuction {
                 prepStatement = connection.prepareStatement(query);
                 prepStatement.setInt(1, auction_id);
                 prepStatement.executeUpdate();
+
+                java.sql.Date sellDate = null;
+                query = "SELECT c_date FROM oursysdate WHERE ROWNUM=1";
+                prepStatement = connection.prepareStatement(query);
+                resultSet = prepStatement.executeQuery();
+                while(resultSet.next()){
+                    sellDate = resultSet.getDate("c_date");
+                }
+                query = "UPDATE product SET sell_date=? WHERE auction_id=?";
+                prepStatement = connection.prepareStatement(query);
+                prepStatement.setDate(1, sellDate);
+                prepStatement.setInt(2, auction_id);
+                prepStatement.executeUpdate();
                 System.out.println("Product sold.");
             }
             resultSet.close();
