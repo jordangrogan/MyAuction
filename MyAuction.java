@@ -793,7 +793,7 @@ public class MyAuction {
 
         try{
             statement = connection.createStatement(); //create an instance
-            query = "SELECT product.auction_id, product.name, product.status, product.amount, bidlog.bidder FROM product JOIN bidlog ON product.auction_id = bidlog.auction_id AND product.amount = bidlog.amount";
+            query = "SELECT product.auction_id, product.name, product.status, product.amount, bidlog.bidder FROM product JOIN bidlog ON product.auction_id = bidlog.auction_id AND product.amount = bidlog.amount"; 
 
             resultSet = statement.executeQuery(query); //run the query on the DB table
 
