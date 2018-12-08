@@ -97,10 +97,20 @@ public class Driver {
     }
 
     public static void test_displayProducts(MyAuction myauction){
+    	myauction.displayProducts();
 
     }
 
     public static void test_displayProductsByKeywords(MyAuction myauction){
+    	String[] keywords = new String[100];
+    	System.out.println("Enter a description of the product \n")
+    	int i = 0;
+    	while(reader.hasNext())
+    	{
+         keywords[i] = reader.next();
+         i++;
+    	}
+    	myauction.displayProductsByKeyword(keywords);
 
     }
 
@@ -109,10 +119,16 @@ public class Driver {
     }
 
     public static void test_putProductForAuction(MyAuction myauction){
+    	System.out.println("Enter a login name \n");
+    	String login = reader.nextLine();
+    	myauction.putProductForAuction(login);
 
     }
 
     public static void test_bidOnProduct(MyAuction myauction){
+    	Sytem.out.println("Enter Bidder Name \n");
+    	String bidder = reader.nextLine();
+    	myauction.bidOnProduct(bidder);
 
     }
 
@@ -121,6 +137,9 @@ public class Driver {
     }
 
     public static void test_sellProduct(MyAuction myauction){
+    	System.out.println("Enter a login name \n");
+    	String login = reader.nextLine();
+    	myauction.sellProduct(login);
 
     }
 
@@ -129,6 +148,28 @@ public class Driver {
     }
 
     public static void test_registerUser(MyAuction myauction){
+    	boolean isAdmin;
+    	System.out.println("Enter your name \n");
+    	String name = reader.nextLine();
+    	System.out.println("Enter an address \n");
+    	String address = reader.nextLine();
+    	System.out.println("Enter your email\n");
+    	String email = reader.nextLine();
+    	System.out.println("Enter your login \n");
+    	String login = reader.nextLine();
+    	System.out.println("Enter your password \n");
+    	String password = reader.nextLine();
+    	if(name.equals("Administrator"))
+    	{
+ 			isAdmin = true;
+    	}
+    	else
+    	{
+    		isAdmin = false;
+    	}
+
+    	myauction.registerUser(name, address, email, login, password, isAdmin);
+    	
 
     }
 
