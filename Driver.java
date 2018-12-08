@@ -178,14 +178,17 @@ public class Driver {
     }
 
     public static void test_productStatisticsAll(MyAuction myauction){
+    	myauction.productStatisticsAll();
 
     }
 
     public static void test_productStatisticsByCustomer(MyAuction myauction){
+    	myauction.productStatisticsByCustomer();
 
     }
 
     public static void test_statistics(MyAuction myauction){
+    	myauction.statistics();
 
     }
 
