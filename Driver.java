@@ -159,7 +159,7 @@ public class Driver {
     	String login = reader.nextLine();
     	System.out.println("Enter your password \n");
     	String password = reader.nextLine();
-    	if(name.equals("Administrator"))
+    	if(name.equals("Administrator") && login.equals("admin") && password.equals("root") && address.equals("4200 Fifth Ave, Pgh, PA 15260") && email.equals("admin@pitt.edu"))
     	{
  			isAdmin = true;
     	}
@@ -167,8 +167,9 @@ public class Driver {
     	{
     		isAdmin = false;
     	}
-
+    	
     	myauction.registerUser(name, address, email, login, password, isAdmin);
+
     	
 
     }
@@ -193,14 +194,26 @@ public class Driver {
     }
 
     public static void test_topKHighestVolumeSubCategories(MyAuction myauction){
+    	//I wasnt exactly sure what X was supposed to be in this so I didnt specify in the printout yet
+    	System.out.println("Enter an integer value for x \n");
+    	int x = reader.nextInt();
+    	myauction.topKHigestVolumeSubCategories(x);
 
     }
 
     public static void test_topKHighestVolumeMainCategories(MyAuction myauction){
+    	//I wasnt exactly sure what X was supposed to be in this so I didnt specify in the printout yet
+    	System.out.println("Enter an integer value for x \n");
+    	int x = reader.nextInt();
+    	myauction.topKHigestVolumeMainCategories(x);
 
     }
 
     public static void test_topKMostActiveBidders(MyAuction myauction){
+    	//I wasnt exactly sure what X was supposed to be in this so I didnt specify in the printout yet
+    	System.out.println("Enter an integer value for x \n");
+    	int x = reader.nextInt();
+    	myauction.topKMostActiveBidders(x);
 
     }
 
