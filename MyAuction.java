@@ -118,7 +118,7 @@ public class MyAuction {
                 "3 - no sorting?");
         response = reader.nextLine();
         // List products with key attributes: auction_id, name, description, highest_bid (if sorted)
-        displayProducts(childCategories.get((Integer.parseInt(category))), Integer.parseInt(response));
+        System.out.print(displayProducts(childCategories.get((Integer.parseInt(category))), Integer.parseInt(response)));
     }
 
     public ArrayList<String> getParentCategories() {
@@ -181,7 +181,9 @@ public class MyAuction {
         return childCategories;
     }
 
-    public void displayProducts(String category, int sort) {
+    public String displayProducts(String category, int sort) {
+
+        String result = "";
 
         try {
 
@@ -203,7 +205,7 @@ public class MyAuction {
                 String name = resultSet.getString("name");
                 String description = resultSet.getString("description");
                 int highestBidAmt = resultSet.getInt("amount");
-                System.out.println(auctionID + ": " + name + " - " + description + " - Highest Bid Amount: $" + highestBidAmt);
+                result += (auctionID + ": " + name + " - " + description + " - Highest Bid Amount: $" + highestBidAmt + "\n");
             }
 
         } catch(SQLException Ex) {
@@ -217,9 +219,13 @@ public class MyAuction {
             }
         }
 
+        return result;
+
     }
 
-    public void displayProductsByKeywords(String[] keywords) {
+    public String displayProductsByKeywords(String[] keywords) {
+
+        String result = "";
 
         try {
 
@@ -243,7 +249,7 @@ public class MyAuction {
                 String name = resultSet.getString("name");
                 String description = resultSet.getString("description");
                 int highestBidAmt = resultSet.getInt("amount");
-                System.out.println(auctionID + ": " + name + " - " + description + " - Highest Bid Amount: $" + highestBidAmt);
+                result += (auctionID + ": " + name + " - " + description + " - Highest Bid Amount: $" + highestBidAmt + "\n");
             }
 
         } catch(SQLException Ex) {
@@ -257,6 +263,8 @@ public class MyAuction {
             }
         }
 
+        return result;
+
     }
 
     public void searchForProductsByText() {
@@ -266,7 +274,7 @@ public class MyAuction {
             String keywords = reader.nextLine();
             keywordsArr = keywords.split(" ");
         } while(keywordsArr.length != 1 && keywordsArr.length != 2);
-        displayProductsByKeywords(keywordsArr);
+        System.out.print(displayProductsByKeywords(keywordsArr));
     }
 
 

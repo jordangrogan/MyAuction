@@ -43,13 +43,10 @@ public class Driver {
 
             test_checkCredentials(myauction);
             test_checkIfCustomerSellsProducts(myauction);
-            test_browseProducts(myauction);
-            test_browseProducts(myauction);
             test_getParentCategories(myauction);
             test_getChildCategories(myauction);
             test_displayProducts(myauction);
             test_displayProductsByKeywords(myauction);
-            test_searchForProductsByText(myauction);
             test_putProductForAuction(myauction);
             test_bidOnProduct(myauction);
             test_suggestions(myauction);
@@ -76,7 +73,7 @@ public class Driver {
 
     public static void test_checkCredentials(MyAuction myauction){
         boolean result;
-        System.out.println("Testing Check Credentials...");
+        System.out.println("Testing check credentials...");
         result = myauction.checkCredentials("jww36", "mypass", false);
         System.out.println("Expected Output: " + true + "\tResult Output: " + result);
         result = myauction.checkCredentials("dummy", "dummy", false);
@@ -85,56 +82,46 @@ public class Driver {
     }
 
     public static void test_checkIfCustomerSellsProducts(MyAuction myauction){
-        System.out.println("Testing if Customer jww36 sells products...");
+        System.out.println("Testing if customer jww36 sells products...");
         boolean result;
     	result = myauction.checkIfCustomerSellsProducts("jww36");
         System.out.println("Expected Output: " + true + "\tResult Output: " + result);
         System.out.println("----------------------------------------------------------------");
     }
 
-    public static void test_browseProducts(MyAuction myauction){
-    	myauction.browseProducts();
-    }
-
     public static void test_getParentCategories(MyAuction myauction){
+        System.out.println("Testing get parent categories...");
     	ArrayList<String> expected = new ArrayList<>();
     	ArrayList<String> result;
     	expected.add("Home");
     	expected.add("Sports");
-
     	result = myauction.getParentCategories();
     	System.out.println("Expected Output: " + expected.toString() + "\tResult Output: " + result.toString());
+        System.out.println("----------------------------------------------------------------");
     }
 
     public static void test_getChildCategories(MyAuction myauction){
-    	ArrayList<String> parentCategories = myauction.getParentCategories();
-    	String childCategories;
-    	for(int i = 0; i < parentCategories.size(); i++){
-    		childCategories = parentCategories.get(i);
-    		System.out.println(childCategories.toString());
-    	}
+        System.out.println("Testing get child categories...");
+        ArrayList<String> expected = new ArrayList<>();
+        ArrayList<String> result;
+        expected.add("Kitchen");
+        result = myauction.getChildCategories("Home");
+        System.out.println("Expected Output: " + expected.toString() + "\tResult Output: " + result.toString());
+        System.out.println("----------------------------------------------------------------");
     }
 
     public static void test_displayProducts(MyAuction myauction){
-    	myauction.displayProducts("someCategory",2);
-
+        System.out.println("Testing display products...");
+    	String result = myauction.displayProducts("Balls",2);
+        System.out.print("Expected Output:\n5: ball - a very bouncy ball - Highest Bid Amount: $3" + "\nResult Output:\n" + result);
+        System.out.println("----------------------------------------------------------------");
     }
 
     public static void test_displayProductsByKeywords(MyAuction myauction){
-    	String[] keywords = new String[100];
-    	System.out.println("Enter a description of the product \n");
-    	int i = 0;
-    	while(reader.hasNext())
-    	{
-         keywords[i] = reader.next();
-         i++;
-    	}
-    	myauction.displayProductsByKeywords(keywords);
-
-    }
-
-    public static void test_searchForProductsByText(MyAuction myauction){
-    	myauction.searchForProductsByText();
+        System.out.println("Testing search for products...");
+    	String[] keywords = new String[]{"kitchen", "sink"};
+        System.out.print("Expected Output:\n3: sink - the kitchen sink - Highest Bid Amount: $12" + "\nResult Output:\n" + myauction.displayProductsByKeywords(keywords));
+        System.out.println("----------------------------------------------------------------");
     }
 
     public static void test_putProductForAuction(MyAuction myauction){
