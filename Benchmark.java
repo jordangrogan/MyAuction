@@ -40,6 +40,15 @@ public class Benchmark {
             connection = DriverManager.getConnection(url, username, password);
             MyAuction myauction = new MyAuction(connection);
 
+            // Check credentials
+            int iterations = 10;
+            benchmark_checkCredentials(myauction, iterations);
+            benchmark_checkIfCustomerSellsProducts(myauction, iterations);
+            benchmark_getParentCategories(myauction, iterations);
+            benchmark_getChildCategories(myauction, iterations);
+            benchmark_displayProducts(myauction, iterations);
+            benchmark_displayProductsByKeywords(myauction, iterations);
+
 
         } catch(Exception Ex)  {
             System.out.println("Error connecting to database.  Machine Error: " + Ex.toString());
@@ -49,6 +58,49 @@ public class Benchmark {
 
         reader.close();
 
+    }
+
+    public static void benchmark_checkCredentials(MyAuction myauction, int iterations){
+        for(int i=0; i<iterations; i++) {
+            System.out.println("Check credentials " + i + ": " + myauction.checkCredentials("jww36", "mypass", false));
+        }
+        System.out.println("----------------------------------------------------------------");
+    }
+
+    public static void benchmark_checkIfCustomerSellsProducts(MyAuction myauction, int iterations){
+        for(int i=0; i<iterations; i++) {
+            System.out.println("Check if customer sells products " + i + ": " + myauction.checkIfCustomerSellsProducts("jww36"));
+        }
+        System.out.println("----------------------------------------------------------------");
+    }
+
+    public static void benchmark_getParentCategories(MyAuction myauction, int iterations){
+        for(int i=0; i<iterations; i++) {
+            System.out.println("Check get parent categories " + i + ": " + myauction.getParentCategories());
+        }
+        System.out.println("----------------------------------------------------------------");
+    }
+
+    public static void benchmark_getChildCategories(MyAuction myauction, int iterations){
+        for(int i=0; i<iterations; i++) {
+            System.out.println("Check get child categories " + i + ": " + myauction.getChildCategories("Home"));
+        }
+        System.out.println("----------------------------------------------------------------");
+    }
+
+    public static void benchmark_displayProducts(MyAuction myauction, int iterations){
+        for(int i=0; i<iterations; i++) {
+            System.out.print("Check display products " + i + ": " + myauction.displayProducts("Balls",2));
+        }
+        System.out.println("----------------------------------------------------------------");
+    }
+
+    public static void benchmark_displayProductsByKeywords(MyAuction myauction, int iterations){
+        String[] keywords = new String[]{"kitchen", "sink"};
+        for(int i=0; i<iterations; i++) {
+            System.out.print("Check display products " + i + ": " + myauction.displayProductsByKeywords(keywords));
+        }
+        System.out.println("----------------------------------------------------------------");
     }
 
 }
