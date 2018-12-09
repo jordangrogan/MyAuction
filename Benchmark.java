@@ -38,7 +38,7 @@ public class Benchmark {
 
             //create a connection to DB on class3.cs.pitt.edu
             connection = DriverManager.getConnection(url, username, password);
-            MyAuction myauction = new MyAuction();
+            MyAuction myauction = new MyAuction(connection);
 
 
         } catch(Exception Ex)  {

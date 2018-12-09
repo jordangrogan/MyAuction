@@ -17,115 +17,9 @@ public class MyAuction {
     private PreparedStatement prepStatement; // used to create a prepared statement, that will be later reused
     private ResultSet resultSet; // used to hold the result of your query (if one exists)
     private String query; // this will hold the query we are using
-    private String login;
 
-    public MyAuction() {
-
-        String response;
-
-        boolean loggedIn = false;
-
-        System.out.println("Welcome to My Auction!");
-
-        // Ask for admin or customer until a valid response is entered
-        do {
-            System.out.println("Are you an \"admin\" or a \"customer\"?");
-            response = reader.nextLine();
-        } while(!(response.equals("admin") || response.equals("customer")));
-
-        // CUSTOMER
-        if(response.equals("customer")) {
-            System.out.println("Welcome Customer! Please enter your login/username:");
-            // Ask for username/password until valid credentials are given
-            do {
-                login = reader.nextLine();
-                System.out.println("Please enter your password:");
-                String password = reader.nextLine();
-                if (checkCredentials(login, password, false)) {
-                    loggedIn = true;
-                } else {
-                    System.out.println("Sorry, those credentials are invalid. Enter your username:");
-                }
-            } while(!loggedIn);
-            do {
-                System.out.println("Customer Main Menu\n" +
-                    "Select an option below:\n" +
-                    "0 - Quit\n" +
-                    "1 - Browse products\n" +
-                    "2 - Search for product by text\n" +
-                    "3 - Put product for auction\n" +
-                    "4 - Bid on product\n" +
-                    "5 - Suggestions");
-                    if(checkIfCustomerSellsProducts(login)) { // this option only available to customers who sell sell products
-                        System.out.println("6 - Sell/withdraw product");
-                    }
-                response = reader.nextLine();
-                switch (response) {
-                    case "1":
-                        browseProducts();
-                        break;
-                    case "2":
-                        searchForProductsByText();
-                        break;
-                    case "3":
-                        putProductForAuction(login);
-                        break;
-                    case "4":
-                        bidOnProduct(login);
-                        break;
-                    case "5":
-                        suggestions();
-                        break;
-                    case "6":
-                        sellProduct(login);
-                        break;
-                }
-            } while(!response.equals("0"));
-
-        // ADMIN
-        } else if(response.equals("admin")) {
-            System.out.println("Welcome Admin! Please enter your login/username:");
-            // Ask for username/password until valid credentials are given
-            do {
-                login = reader.nextLine();
-                System.out.println("Please enter your password:");
-                String password = reader.nextLine();
-                if (checkCredentials(login, password, true)) {
-                    loggedIn = true;
-                } else {
-                    System.out.println("Sorry, those credentials are invalid. Enter your username:");
-                }
-            } while(!loggedIn);
-            do {
-                System.out.println("Administrator Main Menu\n" +
-                    "Select an option below:\n" +
-                    "0 - Quit\n" +
-                    "1 - New customer registration\n" +
-                    "2 - Update system date\n" +
-                    "3 - Product statistics (all products)\n" +
-                    "4 - Product statistics (by customer)\n" +
-                    "5 - Statistics");
-                response = reader.nextLine();
-                switch (response) {
-                    case "1":
-                        newCustomerRegistration();
-                        break;
-                    case "2":
-                        updateSystemDate();
-                        break;
-                    case "3":
-                        productStatisticsAll();
-                        break;
-                    case "4":
-                        productStatisticsByCustomer();
-                        break;
-                    case "5":
-                        statistics();
-                        break;
-                }
-            } while(!response.equals("0"));
-        }
-
+    public MyAuction(Connection connect) {
+        connection = connect;
     }
 
     public boolean checkCredentials(String login, String password, boolean isAdmin) {
@@ -547,7 +441,7 @@ public class MyAuction {
         }        
     }
 
-    public void suggestions() {
+    public void suggestions(String login) {
 
         System.out.println("Here are some products you may want to bid on based on your bidding friends:");
 
@@ -1113,8 +1007,113 @@ public class MyAuction {
             String url = "jdbc:oracle:thin:@class3.cs.pitt.edu:1521:dbclass";
 
             //create a connection to DB on class3.cs.pitt.edu
-            connection = DriverManager.getConnection(url, username, password);
-            MyAuction myauction = new MyAuction();
+            Connection connect = DriverManager.getConnection(url, username, password);
+            MyAuction myauction = new MyAuction(connect);
+
+            String response;
+            String login;
+            boolean loggedIn = false;
+
+            System.out.println("Welcome to My Auction!");
+
+            // Ask for admin or customer until a valid response is entered
+            do {
+                System.out.println("Are you an \"admin\" or a \"customer\"?");
+                response = reader.nextLine();
+            } while(!(response.equals("admin") || response.equals("customer")));
+
+            // CUSTOMER
+            if(response.equals("customer")) {
+                System.out.println("Welcome Customer! Please enter your login/username:");
+                // Ask for username/password until valid credentials are given
+                do {
+                    login = reader.nextLine();
+                    System.out.println("Please enter your password:");
+                    String pass = reader.nextLine();
+                    if (myauction.checkCredentials(login, pass, false)) {
+                        loggedIn = true;
+                    } else {
+                        System.out.println("Sorry, those credentials are invalid. Enter your username:");
+                    }
+                } while(!loggedIn);
+                do {
+                    System.out.println("Customer Main Menu\n" +
+                            "Select an option below:\n" +
+                            "0 - Quit\n" +
+                            "1 - Browse products\n" +
+                            "2 - Search for product by text\n" +
+                            "3 - Put product for auction\n" +
+                            "4 - Bid on product\n" +
+                            "5 - Suggestions");
+                    if(myauction.checkIfCustomerSellsProducts(login)) { // this option only available to customers who sell sell products
+                        System.out.println("6 - Sell/withdraw product");
+                    }
+                    response = reader.nextLine();
+                    switch (response) {
+                        case "1":
+                            myauction.browseProducts();
+                            break;
+                        case "2":
+                            myauction.searchForProductsByText();
+                            break;
+                        case "3":
+                            myauction.putProductForAuction(login);
+                            break;
+                        case "4":
+                            myauction.bidOnProduct(login);
+                            break;
+                        case "5":
+                            myauction.suggestions(login);
+                            break;
+                        case "6":
+                            myauction.sellProduct(login);
+                            break;
+                    }
+                } while(!response.equals("0"));
+
+                // ADMIN
+            } else if(response.equals("admin")) {
+                System.out.println("Welcome Admin! Please enter your login/username:");
+                // Ask for username/password until valid credentials are given
+                do {
+                    login = reader.nextLine();
+                    System.out.println("Please enter your password:");
+                    String pass = reader.nextLine();
+                    if (myauction.checkCredentials(login, pass, true)) {
+                        loggedIn = true;
+                    } else {
+                        System.out.println("Sorry, those credentials are invalid. Enter your username:");
+                    }
+                } while(!loggedIn);
+                do {
+                    System.out.println("Administrator Main Menu\n" +
+                            "Select an option below:\n" +
+                            "0 - Quit\n" +
+                            "1 - New customer registration\n" +
+                            "2 - Update system date\n" +
+                            "3 - Product statistics (all products)\n" +
+                            "4 - Product statistics (by customer)\n" +
+                            "5 - Statistics");
+                    response = reader.nextLine();
+                    switch (response) {
+                        case "1":
+                            myauction.newCustomerRegistration();
+                            break;
+                        case "2":
+                            myauction.updateSystemDate();
+                            break;
+                        case "3":
+                            myauction.productStatisticsAll();
+                            break;
+                        case "4":
+                            myauction.productStatisticsByCustomer();
+                            break;
+                        case "5":
+                            myauction.statistics();
+                            break;
+                    }
+                } while(!response.equals("0"));
+            }
 
 
         } catch(Exception Ex)  {

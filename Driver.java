@@ -23,6 +23,7 @@ public class Driver {
         }
 
         reader  = new Scanner(System.in);
+
         String username, password;
         username = args[0]; //This is your username in oracle
         password = args[1]; //This is your password in oracle
@@ -38,7 +39,7 @@ public class Driver {
 
             //create a connection to DB on class3.cs.pitt.edu
             connection = DriverManager.getConnection(url, username, password);
-            MyAuction myauction = new MyAuction();
+            MyAuction myauction = new MyAuction(connection);
 
             test_checkCredentials(myauction);
             test_checkIfCustomerSellsProducts(myauction);
@@ -63,8 +64,6 @@ public class Driver {
             test_topKHighestVolumeMainCategories(myauction);
             test_topKMostActiveBidders(myauction);
 
-
-
         } catch(Exception Ex)  {
             System.out.println("Error connecting to database.  Machine Error: " + Ex.toString());
         } finally {
@@ -76,11 +75,13 @@ public class Driver {
     }
 
     public static void test_checkCredentials(MyAuction myauction){
-    	boolean expected = true;
         boolean result;
-
+        System.out.println("Testing Check Credentials...");
         result = myauction.checkCredentials("jww36", "mypass", false);
-        System.out.println("Expected Output: " + expected + "\tResult Output: " + result);
+        System.out.println("Expected Output: " + true + "\tResult Output: " + result);
+        result = myauction.checkCredentials("dummy", "dummy", false);
+        System.out.println("Expected Output: " + false + "\tResult Output: " + result);
+        System.out.println("----------------------------------------------------------------");
     }
 
     public static void test_checkIfCustomerSellsProducts(MyAuction myauction){
@@ -151,7 +152,7 @@ public class Driver {
     }
 
     public static void test_suggestions(MyAuction myauction){
-    	myauction.suggestions();
+    	//myauction.suggestions(login);
     }
 
     public static void test_sellProduct(MyAuction myauction){
