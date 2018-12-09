@@ -51,12 +51,12 @@ public class Driver {
             test_bidOnProduct(myauction);
             test_suggestions(myauction);
             test_sellProduct(myauction);
-            test_newCustomerRegisteration(myauction);
+            // test_newCustomerRegisteration(myauction);
             test_registerUser(myauction);
             test_updateSystemDate(myauction);
             test_productStatisticsAll(myauction);
             test_productStatisticsByCustomer(myauction);
-            test_statistics(myauction);
+            // test_statistics(myauction);
             test_topKHighestVolumeSubCategories(myauction);
             test_topKHighestVolumeMainCategories(myauction);
             test_topKMostActiveBidders(myauction);
@@ -151,9 +151,9 @@ public class Driver {
     	System.out.println("----------------------------------------------------------------");
     }
 
-    public static void test_newCustomerRegisteration(MyAuction myauction){
-    	// myauction.newCustomerRegistration();
-    }
+    // public static void test_newCustomerRegisteration(MyAuction myauction){
+    // 	// myauction.newCustomerRegistration();
+    // }
 
     public static void test_registerUser(MyAuction myauction){
     	System.out.println("Testing registering new user...");   	
@@ -182,10 +182,10 @@ public class Driver {
     	System.out.println("----------------------------------------------------------------");
     }
 
-    public static void test_statistics(MyAuction myauction){
-    	// myauction.statistics();
+    // public static void test_statistics(MyAuction myauction){
+    // 	// myauction.statistics();
 
-    }
+    // }
 
     public static void test_topKHighestVolumeSubCategories(MyAuction myauction){
     	System.out.println("Testing display the Top k Highest Volume Sub Categories...");
