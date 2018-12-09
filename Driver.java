@@ -60,6 +60,7 @@ public class Driver {
             test_topKHighestVolumeSubCategories(myauction);
             test_topKHighestVolumeMainCategories(myauction);
             test_topKMostActiveBidders(myauction);
+            test_topKMostActiverBuyers(myauction);
 
         } catch(Exception Ex)  {
             System.out.println("Error connecting to database.  Machine Error: " + Ex.toString());
@@ -187,26 +188,29 @@ public class Driver {
     }
 
     public static void test_topKHighestVolumeSubCategories(MyAuction myauction){
-    	System.out.println("Testing display the top k Highest volume sub categories...");
-    	myauction.topKHighestVolumeSubCategories(2);
+    	System.out.println("Testing display the Top k Highest Volume Sub Categories...");
+    	myauction.topKHighestVolumeSubCategories(2, 2);
     	System.out.println("----------------------------------------------------------------");
 
     }
 
-    public static void test_topKHighestVolumeMainCategories(MyAuction myauction){
-    	//I wasnt exactly sure what X was supposed to be in this so I didnt specify in the printout yet
-    	System.out.println("Enter an integer value for x \n");
-    	int x = reader.nextInt();
-    	myauction.topKHighestVolumeMainCategories(x);
+    public static void test_topKHighestVolumeMainCategories(MyAuction myauction){   	
+    	
+    	System.out.println("Testing display the Top k Highest Volume Main Categories...");
+    	myauction.topKHighestVolumeMainCategories(1, 2);
+    	System.out.println("----------------------------------------------------------------");
 
     }
 
     public static void test_topKMostActiveBidders(MyAuction myauction){
-    	//I wasnt exactly sure what X was supposed to be in this so I didnt specify in the printout yet
-    	System.out.println("Enter an integer value for x \n");
-    	int x = reader.nextInt();
-    	myauction.topKMostActiveBidders(x);
-
+    	System.out.println("Testing Top K Most Activer Bidders...");
+    	myauction.topKMostActiveBidders(1, 3);
+    	System.out.println("----------------------------------------------------------------");
     }
 
+    public static void test_topKMostActiverBuyers(MyAuction myauction){
+    	System.out.println("Testing Top K Most Activer Buyers...");
+    	myauction.topKMostActiveBuyers(1, 3);
+    	System.out.println("----------------------------------------------------------------");
+    }
 }
