@@ -145,48 +145,33 @@ public class Driver {
     public static void test_sellProduct(MyAuction myauction){
     	System.out.println("Testing selling a product...");
 
-    	myauction.sellProduct("jww36");
+    	// myauction.sellProduct("jww36");
 
     	System.out.println("----------------------------------------------------------------");
     }
 
     public static void test_newCustomerRegisteration(MyAuction myauction){
-    	myauction.newCustomerRegistration();
+    	// myauction.newCustomerRegistration();
     }
 
     public static void test_registerUser(MyAuction myauction){
-    	boolean isAdmin;
-    	System.out.println("Enter your name \n");
-    	String name = reader.nextLine();
-    	System.out.println("Enter an address \n");
-    	String address = reader.nextLine();
-    	System.out.println("Enter your email\n");
-    	String email = reader.nextLine();
-    	System.out.println("Enter your login \n");
-    	String login = reader.nextLine();
-    	System.out.println("Enter your password \n");
-    	String password = reader.nextLine();
-    	if(name.equals("Administrator") && login.equals("admin") && password.equals("root") && address.equals("4200 Fifth Ave, Pgh, PA 15260") && email.equals("admin@pitt.edu"))
-    	{
- 			isAdmin = true;
-    	}
-    	else
-    	{
-    		isAdmin = false;
-    	}
+    	System.out.println("Testing registering new user...");   	
+    	myauction.registerUser("Test Name", "Test address", "Test email", "Test", "password", false);
+    	myauction.registerUser("Test Name 2", "Test address 2", "Test email 2", "Test2", "password2", true);
     	
-    	myauction.registerUser(name, address, email, login, password, isAdmin);
-
-    	
-
+    	System.out.println("----------------------------------------------------------------");
     }
 
     public static void test_updateSystemDate(MyAuction myauction){
-    	myauction.updateSystemDate();
+    	System.out.println("Testing updating system date...");
+    	myauction.updateSystemDate(3, 24, 2019, 4, 30, 33);
+    	System.out.println("----------------------------------------------------------------");
     }
 
     public static void test_productStatisticsAll(MyAuction myauction){
+    	System.out.println("Testing displaying all product statistics...");
     	myauction.productStatisticsAll();
+    	System.out.println("----------------------------------------------------------------");
 
     }
 
