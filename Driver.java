@@ -125,10 +125,9 @@ public class Driver {
     }
 
     public static void test_putProductForAuction(MyAuction myauction){
-    	System.out.println("Enter a login name \n");
-    	String login = reader.nextLine();
-    	myauction.putProductForAuction(login);
-
+        System.out.println("Testing add a product...");
+    	myauction.addProduct("Test Product", "Test Description", "jog89", "Balls,Equipment", 10,5);
+        System.out.println("----------------------------------------------------------------");
     }
 
     public static void test_bidOnProduct(MyAuction myauction){

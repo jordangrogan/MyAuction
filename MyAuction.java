@@ -387,23 +387,27 @@ public class MyAuction {
         	if(auctDays.equals("") == false){go = false;}
         }
 		int numDays = Integer.parseInt(auctDays);
-			
+
+        addProduct(productName, desc, login, categories_csv, price, numDays);
+
+    }
+
+    public void addProduct(String productName, String desc, String login, String categories_csv, int price, int numDays) {
         try{
-        	// proc_putProduct (product_name, product_description, seller, categories_csv, min_price, num_days)
-        	CallableStatement cStatement = connection.prepareCall("{call proc_putProduct (?, ?, ?, ?, ?, ?)}");
-        	cStatement.setString(1, productName);
-        	cStatement.setString(2, desc);
-        	cStatement.setString(3, login);
-        	cStatement.setString(4, categories_csv);
-        	cStatement.setInt(5, price);
-        	cStatement.setInt(6, numDays);
-        	cStatement.execute();
+            // proc_putProduct (product_name, product_description, seller, categories_csv, min_price, num_days)
+            CallableStatement cStatement = connection.prepareCall("{call proc_putProduct (?, ?, ?, ?, ?, ?)}");
+            cStatement.setString(1, productName);
+            cStatement.setString(2, desc);
+            cStatement.setString(3, login);
+            cStatement.setString(4, categories_csv);
+            cStatement.setInt(5, price);
+            cStatement.setInt(6, numDays);
+            cStatement.execute();
 
-        	System.out.println("Product added!");
+            System.out.println("Product added!");
         }catch(SQLException e){
-        	System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            System.out.println("Cannot close Statement. Machine error: "+e.toString());
         }
-
     }
 
     public void bidOnProduct(String bidder){
