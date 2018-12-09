@@ -49,7 +49,16 @@ public class Benchmark {
             benchmark_displayProducts(myauction, iterations);
             benchmark_displayProductsByKeywords(myauction, iterations);
             benchmark_putProductForAuction(myauction, iterations);
-
+            benchmark_bidOnProduct(myauction, iterations);
+            benchmark_suggestions(myauction, iterations);
+            benchmark_sellProduct(myauction, iterations);
+            benchmark_registerUser(myauction, iterations);
+            benchmark_updateSystemDate(myauction, iterations);
+            benchmark_productStatisticsAll(myauction, iterations);
+            benchmark_productStatisticsByCustomer(myauction, iterations);
+            benchmark_topKHighestVolumeSubCategories(myauction, iterations);
+            benchmark_topKMostActiveBidders(myauction, iterations);
+            benchmark_topKMostActiveBuyers(myauction, iterations);
 
         } catch(Exception Ex)  {
             System.out.println("Error connecting to database.  Machine Error: " + Ex.toString());
@@ -105,11 +114,79 @@ public class Benchmark {
     }
 
     public static void benchmark_putProductForAuction(MyAuction myauction, int iterations){
+        System.out.println("Running put product for auction.");
         for(int i=0; i<iterations; i++) {
-            System.out.println("Running put product for auction.");
             myauction.addProduct("Test Product", "Test Description", "jog89", "Balls,Equipment", 10, 5);
         }
         System.out.println("----------------------------------------------------------------");
     }
 
+    public static void benchmark_bidOnProduct(MyAuction myauction, int iterations){
+    	int bid = 20;
+    	System.out.println("Running bid on product.");
+    	for(int i = 0; i < iterations; i++){
+    		myauction.addBid(2, "jww36", bid++);
+    	}
+    	System.out.println("----------------------------------------------------------------");
+    }
+
+    public static void benchmark_suggestions(MyAuction myauction, int iterations){
+    	System.put.println("Running suggestions.");
+    	myauction.suggestions("jog89");
+    	System.out.println("----------------------------------------------------------------");
+    }
+
+    public static void benchmark_sellProduct(MyAuction myauction, int iterations){
+    	System.put.println("Running sell product.");
+
+    	System.out.println("----------------------------------------------------------------");
+    }
+
+    public static void benchmark_registerUser(MyAuction myauction, int iterations){
+    	System.put.println("Running register user.");
+    	String name = "Test";
+    	String address = "Test";
+    	String email = "Test";
+    	String username = "Test";
+    	String password = "Test";
+    	for(int i = 0; i < iterations; i++){
+    		myauction.registerUser(name+=1, address+=1, email+=1, username+=1, password);
+    	}
+    	System.out.println("----------------------------------------------------------------");
+    }
+    public static void benchmark_updateSystemDate(MyAuction myauction, int iterations){
+    	System.put.println("Running update system date.");
+
+    	System.out.println("----------------------------------------------------------------");
+    }
+
+    public static void benchmark_productStatisticsAll(MyAuction myauction, int iterations){
+    	System.put.println("Running product statistics all.");
+
+    	System.out.println("----------------------------------------------------------------");
+    }
+
+    public static void benchmark_productStatisticsByCustomer(MyAuction myauction, int iterations){
+    	System.put.println("Running product statistics by customer.");
+
+    	System.out.println("----------------------------------------------------------------");
+    }
+
+    public static void benchmark_topKHighestVolumeSubCategories(MyAuction myauction, int iterations){
+    	System.put.println("Running top k highest volume sub categories.");
+
+    	System.out.println("----------------------------------------------------------------");
+    }
+
+    public static void benchmark_topKMostActiveBidders(MyAuction myauction, int iterations){
+    	System.put.println("Running top k most active bidders.");
+
+    	System.out.println("----------------------------------------------------------------");
+    }
+
+    public static void benchmark_topKMostActiveBuyers(MyAuction myauction, int iterations){
+    	System.put.println("Running top k most active buyers.");
+
+    	System.out.println("----------------------------------------------------------------");
+    }
 }
