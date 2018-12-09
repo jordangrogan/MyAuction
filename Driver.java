@@ -51,12 +51,10 @@ public class Driver {
             test_bidOnProduct(myauction);
             test_suggestions(myauction);
             test_sellProduct(myauction);
-            // test_newCustomerRegisteration(myauction);
             test_registerUser(myauction);
             test_updateSystemDate(myauction);
             test_productStatisticsAll(myauction);
             test_productStatisticsByCustomer(myauction);
-            // test_statistics(myauction);
             test_topKHighestVolumeSubCategories(myauction);
             test_topKHighestVolumeMainCategories(myauction);
             test_topKMostActiveBidders(myauction);
