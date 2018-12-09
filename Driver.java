@@ -293,7 +293,7 @@ public class Driver {
     }
 
     public static void test_topKHighestVolumeSubCategories(MyAuction myauction){
-    	System.out.println("Testing display the Top k Highest Volume Sub Categories...");
+    	System.out.println("Testing display the Top 2 Highest Volume Sub Categories in the last 12 months...");
     	myauction.topKHighestVolumeSubCategories(12, 2);
     	System.out.println("----------------------------------------------------------------");
 
@@ -301,20 +301,20 @@ public class Driver {
 
     public static void test_topKHighestVolumeMainCategories(MyAuction myauction){   	
     	
-    	System.out.println("Testing display the Top k Highest Volume Main Categories...");
+    	System.out.println("Testing display the Top 2 Highest Volume Main Categories in the last 12 months...");
     	myauction.topKHighestVolumeMainCategories(12, 2);
     	System.out.println("----------------------------------------------------------------");
 
     }
 
     public static void test_topKMostActiveBidders(MyAuction myauction){
-    	System.out.println("Testing Top K Most Active Bidders...");
+    	System.out.println("Testing Top 3 Most Active Bidders in the last 12 months...");
     	myauction.topKMostActiveBidders(12, 3);
     	System.out.println("----------------------------------------------------------------");
     }
 
     public static void test_topKMostActiveBuyers(MyAuction myauction){
-    	System.out.println("Testing Top K Most Active Buyers...");
+    	System.out.println("Testing Top 3 Most Active Buyers in the last 12 months...");
     	myauction.topKMostActiveBuyers(12, 3);
     	System.out.println("----------------------------------------------------------------");
     }
