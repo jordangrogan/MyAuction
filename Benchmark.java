@@ -57,6 +57,7 @@ public class Benchmark {
             benchmark_productStatisticsAll(myauction, iterations);
             benchmark_productStatisticsByCustomer(myauction, iterations);
             benchmark_topKHighestVolumeSubCategories(myauction, iterations);
+            benchmark_topKHighestVolumeMainCategories(myauction, iterations);
             benchmark_topKMostActiveBidders(myauction, iterations);
             benchmark_topKMostActiveBuyers(myauction, iterations);
 
@@ -194,20 +195,34 @@ public class Benchmark {
     }
 
     public static void benchmark_topKHighestVolumeSubCategories(MyAuction myauction, int iterations){
-    	System.out.println("Running top k highest volume sub categories.");
-
+    	System.out.println("Running display the Top 2 Highest Volume Sub Categories in the last 12 months...");
+        for(int i = 0; i < iterations; i++) {
+            myauction.topKHighestVolumeSubCategories(12, 2);
+        }
     	System.out.println("----------------------------------------------------------------");
     }
 
-    public static void benchmark_topKMostActiveBidders(MyAuction myauction, int iterations){
-    	System.out.println("Running top k most active bidders.");
+    public static void benchmark_topKHighestVolumeMainCategories(MyAuction myauction, int iterations){
 
+        System.out.println("Testing display the Top 2 Highest Volume Main Categories in the last 12 months...");
+        myauction.topKHighestVolumeMainCategories(12, 2);
+        System.out.println("----------------------------------------------------------------");
+
+    }
+
+    public static void benchmark_topKMostActiveBidders(MyAuction myauction, int iterations){
+    	System.out.println("Running Top 3 Most Active Bidders in the last 12 months...");
+        for(int i = 0; i < iterations; i++) {
+            myauction.topKMostActiveBidders(12, 3);
+        }
     	System.out.println("----------------------------------------------------------------");
     }
 
     public static void benchmark_topKMostActiveBuyers(MyAuction myauction, int iterations){
-    	System.out.println("Running top k most active buyers.");
-
+    	System.out.println("Running Top 3 Most Active Buyers in the last 12 months...");
+        for(int i = 0; i < iterations; i++) {
+            myauction.topKMostActiveBuyers(12, 3);
+        }
     	System.out.println("----------------------------------------------------------------");
     }
 }
