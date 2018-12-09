@@ -144,7 +144,9 @@ public class Driver {
 
     public static void test_sellProduct(MyAuction myauction){
     	System.out.println("Testing selling a product...");
-    	
+
+    	myauction.sellProduct("jww36");
+
     	System.out.println("----------------------------------------------------------------");
     }
 

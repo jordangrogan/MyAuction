@@ -543,6 +543,9 @@ public class MyAuction {
     	boolean go = true;
     	// this try catch just gets the items with closed status and displays them
         try {
+            connection.setAutoCommit(false); //the default is true and every statement executed is considered a transaction.
+            connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            
             query = "SELECT * FROM product WHERE seller=? AND (status='closed' OR status='under auction')";
             prepStatement = connection.prepareStatement(query);
             prepStatement.setString(1, login);
