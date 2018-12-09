@@ -131,61 +131,61 @@ public class Benchmark {
     }
 
     public static void benchmark_suggestions(MyAuction myauction, int iterations){
-    	System.put.println("Running suggestions.");
+    	System.out.println("Running suggestions.");
     	myauction.suggestions("jog89");
     	System.out.println("----------------------------------------------------------------");
     }
 
     public static void benchmark_sellProduct(MyAuction myauction, int iterations){
-    	System.put.println("Running sell product.");
+    	System.out.println("Running sell product.");
 
     	System.out.println("----------------------------------------------------------------");
     }
 
     public static void benchmark_registerUser(MyAuction myauction, int iterations){
-    	System.put.println("Running register user.");
+    	System.out.println("Running register user.");
     	String name = "Test";
     	String address = "Test";
     	String email = "Test";
     	String username = "Test";
     	String password = "Test";
     	for(int i = 0; i < iterations; i++){
-    		myauction.registerUser(name+=1, address+=1, email+=1, username+=1, password);
+    		myauction.registerUser(name, address, email, username + i, password, false);
     	}
     	System.out.println("----------------------------------------------------------------");
     }
     public static void benchmark_updateSystemDate(MyAuction myauction, int iterations){
-    	System.put.println("Running update system date.");
+    	System.out.println("Running update system date.");
 
     	System.out.println("----------------------------------------------------------------");
     }
 
     public static void benchmark_productStatisticsAll(MyAuction myauction, int iterations){
-    	System.put.println("Running product statistics all.");
+    	System.out.println("Running product statistics all.");
 
     	System.out.println("----------------------------------------------------------------");
     }
 
     public static void benchmark_productStatisticsByCustomer(MyAuction myauction, int iterations){
-    	System.put.println("Running product statistics by customer.");
+    	System.out.println("Running product statistics by customer.");
 
     	System.out.println("----------------------------------------------------------------");
     }
 
     public static void benchmark_topKHighestVolumeSubCategories(MyAuction myauction, int iterations){
-    	System.put.println("Running top k highest volume sub categories.");
+    	System.out.println("Running top k highest volume sub categories.");
 
     	System.out.println("----------------------------------------------------------------");
     }
 
     public static void benchmark_topKMostActiveBidders(MyAuction myauction, int iterations){
-    	System.put.println("Running top k most active bidders.");
+    	System.out.println("Running top k most active bidders.");
 
     	System.out.println("----------------------------------------------------------------");
     }
 
     public static void benchmark_topKMostActiveBuyers(MyAuction myauction, int iterations){
-    	System.put.println("Running top k most active buyers.");
+    	System.out.println("Running top k most active buyers.");
 
     	System.out.println("----------------------------------------------------------------");
     }
