@@ -17,3 +17,8 @@ To run our system:
 3. Compile and run Java file
      * `javac MyAuction.java`
      * `java MyAuction YOUR_ORACLE_USERNAME YOUR_ORACLE_PASSWORD`
+     * Compile: `javac MyAuction.java Benchmark.java Driver.java`
+     * Run main program: `java MyAuction YOUR_ORACLE_USERNAME YOUR_ORACLE_PASSWORD`
+     * Run driver: `java Driver YOUR_ORACLE_USERNAME YOUR_ORACLE_PASSWORD`
+     * Run benchmark: `java Benchmark YOUR_ORACLE_USERNAME YOUR_ORACLE_PASSWORD`
+     
