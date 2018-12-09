@@ -1,4 +1,4 @@
-// My Auction
+// My Auction, Phase 3
 // Team 1
 // Benchmark Program
 // Jordan Grogan, John Wartonick, Wyatt Bobis

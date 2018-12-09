@@ -1,4 +1,4 @@
-# MyAuction - TEAM 1 // Phase 2
+# MyAuction - TEAM 1 // Phase 3
 Jordan Grogan - jog89  
 John Wartonick - jww36  
 Wyatt Bobis - wjb39
