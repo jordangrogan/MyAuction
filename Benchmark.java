@@ -137,9 +137,22 @@ public class Benchmark {
     }
 
     public static void benchmark_sellProduct(MyAuction myauction, int iterations){
-    	System.out.println("Running sell product.");
-
-    	System.out.println("----------------------------------------------------------------");
+        System.out.println("Running selling product.");
+        for(int i = 0; i < iterations; i++){
+            System.out.print("Display current products for auction:\n" + myauction.displayCurrentProductsUnderAuction("jog89"));
+        }
+        for(int i = 0; i < iterations; i++){
+            System.out.println("Display second highest bid of #1: " + myauction.displaySecondHighestBid(1));
+        }
+        for(int i = 0; i < iterations; i++){
+            System.out.println("Running withdraw product (auction id #2)");
+            myauction.withdrawProduct(2);
+        }
+        for(int i = 0; i < iterations; i++){
+            System.out.println("Testing sell product (auction id #5)");
+            myauction.sellProduct(5);
+        }
+        System.out.println("----------------------------------------------------------------");
     }
 
     public static void benchmark_registerUser(MyAuction myauction, int iterations){
