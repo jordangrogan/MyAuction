@@ -179,13 +179,17 @@ public class Benchmark {
 
     public static void benchmark_productStatisticsAll(MyAuction myauction, int iterations){
     	System.out.println("Running product statistics all.");
-
+        for(int i = 0; i < iterations; i++) {
+            myauction.productStatisticsAll();
+        }
     	System.out.println("----------------------------------------------------------------");
     }
 
     public static void benchmark_productStatisticsByCustomer(MyAuction myauction, int iterations){
     	System.out.println("Running product statistics by customer.");
-
+        for(int i = 0; i < iterations; i++) {
+            myauction.productStatisticsByCustomer("jww36");
+        }
     	System.out.println("----------------------------------------------------------------");
     }
 
