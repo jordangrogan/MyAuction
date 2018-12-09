@@ -172,7 +172,7 @@ public class Driver {
     }
 
     public static void test_suggestions(MyAuction myauction){
-    	System.out.println("Testing suggestions...");
+    	System.out.println("Testing suggestions for user jog89...");
     	myauction.suggestions("jog89");
     	System.out.println("----------------------------------------------------------------");
     }
