@@ -176,20 +176,20 @@ public class Driver {
     }
 
     public static void test_productStatisticsByCustomer(MyAuction myauction){
-    	myauction.productStatisticsByCustomer();
-
+    	System.out.println("Testing displaying product statistics by Customer...");
+    	myauction.productStatisticsByCustomer("jww36");
+    	System.out.println("----------------------------------------------------------------");
     }
 
     public static void test_statistics(MyAuction myauction){
-    	myauction.statistics();
+    	// myauction.statistics();
 
     }
 
     public static void test_topKHighestVolumeSubCategories(MyAuction myauction){
-    	//I wasnt exactly sure what X was supposed to be in this so I didnt specify in the printout yet
-    	System.out.println("Enter an integer value for x \n");
-    	int x = reader.nextInt();
-    	myauction.topKHighestVolumeSubCategories(x);
+    	System.out.println("Testing display the top k Highest volume sub categories...");
+    	myauction.topKHighestVolumeSubCategories(2);
+    	System.out.println("----------------------------------------------------------------");
 
     }
 
