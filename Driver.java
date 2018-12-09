@@ -60,7 +60,7 @@ public class Driver {
             test_topKHighestVolumeSubCategories(myauction);
             test_topKHighestVolumeMainCategories(myauction);
             test_topKMostActiveBidders(myauction);
-            test_topKMostActiverBuyers(myauction);
+            test_topKMostActiveBuyers(myauction);
 
         } catch(Exception Ex)  {
             System.out.println("Error connecting to database.  Machine Error: " + Ex.toString());
@@ -308,13 +308,13 @@ public class Driver {
     }
 
     public static void test_topKMostActiveBidders(MyAuction myauction){
-    	System.out.println("Testing Top K Most Activer Bidders...");
+    	System.out.println("Testing Top K Most Active Bidders...");
     	myauction.topKMostActiveBidders(1, 3);
     	System.out.println("----------------------------------------------------------------");
     }
 
-    public static void test_topKMostActiverBuyers(MyAuction myauction){
-    	System.out.println("Testing Top K Most Activer Buyers...");
+    public static void test_topKMostActiveBuyers(MyAuction myauction){
+    	System.out.println("Testing Top K Most Active Buyers...");
     	myauction.topKMostActiveBuyers(1, 3);
     	System.out.println("----------------------------------------------------------------");
     }
