@@ -185,10 +185,6 @@ public class Driver {
     	System.out.println("----------------------------------------------------------------");
     }
 
-    // public static void test_newCustomerRegisteration(MyAuction myauction){
-    // 	// myauction.newCustomerRegistration();
-    // }
-
     public static void test_registerUser(MyAuction myauction){
     	System.out.println("Testing registering new user...");   	
     	myauction.registerUser("Test Name", "Test address", "Test email", "Test", "password", false);
@@ -224,7 +220,7 @@ public class Driver {
     		if(resultSet.next()){
     			System.out.println("System Date: " + resultSet.getTimestamp("c_date"));
     		}
-    		
+
     	}catch(SQLException Ex) {
             System.out.println("Error running the queries.  Machine Error: " +
                     Ex.toString());
@@ -251,11 +247,6 @@ public class Driver {
     	myauction.productStatisticsByCustomer("jww36");
     	System.out.println("----------------------------------------------------------------");
     }
-
-    // public static void test_statistics(MyAuction myauction){
-    // 	// myauction.statistics();
-
-    // }
 
     public static void test_topKHighestVolumeSubCategories(MyAuction myauction){
     	System.out.println("Testing display the Top k Highest Volume Sub Categories...");
