@@ -8,7 +8,6 @@ import java.util.Scanner;
 import java.sql.*; //import the file containing definitions for the parts
 import java.text.ParseException; //needed by java for database connection and manipulation
 
-
 public class MyAuction {
 
     private static Scanner reader;
@@ -277,7 +276,6 @@ public class MyAuction {
         System.out.print(displayProductsByKeywords(keywordsArr));
     }
 
-
     public void putProductForAuction(String login) {
         boolean go = true;
         
@@ -477,6 +475,7 @@ public class MyAuction {
             }
         }
     }
+
     public void addBid(int auction_id, String bidder, int your_amount){
         try{
             connection.setAutoCommit(false); //the default is true and every statement executed is considered a transaction.
@@ -881,12 +880,14 @@ public class MyAuction {
             }
         }
     }
+
     public void getCustomerLogin(){
         System.out.println("What is the seller's login name?");
         String seller = reader.nextLine();
         productStatisticsByCustomer(seller);
     }
-    public void productStatisticsByCustomer(String seller) {       
+
+    public void productStatisticsByCustomer(String seller) {
 
         try{
             query = "SELECT product.auction_id, product.name, product.status, product.amount, bidlog.bidder FROM product JOIN bidlog ON product.auction_id = bidlog.auction_id AND product.amount = bidlog.amount WHERE product.seller=?";
