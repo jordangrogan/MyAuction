@@ -48,6 +48,7 @@ public class Benchmark {
             benchmark_getChildCategories(myauction, iterations);
             benchmark_displayProducts(myauction, iterations);
             benchmark_displayProductsByKeywords(myauction, iterations);
+            benchmark_putProductForAuction(myauction, iterations);
 
 
         } catch(Exception Ex)  {
@@ -99,6 +100,14 @@ public class Benchmark {
         String[] keywords = new String[]{"kitchen", "sink"};
         for(int i=0; i<iterations; i++) {
             System.out.print("Check display products " + i + ": " + myauction.displayProductsByKeywords(keywords));
+        }
+        System.out.println("----------------------------------------------------------------");
+    }
+
+    public static void benchmark_putProductForAuction(MyAuction myauction, int iterations){
+        for(int i=0; i<iterations; i++) {
+            System.out.println("Running put product for auction.");
+            myauction.addProduct("Test Product", "Test Description", "jog89", "Balls,Equipment", 10, 5);
         }
         System.out.println("----------------------------------------------------------------");
     }
