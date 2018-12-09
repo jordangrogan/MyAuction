@@ -151,6 +151,23 @@ public class Driver {
     public static void test_bidOnProduct(MyAuction myauction){
     	System.out.println("Testing bidding on a product...");
     	myauction.addBid(2, "jww36", 100);
+    	Statement statement = null;
+    	try{
+    		statement = connection.createStatement();
+    		ResultSet resultSet = statement.executeQuery("SELECT * FROM Bidlog WHERE auction_id = 2 AND bidder = 'jww36' AND amount=100");
+    		if(resultSet.next()){
+    			System.out.println("\"SELECT * FROM Bidlog WHERE auction_id = 2 AND bidder = 'jww36' AND amount=100\" successfully returned a row!");
+    		}
+    	}catch(SQLException Ex) {
+            System.out.println("Error running the queries.  Machine Error: " +
+                    Ex.toString());
+        } finally {
+            try {
+                if (statement != null) statement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
     	System.out.println("----------------------------------------------------------------");
     }
 
@@ -212,21 +229,53 @@ public class Driver {
     	System.out.println("----------------------------------------------------------------");
     }
 
-    // public static void test_newCustomerRegisteration(MyAuction myauction){
-    // 	// myauction.newCustomerRegistration();
-    // }
-
     public static void test_registerUser(MyAuction myauction){
     	System.out.println("Testing registering new user...");   	
     	myauction.registerUser("Test Name", "Test address", "Test email", "Test", "password", false);
-    	myauction.registerUser("Test Name 2", "Test address 2", "Test email 2", "Test2", "password2", true);
-    	
+    	Statement statement = null;
+    	try{
+    		statement = connection.createStatement();
+    		ResultSet resultSet = statement.executeQuery("SELECT * FROM Customer WHERE login = 'Test' AND password = 'password'");
+    		if(resultSet.next()){
+    			System.out.println("\"SELECT * FROM Customer WHERE login = 'Test' AND password = 'password'\" successfully returned a row!");
+    		}
+    		statement = connection.createStatement();
+    		
+    	}catch(SQLException Ex) {
+            System.out.println("Error running the queries.  Machine Error: " +
+                    Ex.toString());
+        } finally {
+            try {
+                if (statement != null) statement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
     	System.out.println("----------------------------------------------------------------");
     }
 
     public static void test_updateSystemDate(MyAuction myauction){
     	System.out.println("Testing updating system date...");
     	myauction.updateSystemDate(3, 24, 2019, 4, 30, 33);
+    	Statement statement = null;
+    	try{
+    		statement = connection.createStatement();
+    		ResultSet resultSet = statement.executeQuery("SELECT * FROM oursysdate WHERE ROWNUM=1");
+    		if(resultSet.next()){
+    			System.out.println("System Date: " + resultSet.getTimestamp("c_date"));
+    		}
+
+    	}catch(SQLException Ex) {
+            System.out.println("Error running the queries.  Machine Error: " +
+                    Ex.toString());
+        } finally {
+            try {
+                if (statement != null) statement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
+
     	System.out.println("----------------------------------------------------------------");
     }
 
@@ -242,11 +291,6 @@ public class Driver {
     	myauction.productStatisticsByCustomer("jww36");
     	System.out.println("----------------------------------------------------------------");
     }
-
-    // public static void test_statistics(MyAuction myauction){
-    // 	// myauction.statistics();
-
-    // }
 
     public static void test_topKHighestVolumeSubCategories(MyAuction myauction){
     	System.out.println("Testing display the Top k Highest Volume Sub Categories...");
