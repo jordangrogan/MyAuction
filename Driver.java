@@ -126,7 +126,7 @@ public class Driver {
 
     public static void test_putProductForAuction(MyAuction myauction){
         System.out.println("Testing add a product...");
-    	myauction.addProduct("Test Product", "Test Description", "jog89", "Balls,Equipment", 10,5);
+    	myauction.addProduct("Test Product", "Test Description", "jog89", "Balls,Equipment", 10, 5);
         System.out.println("----------------------------------------------------------------");
     }
 
