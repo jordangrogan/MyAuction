@@ -450,6 +450,24 @@ public class MyAuction {
                 reader.nextLine();
             }
 
+            
+            addBid(auction_id, bidder, your_amount);
+        } catch(SQLException Ex) {
+            System.out.println("Error running the sample queries.  Machine Error: " + Ex.toString());
+        } 
+        finally{
+            try {
+                if (prepStatement != null) prepStatement.close();
+            } 
+            catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
+    }
+    public void addBid(int auction_id, String bidder, int your_amount){
+        try{
+            connection.setAutoCommit(false); //the default is true and every statement executed is considered a transaction.
+            connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
             // Gets the system date
             java.sql.Date bidTime = null;
             query = "SELECT c_date FROM oursysdate WHERE ROWNUM=1";
@@ -459,8 +477,6 @@ public class MyAuction {
                 bidTime = resultSet.getDate("c_date");
             }
 
-            //System.out.println("BIDTIME: " + bidTime);
-            //add bid to DB
             query = "INSERT INTO Bidlog (auction_id, bidder, bid_time, amount) VALUES (?, ?, ?, ?)";
 
             prepStatement = connection.prepareStatement(query);

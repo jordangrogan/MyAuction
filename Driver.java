@@ -132,21 +132,20 @@ public class Driver {
 
     public static void test_bidOnProduct(MyAuction myauction){
     	System.out.println("Testing bidding on a product...");
-    	System.out.println("Enter Bidder Name \n");
-    	String bidder = reader.nextLine();
-    	myauction.bidOnProduct(bidder);
+    	myauction.addBid(2, "jww36", 100);
     	System.out.println("----------------------------------------------------------------");
     }
 
     public static void test_suggestions(MyAuction myauction){
-    	//myauction.suggestions(login);
+    	System.out.println("Testing suggestions...");
+    	myauction.suggestions("jog89");
+    	System.out.println("----------------------------------------------------------------");
     }
 
     public static void test_sellProduct(MyAuction myauction){
-    	System.out.println("Enter a login name \n");
-    	String login = reader.nextLine();
-    	myauction.sellProduct(login);
-
+    	System.out.println("Testing selling a product...");
+    	
+    	System.out.println("----------------------------------------------------------------");
     }
 
     public static void test_newCustomerRegisteration(MyAuction myauction){
