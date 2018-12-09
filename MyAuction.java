@@ -420,8 +420,9 @@ public class MyAuction {
             connection.setAutoCommit(false); //the default is true and every statement executed is considered a transaction.
             connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 
-            query = "SELECT amount FROM ( SELECT amount, DENSE_RANK() OVER (ORDER BY amount DESC) ranking FROM bidlog WHERE auction_id=" + auction_id + " ) WHERE ranking= 1";
+            query = "SELECT amount FROM ( SELECT amount, DENSE_RANK() OVER (ORDER BY amount DESC) ranking FROM bidlog WHERE auction_id=? ) WHERE ranking= 1";
             prepStatement = connection.prepareStatement(query);
+            prepStatement.setInt(1, auction_id);
             resultSet = prepStatement.executeQuery();
             int bid_amount = -1;
             ResultSetMetaData rsltMD = resultSet.getMetaData();
@@ -439,10 +440,22 @@ public class MyAuction {
             }
             System.out.println("The current highest bid for This product is: " + bid_amount);
 
+            int your_amount;
 
-            System.out.print("Enter an Amount to bid on Auction " + auction_id + ": ");
-            int your_amount = reader.nextInt();
-            reader.nextLine();
+            do {
+
+                System.out.print("Enter an Amount to bid on Auction " + auction_id + ": ");
+                your_amount = reader.nextInt();
+                reader.nextLine();
+
+                query = "SELECT * FROM bidlog WHERE auction_id=? AND amount>=?";
+                prepStatement = connection.prepareStatement(query);
+                prepStatement.setInt(1, auction_id);
+                prepStatement.setInt(2, your_amount);
+                resultSet = prepStatement.executeQuery();
+
+            } while(resultSet.next());
+
             while(your_amount <= bid_amount){
                 System.out.println("The current highest bid for This product is: " + bid_amount);
                 System.out.print("Enter an Amount to bid on : " + auction_id);
@@ -450,8 +463,8 @@ public class MyAuction {
                 reader.nextLine();
             }
 
-            
             addBid(auction_id, bidder, your_amount);
+
         } catch(SQLException Ex) {
             System.out.println("Error running the sample queries.  Machine Error: " + Ex.toString());
         } 
