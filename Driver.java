@@ -128,6 +128,23 @@ public class Driver {
     public static void test_putProductForAuction(MyAuction myauction){
         System.out.println("Testing add a product...");
     	myauction.addProduct("Test Product", "Test Description", "jog89", "Balls,Equipment", 10, 5);
+        Statement statement = null;
+        try {
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM product WHERE name='Test Product'"); //run the query on the DB table
+            if(resultSet.next()) {
+                System.out.println("\"SELECT * FROM product WHERE name='Test Product'\" successfully returned a row!");
+            }
+        } catch(SQLException Ex) {
+            System.out.println("Error running the queries.  Machine Error: " +
+                    Ex.toString());
+        } finally {
+            try {
+                if (statement != null) statement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
         System.out.println("----------------------------------------------------------------");
     }
 
