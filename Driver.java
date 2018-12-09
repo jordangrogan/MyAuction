@@ -217,6 +217,25 @@ public class Driver {
     public static void test_updateSystemDate(MyAuction myauction){
     	System.out.println("Testing updating system date...");
     	myauction.updateSystemDate(3, 24, 2019, 4, 30, 33);
+    	Statement statement = null;
+    	try{
+    		statement = connection.createStatement();
+    		ResultSet resultSet = statement.executeQuery("SELECT * FROM oursysdate WHERE ROWNUM=1");
+    		if(resultSet.next()){
+    			System.out.println("System Date: " + resultSet.getTimestamp("c_date"));
+    		}
+    		
+    	}catch(SQLException Ex) {
+            System.out.println("Error running the queries.  Machine Error: " +
+                    Ex.toString());
+        } finally {
+            try {
+                if (statement != null) statement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
+
     	System.out.println("----------------------------------------------------------------");
     }
 
