@@ -162,8 +162,52 @@ public class Driver {
 
     public static void test_sellProduct(MyAuction myauction){
     	System.out.println("Testing selling a product...");
+    	System.out.println("Testing display products closed or under auction:");
+        System.out.print("Result Output:\n" + myauction.displayCurrentProductsUnderAuction("jog89"));
 
-    	// myauction.sellProduct("jww36");
+        System.out.println("Testing display second highest bid of auction id #1 (Expected Output: 22)");
+        System.out.println("Result Output: " + myauction.displaySecondHighestBid(1));
+
+        System.out.println("Testing withdraw product (auction id #2)");
+        myauction.withdrawProduct(2);
+        Statement statement = null;
+        try {
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM product WHERE auction_id=2"); //run the query on the DB table
+            if(resultSet.next()) {
+                System.out.println("Resulting status of auction ID 2: " + resultSet.getString("status"));
+            }
+        } catch(SQLException Ex) {
+            System.out.println("Error running the queries.  Machine Error: " +
+                    Ex.toString());
+        } finally {
+            try {
+                if (statement != null) statement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
+
+        System.out.println("Testing sell product (auction id #5)");
+        myauction.sellProduct(5);
+        try {
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM product WHERE auction_id=5"); //run the query on the DB table
+            if(resultSet.next()) {
+                System.out.println("Resulting status of auction ID 5: " + resultSet.getString("status"));
+                System.out.println("Resulting sell date of auction ID 5: " + resultSet.getDate("sell_date").toString());
+            }
+        } catch(SQLException Ex) {
+            System.out.println("Error running the queries.  Machine Error: " +
+                    Ex.toString());
+        } finally {
+            try {
+                if (statement != null) statement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
+
 
     	System.out.println("----------------------------------------------------------------");
     }

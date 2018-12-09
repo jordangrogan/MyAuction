@@ -554,96 +554,37 @@ public class MyAuction {
 
     public void sellProduct(String login) {
     	boolean go = true;
+    	String response;
     	// this try catch just gets the items with closed status and displays them
         try {
             connection.setAutoCommit(false); //the default is true and every statement executed is considered a transaction.
             connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 
-            query = "SELECT * FROM product WHERE seller=? AND (status='closed' OR status='under auction')";
-            prepStatement = connection.prepareStatement(query);
-            prepStatement.setString(1, login);
-            resultSet = prepStatement.executeQuery(); //run the query on the DB table
+            System.out.print(displayCurrentProductsUnderAuction(login));
 
-            ResultSetMetaData rsltMD = resultSet.getMetaData();
-            int colNumber = rsltMD.getColumnCount();
-            int auction_id = -1;
-            System.out.println("Current products:");
-            while(resultSet.next()){
-            	for(int i = 1; i <= colNumber; i++){
-                    if(rsltMD.getColumnName(i).equalsIgnoreCase("auction_id")) {
-                        auction_id = resultSet.getInt(i);
-                        System.out.print(auction_id + "");
-                    }
-            		if(rsltMD.getColumnName(i).equalsIgnoreCase("name")){
-	            		String val = resultSet.getString(i);
-	            		System.out.print(" - " + val);
-	            	}
-	            	if(rsltMD.getColumnName(i).equalsIgnoreCase("status")){
-	            		String val = resultSet.getString(i);
-	            		System.out.print("  " + val);
-	            	}
-            	}
-	            System.out.println();
-            }
-
+            int auction_id = 0;
             while(go == true){
             	System.out.println("Which product would you like to sell (enter id):");
-                String response = reader.nextLine();
+                response = reader.nextLine();
                 auction_id = Integer.parseInt(response);
                 if(response.equals("") == false) go = false;
             }
-            resultSet.close();
 
-            //this gets the second highest bid and displays it
-            query = "SELECT amount FROM ( SELECT amount, DENSE_RANK() OVER (ORDER BY amount DESC) ranking FROM bidlog WHERE auction_id=" + auction_id + " ) WHERE ranking=2";
-            prepStatement = connection.prepareStatement(query);
-            resultSet = prepStatement.executeQuery();
-            int bid_amount = -1;
-            rsltMD = resultSet.getMetaData();
-            colNumber = rsltMD.getColumnCount();
-            while(resultSet.next()){
-                for(int i = 1; i <= colNumber; i++){
-                    if(rsltMD.getColumnName(i).equalsIgnoreCase("amount")) bid_amount = resultSet.getInt(i);
-                }
-            }
-            go = true;
-            String res = "";
-            while(go == true){
-                System.out.println("Second highest bid: " + bid_amount);
+            System.out.println("Second highest bid: " + displaySecondHighestBid(auction_id));
+
+            do {
                 System.out.println("Choose an option: \"withdraw\" or \"sell\":");
-                res = reader.nextLine();
-                if(res.equals("") == false) go = false;                
-            }
+                response = reader.nextLine();
+            } while(!(response.equals("withdraw") || response.equals("sell")));
 
-            if(res.equalsIgnoreCase("Withdraw")){
-                //update product status
-                query = "UPDATE product SET status='withdrawn' WHERE auction_id=?";
-                prepStatement = connection.prepareStatement(query);
-                prepStatement.setInt(1, auction_id);
-                prepStatement.executeUpdate();
-                System.out.println("Product withdrawn.");
-            }else if(res.equalsIgnoreCase("Sell")){
-                // update DB
-                query = "UPDATE product SET status='sold' WHERE auction_id=?";
-                prepStatement = connection.prepareStatement(query);
-                prepStatement.setInt(1, auction_id);
-                prepStatement.executeUpdate();
-
-                java.sql.Date sellDate = null;
-                query = "SELECT c_date FROM oursysdate WHERE ROWNUM=1";
-                prepStatement = connection.prepareStatement(query);
-                resultSet = prepStatement.executeQuery();
-                while(resultSet.next()){
-                    sellDate = resultSet.getDate("c_date");
-                }
-                query = "UPDATE product SET sell_date=? WHERE auction_id=?";
-                prepStatement = connection.prepareStatement(query);
-                prepStatement.setDate(1, sellDate);
-                prepStatement.setInt(2, auction_id);
-                prepStatement.executeUpdate();
-                System.out.println("Product sold.");
+            if(response.equalsIgnoreCase("Withdraw")){
+                withdrawProduct(auction_id);
+            }else if(response.equalsIgnoreCase("Sell")){
+                sellProduct(auction_id);
             }
             resultSet.close();
+
+            connection.commit();
 
         } catch(SQLException Ex) {
             System.out.println("Error running the queries.  Machine Error: " +
@@ -655,6 +596,145 @@ public class MyAuction {
                 System.out.println("Cannot close Statement. Machine error: "+e.toString());
             }
         }
+    }
+
+    public String displayCurrentProductsUnderAuction(String login) {
+        String result = "";
+
+        try {
+
+            query = "SELECT * FROM product WHERE seller=? AND (status='closed' OR status='under auction')";
+            prepStatement = connection.prepareStatement(query);
+            prepStatement.setString(1, login);
+            resultSet = prepStatement.executeQuery(); //run the query on the DB table
+
+            ResultSetMetaData rsltMD = resultSet.getMetaData();
+            int colNumber = rsltMD.getColumnCount();
+            int auction_id = -1;
+            result += "Current products:\n";
+            while(resultSet.next()){
+                for(int i = 1; i <= colNumber; i++){
+                    if(rsltMD.getColumnName(i).equalsIgnoreCase("auction_id")) {
+                        auction_id = resultSet.getInt(i);
+                        result += auction_id + "";
+                    }
+                    if(rsltMD.getColumnName(i).equalsIgnoreCase("name")){
+                        String val = resultSet.getString(i);
+                        result += " - " + val;
+                    }
+                    if(rsltMD.getColumnName(i).equalsIgnoreCase("status")){
+                        String val = resultSet.getString(i);
+                        result += "  " + val;
+                    }
+                }
+                result += "\n";
+            }
+
+            resultSet.close();
+
+        } catch(SQLException Ex) {
+            System.out.println("Error running the queries.  Machine Error: " + Ex.toString());
+        }
+
+        return result;
+    }
+
+    public String displaySecondHighestBid(int auction_id) {
+
+        String result = "";
+
+        try {
+
+            //this gets the second highest bid and displays it
+            query = "SELECT amount FROM ( SELECT amount, DENSE_RANK() OVER (ORDER BY amount DESC) ranking FROM bidlog WHERE auction_id=?) WHERE ranking=2";
+            prepStatement = connection.prepareStatement(query);
+            prepStatement.setInt(1, auction_id);
+            resultSet = prepStatement.executeQuery();
+            int bid_amount = -1;
+            ResultSetMetaData rsltMD = resultSet.getMetaData();
+            int colNumber = rsltMD.getColumnCount();
+            while(resultSet.next()){
+                for(int i = 1; i <= colNumber; i++){
+                    if(rsltMD.getColumnName(i).equalsIgnoreCase("amount")) bid_amount = resultSet.getInt(i);
+                }
+            }
+
+            result += "" + bid_amount;
+
+        } catch(SQLException Ex) {
+            System.out.println("Error running the queries.  Machine Error: " +
+                    Ex.toString());
+        } finally{
+            try {
+                if (prepStatement != null) prepStatement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
+
+        return result;
+
+    }
+
+    public void withdrawProduct(int auction_id) {
+
+        try {
+
+            //update product status
+            query = "UPDATE product SET status='withdrawn' WHERE auction_id=?";
+            prepStatement = connection.prepareStatement(query);
+            prepStatement.setInt(1, auction_id);
+            prepStatement.executeUpdate();
+            System.out.println("Product withdrawn.");
+
+        } catch(SQLException Ex) {
+            System.out.println("Error running the queries.  Machine Error: " +
+                    Ex.toString());
+        } finally{
+            try {
+                if (prepStatement != null) prepStatement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
+
+    }
+
+    public void sellProduct(int auction_id) {
+
+        try {
+
+            // update DB
+            query = "UPDATE product SET status='sold' WHERE auction_id=?";
+            prepStatement = connection.prepareStatement(query);
+            prepStatement.setInt(1, auction_id);
+            prepStatement.executeUpdate();
+
+            java.sql.Date sellDate = null;
+            query = "SELECT c_date FROM oursysdate WHERE ROWNUM=1";
+            prepStatement = connection.prepareStatement(query);
+            resultSet = prepStatement.executeQuery();
+            while(resultSet.next()){
+                sellDate = resultSet.getDate("c_date");
+            }
+            query = "UPDATE product SET sell_date=? WHERE auction_id=?";
+            prepStatement = connection.prepareStatement(query);
+            prepStatement.setDate(1, sellDate);
+            prepStatement.setInt(2, auction_id);
+            prepStatement.executeUpdate();
+            System.out.println("Product sold.");
+
+        } catch(SQLException Ex) {
+            System.out.println("Error running the queries.  Machine Error: " +
+                    Ex.toString());
+        } finally{
+            try {
+                if (prepStatement != null) prepStatement.close();
+            } catch (SQLException e) {
+                System.out.println("Cannot close Statement. Machine error: "+e.toString());
+            }
+        }
+
     }
 
     public void newCustomerRegistration() {
