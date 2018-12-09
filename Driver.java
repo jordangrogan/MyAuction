@@ -11,6 +11,8 @@ import java.text.ParseException; //needed by java for database connection and ma
 public class Driver {
 
 	// private MyAuction auction;
+    private static Scanner reader;
+    private static Connection connection; // used to hold the jdbc connection to the DB
 
     public static void main(String args[]) throws SQLException {
 
@@ -20,8 +22,7 @@ public class Driver {
             System.exit(0);
         }
 
-        Scanner reader  = new Scanner(System.in);
-        Connection connection = null;
+        reader  = new Scanner(System.in);
         String username, password;
         username = args[0]; //This is your username in oracle
         password = args[1]; //This is your password in oracle
@@ -114,20 +115,20 @@ public class Driver {
     }
 
     public static void test_displayProducts(MyAuction myauction){
-    	myauction.displayProducts();
+    	myauction.displayProducts("someCategory",2);
 
     }
 
     public static void test_displayProductsByKeywords(MyAuction myauction){
     	String[] keywords = new String[100];
-    	System.out.println("Enter a description of the product \n")
+    	System.out.println("Enter a description of the product \n");
     	int i = 0;
     	while(reader.hasNext())
     	{
          keywords[i] = reader.next();
          i++;
     	}
-    	myauction.displayProductsByKeyword(keywords);
+    	myauction.displayProductsByKeywords(keywords);
 
     }
 
@@ -143,7 +144,7 @@ public class Driver {
     }
 
     public static void test_bidOnProduct(MyAuction myauction){
-    	Sytem.out.println("Enter Bidder Name \n");
+    	System.out.println("Enter Bidder Name \n");
     	String bidder = reader.nextLine();
     	myauction.bidOnProduct(bidder);
 
@@ -214,7 +215,7 @@ public class Driver {
     	//I wasnt exactly sure what X was supposed to be in this so I didnt specify in the printout yet
     	System.out.println("Enter an integer value for x \n");
     	int x = reader.nextInt();
-    	myauction.topKHigestVolumeSubCategories(x);
+    	myauction.topKHighestVolumeSubCategories(x);
 
     }
 
@@ -222,7 +223,7 @@ public class Driver {
     	//I wasnt exactly sure what X was supposed to be in this so I didnt specify in the printout yet
     	System.out.println("Enter an integer value for x \n");
     	int x = reader.nextInt();
-    	myauction.topKHigestVolumeMainCategories(x);
+    	myauction.topKHighestVolumeMainCategories(x);
 
     }
 
