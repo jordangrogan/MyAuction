@@ -131,10 +131,11 @@ public class Driver {
     }
 
     public static void test_bidOnProduct(MyAuction myauction){
+    	System.out.println("Testing bidding on a product...");
     	System.out.println("Enter Bidder Name \n");
     	String bidder = reader.nextLine();
     	myauction.bidOnProduct(bidder);
-
+    	System.out.println("----------------------------------------------------------------");
     }
 
     public static void test_suggestions(MyAuction myauction){
