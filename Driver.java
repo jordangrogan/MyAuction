@@ -85,11 +85,11 @@ public class Driver {
     }
 
     public static void test_checkIfCustomerSellsProducts(MyAuction myauction){
-		boolean expected = true;
+        System.out.println("Testing if Customer jww36 sells products...");
         boolean result;
-
     	result = myauction.checkIfCustomerSellsProducts("jww36");
-        System.out.println("Expected Output: " + expected + "\tResult Output: " + result);
+        System.out.println("Expected Output: " + true + "\tResult Output: " + result);
+        System.out.println("----------------------------------------------------------------");
     }
 
     public static void test_browseProducts(MyAuction myauction){
