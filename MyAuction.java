@@ -293,32 +293,66 @@ public class MyAuction {
 	        System.out.println("Enter an item category: ");
 	        category1 = reader.nextLine();
 
-	        ArrayList<String> parentCategories = getParentCategories();
-	       	
-	        for(int i = 0; i < parentCategories.size(); i++){
-	        	ArrayList<String> childCategories = getChildCategories(parentCategories.get(i));
-	        	if(childCategories.contains(category1) == true){
-	        		go = false;
-	        	}	        	
-	        }
-	        if(go == true){System.out.println("Invalid item category: " + category1);}	    
+            try {
+
+                query = "SELECT * FROM category WHERE name=? AND parent_category IS NOT NULL";
+                prepStatement = connection.prepareStatement(query);
+                prepStatement.setString(1, category1);
+                resultSet = prepStatement.executeQuery();
+
+                if(resultSet.next()) {
+                    go = false;
+                } else {
+                    go = true;
+                }
+
+            } catch(SQLException Ex) {
+                    System.out.println("Error running the queries.  Machine Error: " +
+                            Ex.toString());
+            } finally {
+                try {
+                    if (prepStatement != null) prepStatement.close();
+                } catch (SQLException e) {
+                    System.out.println("Cannot close Statement. Machine error: "+e.toString());
+                }
+            }
+
+	        if(go == true){System.out.println("Invalid item category: " + category1);}
+
         }
         go = true;
         String category2 = "";
         while(go == true){        	
 	        System.out.println("Enter a second item category(optional): ");
 	        category2 = reader.nextLine();
+
 	        // System.out.println("Category 2: "+category);
 	        if(category2.equals("")){ break;}
 
-	        ArrayList<String> parentCategories = getParentCategories();
-	       	
-	        for(int i = 0; i < parentCategories.size(); i++){
-	        	ArrayList<String> childCategories = getChildCategories(parentCategories.get(i));
-	        	if(childCategories.contains(category2) == true){
-	        		go = false;
-	        	}	        	
-	        }
+            try {
+
+                query = "SELECT * FROM category WHERE name=? AND parent_category IS NOT NULL";
+                prepStatement = connection.prepareStatement(query);
+                prepStatement.setString(1, category2);
+                resultSet = prepStatement.executeQuery();
+
+                if(resultSet.next()) {
+                    go = false;
+                } else {
+                    go = true;
+                }
+
+            } catch(SQLException Ex) {
+                System.out.println("Error running the queries.  Machine Error: " +
+                        Ex.toString());
+            } finally {
+                try {
+                    if (prepStatement != null) prepStatement.close();
+                } catch (SQLException e) {
+                    System.out.println("Cannot close Statement. Machine error: "+e.toString());
+                }
+            }
+
 	        if(go == true){System.out.println("Invalid item category: " + category2);}	    
         }
 
@@ -356,6 +390,8 @@ public class MyAuction {
         	cStatement.setInt(5, price);
         	cStatement.setInt(6, numDays);
         	cStatement.execute();
+
+        	System.out.println("Product added!");
         }catch(SQLException e){
         	System.out.println("Cannot close Statement. Machine error: "+e.toString());
         }
