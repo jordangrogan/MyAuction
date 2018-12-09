@@ -132,7 +132,9 @@ public class Benchmark {
 
     public static void benchmark_suggestions(MyAuction myauction, int iterations){
     	System.out.println("Running suggestions.");
-    	myauction.suggestions("jog89");
+        for(int i = 0; i < iterations; i++) {
+            myauction.suggestions("jog89");
+        }
     	System.out.println("----------------------------------------------------------------");
     }
 
@@ -169,7 +171,9 @@ public class Benchmark {
     }
     public static void benchmark_updateSystemDate(MyAuction myauction, int iterations){
     	System.out.println("Running update system date.");
-
+        for(int i = 0; i < iterations; i++) {
+            myauction.updateSystemDate(3, 1+i, 2019, 4, 30, 33);
+        }
     	System.out.println("----------------------------------------------------------------");
     }
 
