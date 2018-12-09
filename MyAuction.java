@@ -438,7 +438,7 @@ public class MyAuction {
                 reader.nextLine();
             }
 
-            // Gets the dystem date
+            // Gets the system date
             java.sql.Date bidTime = null;
             query = "SELECT c_date FROM oursysdate WHERE ROWNUM=1";
             prepStatement = connection.prepareStatement(query);
@@ -723,7 +723,7 @@ public class MyAuction {
 
         try{
             statement = connection.createStatement(); //create an instance
-            query = "SELECT product.auction_id, product.name, product.status, product.amount, bidlog.bidder FROM product JOIN bidlog ON product.auction_id = bidlog.auction_id AND product.amount = bidlog.amount"; 
+            query = "SELECT product.auction_id, product.name, product.status, product.amount, bidlog.bidder FROM product LEFT OUTER JOIN bidlog ON product.auction_id = bidlog.auction_id AND product.amount = bidlog.amount";
 
             resultSet = statement.executeQuery(query); //run the query on the DB table
 
@@ -736,7 +736,7 @@ public class MyAuction {
 
                 System.out.print(auction_id + " - " + name + " - " + status + " - $" + amount);
 
-                if(!status.equals("sold")) {
+                if(!status.equals("sold") && bidder != null) {
                     System.out.println(" - Highest bidder: " + bidder);
                 } else {
                     System.out.println("");
